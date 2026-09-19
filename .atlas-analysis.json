@@ -1,0 +1,122 @@
+{
+  "projectType": "saas",
+  "projectName": "The Private Clubs",
+  "projectDescription": "The largest directory of private membership clubs in North America, offering search, comparison, and application tools for prospective members, plus lead generation and analytics for club membership directors — with a public REST API and MCP endpoint for AI integrations.",
+  "theme": "willow",
+  "primaryColor": "#171717",
+  "lightColor": null,
+  "darkColor": null,
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Platform",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "introduction",
+              "platform/how-it-works",
+              "platform/club-types"
+            ]
+          },
+          {
+            "group": "For Members",
+            "pages": [
+              "members/searching-clubs",
+              "members/comparing-clubs",
+              "members/applying-for-membership",
+              "members/concierge-service",
+              "members/member-community"
+            ]
+          },
+          {
+            "group": "For Clubs",
+            "pages": [
+              "clubs/claiming-your-listing",
+              "clubs/verified-profile",
+              "clubs/lead-management",
+              "clubs/analytics-dashboard",
+              "clubs/ai-discovery",
+              "clubs/director-community"
+            ]
+          },
+          {
+            "group": "Pricing & Plans",
+            "pages": [
+              "pricing/members-plans",
+              "pricing/clubs-plans"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API & Integrations",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "api/overview",
+              "api/authentication",
+              "api/rate-limits"
+            ]
+          },
+          {
+            "group": "REST API",
+            "pages": [
+              "api/search-clubs",
+              "api/get-club",
+              "api/fee-data",
+              "api/statistics"
+            ]
+          },
+          {
+            "group": "MCP Integration",
+            "pages": [
+              "api/mcp-overview",
+              "api/mcp-tools",
+              "api/mcp-connect"
+            ]
+          },
+          {
+            "group": "Data Reference",
+            "pages": [
+              "api/data-model",
+              "api/club-types-reference",
+              "api/conventions"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Directory of 51,633+ private clubs across the US and Canada",
+    "Search and filter by location, club type, fees, and waitlist status",
+    "Side-by-side club comparison (initiation fees, dues, amenities, waitlists)",
+    "Direct membership application routing to membership directors",
+    "Membership Concierge service with dedicated advisor and money-back guarantee",
+    "Club profile claiming and verification for membership directors",
+    "Pre-qualified lead generation routed via email, SMS, WhatsApp, or CRM",
+    "AI discovery — club profiles surface in ChatGPT, Claude, Perplexity, and Gemini responses",
+    "Analytics dashboard: views, impressions, enquiries, and fee benchmarks",
+    "Director community with 2,400+ membership professionals",
+    "Verified members-only community requiring club affiliation confirmation",
+    "Public REST API with OpenAPI specification",
+    "Model Context Protocol (MCP) endpoint for AI tool integrations",
+    "15-language UI with fee display in 49 currencies"
+  ],
+  "publicApiSurface": [
+    "GET /ai/clubs.json — search and browse clubs (type, state, page, limit)",
+    "GET /api/clubs — general-purpose club search",
+    "GET /ai/context.md — AI-optimized Markdown context summary",
+    "GET /api/mcp — MCP streamable HTTP endpoint",
+    "GET /openapi.json — OpenAPI 3.0 specification",
+    "GET /llms.txt — summary LLM context file",
+    "GET /llms-full.txt — full LLM reference with API docs and schemas",
+    "MCP tool: search_clubs (state, type, fee range, waitlist_status, query)",
+    "MCP tool: get_club (name or slug)",
+    "MCP tool: get_fee_data (state, type)",
+    "MCP tool: get_statistics ()",
+    "MCP tool: find_clubs_by_criteria (natural language criteria)"
+  ]
+}

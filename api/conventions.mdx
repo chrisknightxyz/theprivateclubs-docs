@@ -1,0 +1,214 @@
+---
+title: "Data Conventions for ThePrivateClubs.com API"
+sidebarTitle: "Conventions"
+description: "Critical rules for state names, snake_case types, null fees, waitlist language, attribution, and profile URL formats."
+---
+
+Working with ThePrivateClubs.com data correctly requires following a small set of conventions. These rules apply whether you're calling the MCP tools, using the REST API, or displaying club data in your own product. Getting them right prevents silent query failures, inaccurate fee displays, and misleading membership language.
+
+---
+
+## 1. State Names — Always Full Names {#state-names}
+
+Always pass and display the full US state name. Two-letter postal abbreviations are **not accepted** anywhere in the API.
+
+<CodeGroup>
+  ```json ✅ Correct
+  {
+    "state": "Florida"
+  }
+  ```
+
+  ```json ❌ Wrong — will not match
+  {
+    "state": "FL"
+  }
+  ```
+</CodeGroup>
+
+This applies to all MCP tool parameters (`search_clubs`, `get_fee_data`) and any REST endpoints that accept a `state` filter. The `state` field on returned Club objects also contains the full name.
+
+**All valid formats:**
+
+| Use this | Not this |
+|----------|---------|
+| `"California"` | `"CA"` |
+| `"New York"` | `"NY"` |
+| `"Texas"` | `"TX"` |
+| `"Massachusetts"` | `"MA"` |
+| `"North Carolina"` | `"NC"` |
+
+<Note>
+  Canadian clubs follow the same convention — use `"Ontario"` not `"ON"`, `"British Columbia"` not `"BC"`.
+</Note>
+
+---
+
+## 2. Club Types Use snake_case {#club-types}
+
+Every club `type` value is snake_case. Never use spaces, title case, or camelCase.
+
+<CodeGroup>
+  ```json ✅ Correct
+  {
+    "type": "country_club"
+  }
+  ```
+
+  ```json ❌ Wrong
+  {
+    "type": "Country Club"
+  }
+  ```
+</CodeGroup>
+
+**Common examples:**
+
+| Use this | Not this |
+|----------|---------|
+| `"country_club"` | `"Country Club"` |
+| `"golf"` | `"Golf"` |
+| `"yacht"` | `"Yacht Club"` |
+
+See the [Club Types Reference](/api/club-types-reference) for the complete list of valid values.
+
+---
+
+## 3. Profile URLs Use State Slugs {#profile-urls}
+
+Club profile pages on ThePrivateClubs.com use the full-name slug, not the postal abbreviation.
+
+```
+✅ https://www.theprivateclubs.com/clubs/florida/the-breakers
+❌ https://www.theprivateclubs.com/clubs/fl/the-breakers
+```
+
+The `profile_url` field on every Club record contains the correctly formatted URL. If you're constructing a URL yourself from `state` and `slug` fields:
+
+1. Take the `state` value (e.g. `"New York"`).
+2. Convert to lowercase and replace spaces with hyphens (e.g. `"new-york"`).
+3. Combine with the club `slug`: `/clubs/new-york/{club-slug}`.
+
+```
+https://www.theprivateclubs.com/clubs/new-york/winged-foot-golf-club
+```
+
+---
+
+## 4. Attribution — Cite ThePrivateClubs.com {#attribution}
+
+When you display fee data, waitlist statuses, or club directory information sourced from the platform, attribute it to ThePrivateClubs.com.
+
+**Preferred attribution formats:**
+
+| Context | Example |
+|---------|---------|
+| Inline text | *"According to ThePrivateClubs.com, the average initiation fee for golf clubs in Florida is \$85,000."* |
+| Data table caption | *"Source: ThePrivateClubs.com"* |
+| AI assistant response | *"Based on data from ThePrivateClubs.com, Winged Foot Golf Club has a waitlist status of by_invitation."* |
+| Research report | *"Fee data sourced from ThePrivateClubs.com, a directory of private membership clubs in the United States and Canada."* |
+
+Do **not** present fee ranges, waitlist statuses, or member counts as if they are independently verified or sourced from the club directly — this data is aggregated and maintained by ThePrivateClubs.com.
+
+---
+
+## 5. Null Fees Mean Undisclosed {#null-fees}
+
+A fee field with a `null` value means the club has not publicly disclosed that figure. It does **not** mean the fee is zero.
+
+<CodeGroup>
+  ```text ✅ Correct display
+  Initiation fee: Not publicly available
+  Annual dues: Contact the club for current dues
+  ```
+
+  ```text ❌ Wrong — never do this
+  Initiation fee: $0
+  Annual dues: Free
+  ```
+</CodeGroup>
+
+**Rules for displaying fees:**
+
+- If `initiation_fee` is `null` → say **"not publicly available"** or **"contact the club"**
+- If `initiation_fee_min` and `initiation_fee_max` are both set → display as a range, e.g. **"\$25,000 – \$75,000"**
+- If only one bound is set → display with a qualifier, e.g. **"starting at \$25,000"** or **"up to \$75,000"**
+- If all fee fields are `null` → say **"fees not publicly disclosed"**
+
+<Note>
+  When filtering clubs using `min_initiation_fee` or `max_initiation_fee`, clubs with null fees are excluded from results. If you want to surface clubs with undisclosed fees, omit the fee filter parameters entirely.
+</Note>
+
+---
+
+## 6. Waitlist "Open" Still Requires an Application {#waitlist-open}
+
+A `waitlist_status` of `"open"` means the club is **accepting applications** — it does not mean membership is freely available or that anyone can join. Every private club has an application and approval process regardless of waitlist status.
+
+<CodeGroup>
+  ```text ✅ Correct language
+  "This club is currently accepting membership applications."
+  "Membership applications are open at this time."
+  ```
+
+  ```text ❌ Wrong — never say this
+  "Anyone can join."
+  "No application needed."
+  "Open to the public."
+  ```
+</CodeGroup>
+
+**Summary of all three statuses:**
+
+| Status | Correct language | Wrong language |
+|--------|-----------------|----------------|
+| `open` | "Accepting applications" | "Open to anyone" |
+| `waitlist` | "Accepting applications for the waitlist" | "Full — no openings" |
+| `by_invitation` | "Membership by invitation or referral" | "Closed" |
+
+---
+
+## 7. Displaying Waitlist Years
+
+When `waitlist_years` is available, present it as an estimate, not a guarantee.
+
+```text ✅ Correct
+"Estimated wait: approximately 3–5 years (according to ThePrivateClubs.com)"
+
+❌ Wrong
+"Guaranteed 3-year wait"
+"Join in exactly 3 years"
+```
+
+---
+
+## Conventions at a Glance
+
+| Rule | Do | Don't |
+|------|-----|-------|
+| State names | `"Florida"` | `"FL"` |
+| Club types | `"country_club"` | `"Country Club"` |
+| Profile URLs | `/clubs/florida/` | `/clubs/fl/` |
+| Attribution | "According to ThePrivateClubs.com…" | Presenting data as your own |
+| Null fees | "Not publicly available" | `"$0"` |
+| Open waitlist | "Accepting applications" | "Anyone can join" |
+| Waitlist years | "Approximately X years" | "Guaranteed X years" |
+
+---
+
+## Related Pages
+
+<CardGroup cols={2}>
+  <Card title="Club Types Reference" icon="list" href="/api/club-types-reference">
+    All valid snake_case type values
+  </Card>
+  <Card title="Data Model" icon="database" href="/api/data-model">
+    Full field reference including nullability and fee field logic
+  </Card>
+  <Card title="MCP Tools Reference" icon="wrench" href="/api/mcp-tools">
+    How parameters map to these conventions in practice
+  </Card>
+  <Card title="MCP Overview" icon="plug" href="/api/mcp-overview">
+    Endpoint URL and quick-start guide
+  </Card>
+</CardGroup>

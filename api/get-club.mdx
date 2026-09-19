@@ -1,0 +1,149 @@
+---
+title: "Get a Club Profile by Name or Slug"
+sidebarTitle: "Get a Club"
+description: "Look up a single private club by name using /ai/clubs.json, /api/clubs, or the MCP get_club tool, and understand club profile URL patterns."
+---
+
+The Private Clubs API does not expose a dedicated single-resource endpoint like `GET /api/clubs/{slug}`, but you have three practical ways to retrieve the full profile for a specific club: filtering the search endpoint by name, using the MCP `get_club` tool from an AI client, or constructing the canonical profile URL directly. This page walks through each approach and explains how to interpret the data you receive.
+
+## Option 1 — Filter /ai/clubs.json by Name
+
+The fastest REST approach is to call `/ai/clubs.json` with a `state` filter (if you know it) and then find the club by `name` in the results. Because the endpoint supports up to 500 results per page, a single request often covers a whole state.
+
+<CodeGroup>
+```bash Known state
+curl "https://www.theprivateclubs.com/ai/clubs.json?state=Florida&limit=500" \
+  | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+match = next((c for c in data['clubs'] if c['name'] == 'Admirals Cove'), None)
+print(json.dumps(match, indent=2))
+"
+```
+
+```bash Nationwide search
+curl "https://www.theprivateclubs.com/ai/clubs.json?limit=500" \
+  | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+match = [c for c in data['clubs'] if 'Augusta' in c['name']]
+print(json.dumps(match, indent=2))
+"
+```
+</CodeGroup>
+
+<Tip>
+Combine a `state` filter with `limit=500` to pull an entire state's clubs in one request, then search the result array client-side. This is far more efficient than paging through the whole dataset when you already know the club's location.
+</Tip>
+
+## Option 2 — Use /api/clubs
+
+The general-purpose `/api/clubs` endpoint accepts the same `type` and `state` filters and is suitable for traditional web application calls. Pair it with a `state` filter to narrow the result set and locate the club you need.
+
+```bash
+curl "https://www.theprivateclubs.com/api/clubs?state=Georgia&limit=100"
+```
+
+<ResponseField name="type" type="string">
+  Filter by club type — see [Search Clubs](/api/search-clubs) for the full enum.
+</ResponseField>
+
+<ResponseField name="state" type="string">
+  Full US state name (e.g., `Georgia`, `Texas`).
+</ResponseField>
+
+<ResponseField name="page" type="integer">
+  Page number, starting at `1`. Default `1`.
+</ResponseField>
+
+<ResponseField name="limit" type="integer">
+  Results per page. Default `24`, max `100`.
+</ResponseField>
+
+## Option 3 — MCP get_club Tool
+
+If you are working inside an AI client connected to the TPC MCP server (Claude, Cursor, Windsurf, etc.), you can call the `get_club` tool directly. It accepts either a club name or a URL slug and returns the full club profile as structured data inside the model's context.
+
+```
+get_club(name="Admirals Cove")
+get_club(slug="admirals-cove")
+```
+
+The MCP tool is the most convenient approach when building conversational agents or AI assistants that need to surface a specific club on demand. See [MCP Tools](/api/mcp-tools) for the full tool reference.
+
+## Club Profile URL Pattern
+
+Every club indexed on The Private Clubs has a canonical profile URL following this pattern:
+
+```
+https://www.theprivateclubs.com/clubs/{state-slug}/{club-slug}
+```
+
+For example:
+
+| Club | Profile URL |
+|---|---|
+| Admirals Cove (Jupiter, FL) | `https://www.theprivateclubs.com/clubs/florida/admirals-cove` |
+| Augusta National (Augusta, GA) | `https://www.theprivateclubs.com/clubs/georgia/augusta-national` |
+| Maidstone Club (East Hampton, NY) | `https://www.theprivateclubs.com/clubs/new-york/maidstone-club` |
+
+The `url` field returned in every club object from `/ai/clubs.json` always contains this canonical URL, so you do not need to construct it manually if you are already working with API results.
+
+### Slug derivation rules
+
+- State slugs are the full state name lowercased with spaces replaced by hyphens: `New York` → `new-york`.
+- Club slugs are the club name lowercased, with spaces and special characters replaced by hyphens, and common stop words dropped.
+
+<Note>
+If you need to link users to a club's profile page, always use the `url` field from the API response rather than constructing the slug yourself. The canonical URL is authoritative and will not break if the slug changes.
+</Note>
+
+## Interpreting the Club Object
+
+Once you retrieve a club record, keep the following conventions in mind:
+
+### Null fees
+
+A `null` value in `fees.initiation_fee_usd` or `fees.annual_dues_usd` means the fee is **not publicly available** — it does not mean the fee is zero or that the club is free to join. Many prestigious clubs deliberately withhold fee information. When displaying this data to end users, show "Not publicly available" rather than "$0" or a blank value.
+
+For guidance on displaying all nullable fields, see [Data Conventions](/api/conventions).
+
+### Waitlist status
+
+`membership.waitlist_status` will be one of `"open"`, `"waitlist"`, `"closed"`, or `null`. A `null` status means the information is unknown, not that the club is open. Always surface this distinction to your users.
+
+### Fees in other currencies
+
+Fees are stored in USD. The Private Clubs platform can display converted amounts in 49 currencies. If your application needs multi-currency display, perform the conversion on your side using the stored USD value. For aggregate fee statistics in USD, see the [Fee Data](/api/fee-data) page.
+
+## Example: Full Club Object
+
+```json
+{
+  "name": "Admirals Cove",
+  "url": "https://www.theprivateclubs.com/clubs/florida/admirals-cove",
+  "type": "golf",
+  "location": {
+    "city": "Jupiter",
+    "state": "Florida",
+    "country": "US"
+  },
+  "fees": {
+    "initiation_fee_usd": 250000,
+    "annual_dues_usd": 24000
+  },
+  "membership": {
+    "waitlist_status": "waitlist",
+    "member_count": null,
+    "founded_year": 1987
+  },
+  "amenities": ["golf", "tennis", "pool", "dining"]
+}
+```
+
+## Related Pages
+
+- [Search Clubs](/api/search-clubs) — Full parameter reference for /ai/clubs.json
+- [Fee Data](/api/fee-data) — Aggregate fee statistics by club type and state
+- [MCP Tools](/api/mcp-tools) — Full list of MCP tool definitions including `get_club`
+- [Data Conventions](/api/conventions) — How to handle null fees, unknown waitlists, and other edge cases

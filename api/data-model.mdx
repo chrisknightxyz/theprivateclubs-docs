@@ -1,0 +1,293 @@
+---
+title: "Club Data Model — Field Reference"
+sidebarTitle: "Data Model"
+description: "Every field on a ThePrivateClubs.com Club record, grouped by category, with types, nullability, and usage notes."
+---
+
+Every club in the ThePrivateClubs.com database is represented as a single Club entity. Whether you retrieve it through the [`get_club`](/api/mcp-tools#get-club) MCP tool or the REST API, you'll receive the same set of fields. This page documents all of them — what they mean, when they're null, and how to display them responsibly.
+
+<Note>
+  Fields marked as **nullable** may return `null` when the data isn't publicly available. Never display a null fee as `$0` — instead say "not publicly available" or "contact the club directly." See [Conventions](/api/conventions) for the full rules.
+</Note>
+
+---
+
+## Core Identity
+
+<ResponseField name="id" type="string">
+  UUID for the club record. Stable across updates — use this as your primary key if you store club data locally.
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Official club name as listed on ThePrivateClubs.com.
+</ResponseField>
+
+<ResponseField name="slug" type="string">
+  URL-safe version of the name used in profile URLs (e.g. `"winged-foot-golf-club"`).
+</ResponseField>
+
+<ResponseField name="type" type="string">
+  Club category in snake_case. See [Club Types Reference](/api/club-types-reference) for all valid values.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Publication status of the record on ThePrivateClubs.com platform.
+</ResponseField>
+
+<ResponseField name="tier" type="string">
+  Data completeness tier — indicates how thoroughly the record has been verified and filled in.
+</ResponseField>
+
+---
+
+## Location
+
+<ResponseField name="city" type="string">
+  City where the club is located.
+</ResponseField>
+
+<ResponseField name="state" type="string">
+  Full US state name (e.g. `"Florida"`). Canadian clubs use province names. Always full name — never an abbreviation. See [Conventions — State Names](/api/conventions#state-names).
+</ResponseField>
+
+<ResponseField name="country" type="string">
+  `"US"` or `"CA"` (United States or Canada).
+</ResponseField>
+
+<ResponseField name="address" type="string | null">
+  Street address.
+</ResponseField>
+
+<ResponseField name="zip" type="string | null">
+  ZIP or postal code.
+</ResponseField>
+
+<ResponseField name="latitude" type="number | null">
+  GPS latitude in decimal degrees.
+</ResponseField>
+
+<ResponseField name="longitude" type="number | null">
+  GPS longitude in decimal degrees.
+</ResponseField>
+
+---
+
+## Fees
+
+Fee fields may be `null` when a club does not publicly disclose its pricing. When you encounter a null fee, say "not publicly available" or "contact the club" — never display it as `$0`. When a club has a fee *range* rather than a single figure, `initiation_fee_min` and `initiation_fee_max` will be set while `initiation_fee` may be null.
+
+<ResponseField name="initiation_fee" type="number | null">
+  One-time initiation fee in USD. Null if undisclosed or if the club uses a range instead of a flat fee.
+</ResponseField>
+
+<ResponseField name="initiation_fee_min" type="number | null">
+  Lower bound of the initiation fee range in USD.
+</ResponseField>
+
+<ResponseField name="initiation_fee_max" type="number | null">
+  Upper bound of the initiation fee range in USD.
+</ResponseField>
+
+<ResponseField name="annual_dues" type="number | null">
+  Annual membership dues in USD. Null if undisclosed.
+</ResponseField>
+
+<ResponseField name="annual_dues_min" type="number | null">
+  Lower bound of annual dues range.
+</ResponseField>
+
+<ResponseField name="annual_dues_max" type="number | null">
+  Upper bound of annual dues range.
+</ResponseField>
+
+<ResponseField name="monthly_dues" type="number | null">
+  Monthly dues in USD, if the club uses monthly billing. Null if the club bills annually or if undisclosed.
+</ResponseField>
+
+<ResponseField name="social_fee" type="number | null">
+  Social membership fee in USD, for clubs that offer a social tier separate from full membership.
+</ResponseField>
+
+---
+
+## Membership
+
+<ResponseField name="waitlist_status" type="string">
+  Current membership availability. One of three values:
+
+  | Value | Meaning |
+  |-------|---------|
+  | `open` | The club is accepting membership applications. An application and approval process is still required — this does not mean anyone can join. |
+  | `waitlist` | The club accepts applications, but new members join a waiting list before receiving full membership. |
+  | `by_invitation` | Membership is available only through a sponsor, member referral, or board invitation. No unsolicited applications are accepted. |
+</ResponseField>
+
+<ResponseField name="membership_availability" type="string | null">
+  Free-text note about current availability, such as a specific opening for a membership category.
+</ResponseField>
+
+<ResponseField name="waitlist_years" type="number | null">
+  Estimated wait time in years for clubs with a `waitlist` status. Null if not disclosed or if status is `open` or `by_invitation`.
+</ResponseField>
+
+<ResponseField name="total_members" type="number | null">
+  Current number of members. Null if not disclosed.
+</ResponseField>
+
+<ResponseField name="member_capacity" type="number | null">
+  Maximum membership capacity. Null if not disclosed or uncapped.
+</ResponseField>
+
+---
+
+## Details
+
+<ResponseField name="description" type="string | null">
+  Long-form description of the club, its history, culture, and offerings.
+</ResponseField>
+
+<ResponseField name="founded_year" type="number | null">
+  Year the club was established (e.g. `1888`).
+</ResponseField>
+
+<ResponseField name="amenities" type="array">
+  List of amenity strings available at the club. Common values include `"Golf"`, `"Tennis"`, `"Swimming Pool"`, `"Dining"`, `"Fitness Center"`, `"Marina"`, `"Spa"`.
+</ResponseField>
+
+<ResponseField name="tags" type="array">
+  Descriptive tags used for search and filtering (e.g. `["family-friendly", "championship-course", "oceanfront"]`).
+</ResponseField>
+
+<ResponseField name="website" type="string | null">
+  The club's official website URL.
+</ResponseField>
+
+---
+
+## Golf Course Data
+
+These fields are only populated for clubs with a `type` of `golf` or `country_club`. All are null for other club types.
+
+<ResponseField name="holes" type="number | null">
+  Number of holes (typically 9, 18, 27, or 36).
+</ResponseField>
+
+<ResponseField name="par" type="number | null">
+  Course par.
+</ResponseField>
+
+<ResponseField name="yardage" type="number | null">
+  Total yardage from the championship tees.
+</ResponseField>
+
+<ResponseField name="slope" type="number | null">
+  USGA slope rating (55–155 scale).
+</ResponseField>
+
+<ResponseField name="rating" type="number | null">
+  USGA course rating.
+</ResponseField>
+
+<ResponseField name="course_architect" type="string | null">
+  Name of the course designer or architect.
+</ResponseField>
+
+<ResponseField name="course_count" type="number | null">
+  Number of distinct courses at the club, for multi-course facilities.
+</ResponseField>
+
+<ResponseField name="courses" type="array | null">
+  <Expandable title="Individual course objects (for multi-course clubs)">
+    <ResponseField name="name" type="string">Course name (e.g. `"East Course"`).</ResponseField>
+    <ResponseField name="holes" type="number | null">Holes on this course.</ResponseField>
+    <ResponseField name="par" type="number | null">Par for this course.</ResponseField>
+    <ResponseField name="yardage" type="number | null">Yardage for this course.</ResponseField>
+    <ResponseField name="slope" type="number | null">Slope rating for this course.</ResponseField>
+    <ResponseField name="rating" type="number | null">Course rating for this course.</ResponseField>
+    <ResponseField name="architect" type="string | null">Architect for this course.</ResponseField>
+  </Expandable>
+</ResponseField>
+
+---
+
+## Reviews & Ratings
+
+<ResponseField name="google_place_id" type="string | null">
+  Google Places ID for the club, used to link to its Google Maps listing.
+</ResponseField>
+
+<ResponseField name="google_rating" type="number | null">
+  Aggregate Google rating on a 1.0–5.0 scale. Null if the club has no Google Places record or fewer than the minimum review threshold.
+</ResponseField>
+
+<ResponseField name="google_review_count" type="number | null">
+  Total number of Google reviews contributing to the rating.
+</ResponseField>
+
+---
+
+## Media
+
+<ResponseField name="hero_image_url" type="string | null">
+  URL of the club's primary feature image.
+</ResponseField>
+
+<ResponseField name="logo_url" type="string | null">
+  URL of the club's logo.
+</ResponseField>
+
+<ResponseField name="gallery_images" type="array | null">
+  Array of additional image URLs for the club gallery.
+</ResponseField>
+
+<ResponseField name="virtual_tour_url" type="string | null">
+  URL to a virtual tour (e.g. a Matterport or YouTube link), if available.
+</ResponseField>
+
+---
+
+## Contact
+
+<ResponseField name="phone" type="string | null">
+  Club's main phone number.
+</ResponseField>
+
+<ResponseField name="email" type="string | null">
+  Club's general contact email address.
+</ResponseField>
+
+<ResponseField name="contact_name" type="string | null">
+  Name of the primary membership or sales contact.
+</ResponseField>
+
+<ResponseField name="contact_email" type="string | null">
+  Direct email for the membership contact.
+</ResponseField>
+
+<ResponseField name="contact_phone" type="string | null">
+  Direct phone number for the membership contact.
+</ResponseField>
+
+---
+
+## Profile URL
+
+Every club has a canonical profile page on ThePrivateClubs.com. The URL pattern is:
+
+```
+https://www.theprivateclubs.com/clubs/{state-slug}/{club-slug}
+```
+
+Where `{state-slug}` is the lowercase, hyphenated state name and `{club-slug}` is the club's `slug` field. Examples:
+
+| Club | Profile URL |
+|------|-------------|
+| Winged Foot Golf Club (New York) | `https://www.theprivateclubs.com/clubs/new-york/winged-foot-golf-club` |
+| The Breakers (Florida) | `https://www.theprivateclubs.com/clubs/florida/the-breakers` |
+| Bel-Air Country Club (California) | `https://www.theprivateclubs.com/clubs/california/bel-air-country-club` |
+
+The `profile_url` field on every Club record contains the fully resolved URL — you don't need to construct it yourself.
+
+<Note>
+  Profile URLs always use the full state name slug (`/clubs/florida/`), never the two-letter abbreviation (`/clubs/fl/`). See [Conventions](/api/conventions#profile-urls) for details.
+</Note>

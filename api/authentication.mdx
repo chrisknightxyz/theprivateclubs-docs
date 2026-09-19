@@ -1,0 +1,87 @@
+---
+title: "API Authentication: No Key Required for Public Use"
+sidebarTitle: "Authentication"
+description: "The TPC REST API is fully public — no API key or Authorization header needed for standard endpoints. Learn when auth does and doesn't apply."
+---
+
+The Private Clubs API is designed for frictionless access. The standard REST endpoints are completely public, meaning you can make requests directly from a browser, a curl command, a server-side script, or an LLM tool without registering for an account or generating an API key. For the vast majority of use cases, authentication is simply not required.
+
+<Note>
+**No API key needed.** You do not need an `Authorization` header, a `Bearer` token, or any query-string credential to call `/ai/clubs.json` or `/api/clubs`. Just make a plain HTTP GET request.
+</Note>
+
+## Public Endpoints
+
+The following endpoints are open to everyone with no credentials:
+
+| Endpoint | Auth Required |
+|---|---|
+| `GET /ai/clubs.json` | None |
+| `GET /api/clubs` | None |
+| `GET /ai/context.md` | None |
+| `GET /openapi.json` | None |
+| `GET /llms.txt` | None |
+| `GET /llms-full.txt` | None |
+
+### Making a request
+
+Because there is no authentication layer, a minimal request looks exactly like this:
+
+<CodeGroup>
+```bash curl
+curl "https://www.theprivateclubs.com/ai/clubs.json?type=country_club&state=New+York"
+```
+
+```python Python
+import urllib.request, json
+
+url = "https://www.theprivateclubs.com/ai/clubs.json?type=country_club&state=New+York"
+with urllib.request.urlopen(url) as response:
+    data = json.loads(response.read())
+print(data["meta"]["total"], "clubs found")
+```
+
+```javascript JavaScript
+const res = await fetch(
+  "https://www.theprivateclubs.com/ai/clubs.json?type=country_club&state=New+York"
+);
+const data = await res.json();
+console.log(data.meta.total, "clubs found");
+```
+</CodeGroup>
+
+No additional headers are needed. The API responds with `Content-Type: application/json` and you can parse the body immediately.
+
+## MCP Endpoint
+
+The MCP endpoint at `/api/mcp` is used by AI clients such as Claude, Cursor, and Windsurf that support the [Model Context Protocol](https://modelcontextprotocol.io/). Authentication for the MCP endpoint is **managed automatically by the MCP client** — the client establishes a session when it connects, and that session context is passed with every tool call. You do not need to generate or store a token manually.
+
+If you are setting up an MCP client integration, refer to the [MCP Overview](/api/mcp-overview) and [MCP Connect](/api/mcp-connect) pages for connection instructions specific to your tool.
+
+| Endpoint | Auth |
+|---|---|
+| `POST /api/mcp` | Session-based, managed by the MCP client |
+
+## Enterprise & Bulk Access
+
+If you need capabilities beyond the public API — such as higher rate limits, bulk data exports, or a dedicated data feed — you will need to contact the team to arrange enterprise access:
+
+- **Email:** [data@theprivateclubs.com](mailto:data@theprivateclubs.com)
+- **Enterprise page:** [theprivateclubs.com/enterprise](https://www.theprivateclubs.com/enterprise)
+
+Enterprise access details, including any credential format used for higher-tier endpoints, are provided directly to enterprise customers.
+
+<Tip>
+If you are building a prototype, a research tool, or an LLM agent, the public endpoints almost certainly cover your needs. Start with `/ai/clubs.json` and only reach out for enterprise access if you are running into [rate limits](/api/rate-limits) or require bulk export volumes.
+</Tip>
+
+## Summary
+
+| Use Case | Auth Required |
+|---|---|
+| Browse or search clubs | ❌ None |
+| Fetch fee and waitlist data | ❌ None |
+| AI context file | ❌ None |
+| LLM guidance files | ❌ None |
+| MCP tool use (via AI client) | Session-managed by client |
+| Enterprise bulk access | Contact data@theprivateclubs.com |

@@ -1,0 +1,104 @@
+---
+title: "The Private Clubs API: Overview & Quick Start"
+sidebarTitle: "Overview"
+description: "Explore the TPC public REST API to query 51,633+ private clubs by type, state, fees, and waitlist status — no authentication required."
+---
+
+The Private Clubs API gives you programmatic access to the largest directory of private membership clubs in North America. Every endpoint is public and requires no API key for standard use, so you can start pulling club data — names, locations, initiation fees, annual dues, amenity lists, and waitlist statuses — with a single HTTP GET request. The API is designed with AI and LLM workflows in mind, and dedicated endpoints are available for AI context summarization and MCP-compatible tool use.
+
+## Base URL
+
+All API requests go to:
+
+```
+https://www.theprivateclubs.com
+```
+
+## Main Endpoints
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /ai/clubs.json` | Search and filter clubs — optimized for AI/LLM use |
+| `GET /api/clubs` | General-purpose club search |
+| `GET /ai/context.md` | Markdown summary for AI context windows |
+| `GET /openapi.json` | OpenAPI 3.0 specification |
+| `GET /llms.txt` | Summary LLM guidance file |
+| `GET /llms-full.txt` | Full LLM reference file |
+| `POST /api/mcp` | MCP endpoint for AI tool integrations |
+
+### /ai/clubs.json — AI-optimized search
+
+`/ai/clubs.json` is the primary endpoint for querying clubs. It returns structured JSON with a `meta` pagination object and an array of `clubs`, each containing fee data, location, membership status, and amenities. Use this endpoint when building AI-powered club finders, LLM agents, or data pipelines.
+
+### /api/clubs — General-purpose search
+
+`/api/clubs` offers the same filtering capabilities with a smaller default page size (24 per page, max 100). It is better suited for traditional web application use where you want lighter payloads per request.
+
+### /ai/context.md — AI context summary
+
+`/ai/context.md` returns a pre-built Markdown document containing key stats, average fees by club type, top clubs by initiation fee, and dataset summaries. Drop it directly into an LLM context window to give a model an authoritative overview of the private club landscape without fetching individual records.
+
+### /llms.txt and /llms-full.txt
+
+These files follow the [llms.txt](https://llmstxt.org/) convention. `/llms.txt` is a compact summary; `/llms-full.txt` is the complete reference. Neither endpoint has a rate limit, and both are cached for one hour.
+
+### /openapi.json
+
+The full [OpenAPI 3.0](https://www.theprivateclubs.com/openapi.json) specification describes every endpoint, parameter, and response schema in a machine-readable format you can import directly into tools like Postman, Insomnia, or code generators.
+
+## Quick Start
+
+The example below fetches the first page of golf clubs in Florida with no API key:
+
+<CodeGroup>
+```bash curl
+curl "https://www.theprivateclubs.com/ai/clubs.json?type=golf&state=Florida"
+```
+
+```python Python
+import urllib.request, json
+
+url = "https://www.theprivateclubs.com/ai/clubs.json?type=golf&state=Florida"
+with urllib.request.urlopen(url) as response:
+    data = json.loads(response.read())
+
+print(f"Found {data['meta']['total']} clubs across {data['meta']['pages']} pages")
+for club in data["clubs"]:
+    print(club["name"], "-", club["location"]["city"])
+```
+
+```javascript JavaScript
+const res = await fetch(
+  "https://www.theprivateclubs.com/ai/clubs.json?type=golf&state=Florida"
+);
+const data = await res.json();
+
+console.log(`Found ${data.meta.total} clubs`);
+data.clubs.forEach(c => console.log(c.name, "-", c.location.city));
+```
+</CodeGroup>
+
+<Note>
+No `Authorization` header or API key is required for any of the examples above. See [Authentication](/api/authentication) for full details on what the public endpoints require — and what enterprise access looks like.
+</Note>
+
+## Enterprise & Bulk Access
+
+The standard rate limit for `/ai/clubs.json` and `/api/clubs` is 100 requests per minute per IP. If you need higher throughput, bulk exports, or a dedicated data feed, contact the team at [data@theprivateclubs.com](mailto:data@theprivateclubs.com) or visit the [enterprise page](https://www.theprivateclubs.com/enterprise).
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="lock-open" href="/api/authentication">
+    Understand what's public and how the MCP endpoint handles sessions
+  </Card>
+  <Card title="Rate Limits" icon="gauge-high" href="/api/rate-limits">
+    Default limits, 429 handling, and best practices
+  </Card>
+  <Card title="Search Clubs" icon="magnifying-glass" href="/api/search-clubs">
+    Full parameter and response reference for /ai/clubs.json
+  </Card>
+  <Card title="MCP Integration" icon="plug" href="/api/mcp-overview">
+    Connect Claude, Cursor, and other AI tools via MCP
+  </Card>
+</CardGroup>

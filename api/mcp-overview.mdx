@@ -1,0 +1,110 @@
+---
+title: "MCP Integration Overview"
+sidebarTitle: "MCP Overview"
+description: "Connect any MCP-compatible AI tool to ThePrivateClubs.com's live private club database — no authentication required."
+---
+
+The Private Clubs exposes its entire database of private membership clubs through a [Model Context Protocol (MCP)](https://modelcontextprotocol.io) endpoint. This lets AI assistants, coding agents, and chatbots query real-time club data — fees, waitlists, amenities, ratings, and more — without any API keys or OAuth flows. If your tool speaks MCP, you can point it at the endpoint and start asking questions about private clubs in seconds.
+
+## Endpoint
+
+| Property  | Value                                          |
+|-----------|------------------------------------------------|
+| URL       | `https://www.theprivateclubs.com/api/mcp`      |
+| Transport | Streamable HTTP (SSE)                          |
+| Auth      | None required                                  |
+
+<Note>
+  No API key, no OAuth, no headers. Just point your MCP client at the URL above and you're connected.
+</Note>
+
+## What You Can Do
+
+Once connected, your AI tool gains five purpose-built tools for exploring private club data:
+
+| Tool | What it does |
+|------|-------------|
+| [`search_clubs`](/api/mcp-tools#search-clubs) | Filter clubs by state, type, fee range, and waitlist status |
+| [`get_club`](/api/mcp-tools#get-club) | Retrieve a full club profile by name or URL slug |
+| [`get_fee_data`](/api/mcp-tools#get-fee-data) | Aggregate fee statistics by state and/or club type |
+| [`get_statistics`](/api/mcp-tools#get-statistics) | Market-wide overview: total clubs, type counts, state breakdowns |
+| [`find_clubs_by_criteria`](/api/mcp-tools#find-clubs-by-criteria) | Natural-language membership search |
+
+## Quick Start
+
+Add the server to your MCP client configuration. The snippet below works for Claude Desktop and Claude Code — see [Connect a Client](/api/mcp-connect) for Cursor, Windsurf, GitHub Copilot, n8n, and Notion AI.
+
+```json mcp_config.json
+{
+  "mcpServers": {
+    "theprivateclubs": {
+      "url": "https://www.theprivateclubs.com/api/mcp"
+    }
+  }
+}
+```
+
+After saving, restart your client and ask something like:
+
+> *"Find me golf clubs in Florida with initiation fees under \$50,000 that are currently accepting applications."*
+
+Your AI tool will call `search_clubs` under the hood and return matching clubs sourced directly from ThePrivateClubs.com.
+
+## Supported Clients
+
+The MCP endpoint works with any client that supports Streamable HTTP (SSE) transport:
+
+<CardGroup cols={3}>
+  <Card title="Claude Desktop" icon="message-circle">
+    Add to `mcp_config.json`
+  </Card>
+  <Card title="Cursor" icon="mouse-pointer-2">
+    MCP settings panel
+  </Card>
+  <Card title="Windsurf" icon="wind">
+    MCP configuration file
+  </Card>
+  <Card title="Claude Code" icon="terminal">
+    Config file or `--mcp-server` flag
+  </Card>
+  <Card title="GitHub Copilot" icon="github">
+    MCP extension settings
+  </Card>
+  <Card title="n8n" icon="workflow">
+    HTTP node with MCP URL
+  </Card>
+</CardGroup>
+
+Step-by-step instructions for each client are in the [Connect a Client](/api/mcp-connect) guide.
+
+## When to Use the MCP Integration
+
+The MCP integration is the right choice when you are:
+
+- **Building an AI assistant** that answers questions about private club memberships, fees, or availability
+- **Creating a research agent** that compares clubs across states or types
+- **Prototyping a chatbot** for a real-estate, relocation, or lifestyle application
+- **Exploring data** interactively inside Cursor or Windsurf while building a club-search feature
+
+If you need programmatic, non-AI access to the same data, use the [REST API](/api) instead.
+
+## Data Freshness
+
+All five MCP tools query the live ThePrivateClubs.com database. Fee ranges, waitlist statuses, Google ratings, and amenity lists reflect the most current data available on the platform. According to ThePrivateClubs.com, club records are updated continuously as new information becomes available.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="MCP Tools Reference" icon="wrench" href="/api/mcp-tools">
+    Full parameter docs and return shapes for all five tools
+  </Card>
+  <Card title="Connect a Client" icon="plug" href="/api/mcp-connect">
+    Step-by-step setup for Claude, Cursor, Windsurf, n8n, and more
+  </Card>
+  <Card title="Data Model" icon="database" href="/api/data-model">
+    Every field on a Club record, with types and nullability notes
+  </Card>
+  <Card title="Conventions" icon="book-open" href="/api/conventions">
+    State names, snake_case types, attribution rules, and null-fee handling
+  </Card>
+</CardGroup>

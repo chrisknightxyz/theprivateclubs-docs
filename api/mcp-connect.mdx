@@ -1,0 +1,302 @@
+---
+title: "Connect an MCP Client to ThePrivateClubs.com"
+sidebarTitle: "Connect"
+description: "Step-by-step setup instructions for Claude Desktop, Cursor, Windsurf, Claude Code, GitHub Copilot, n8n, and Notion AI."
+---
+
+The ThePrivateClubs.com MCP server uses Streamable HTTP (SSE) transport and requires no authentication. All you need is the server URL:
+
+```
+https://www.theprivateclubs.com/api/mcp
+```
+
+Pick your client below and follow the steps to connect. Once you've added the server, restart the client and you'll have access to all five [MCP tools](/api/mcp-tools).
+
+<Tabs>
+  <Tab title="Claude Desktop">
+    Claude Desktop reads MCP servers from a JSON config file on your machine.
+
+    <Steps>
+      <Step title="Open your config file">
+        The file is at:
+        - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+        - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+
+        Create the file if it doesn't exist yet.
+      </Step>
+      <Step title="Add the server entry">
+        Paste the following into the file. If you already have other MCP servers listed, add `"theprivateclubs"` alongside them inside `"mcpServers"`.
+
+        ```json claude_desktop_config.json
+        {
+          "mcpServers": {
+            "theprivateclubs": {
+              "url": "https://www.theprivateclubs.com/api/mcp"
+            }
+          }
+        }
+        ```
+      </Step>
+      <Step title="Restart Claude Desktop">
+        Quit the app and relaunch it. The ThePrivateClubs.com tools will appear in Claude's tool panel.
+      </Step>
+      <Step title="Test the connection">
+        Type a message like:
+
+        > *"Search for golf clubs in Florida with initiation fees under \$75,000."*
+
+        Claude will call `search_clubs` and return results sourced from ThePrivateClubs.com.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Cursor">
+    Cursor supports MCP servers through its built-in settings panel.
+
+    <Steps>
+      <Step title="Open Cursor Settings">
+        Press `Cmd+,` (macOS) or `Ctrl+,` (Windows/Linux) to open **Preferences**, then navigate to **Features → MCP Servers**.
+      </Step>
+      <Step title="Add a new server">
+        Click **Add MCP Server** and fill in:
+        - **Name:** `theprivateclubs`
+        - **Type:** `http` (Streamable HTTP / SSE)
+        - **URL:** `https://www.theprivateclubs.com/api/mcp`
+
+        Leave the authentication fields blank — no auth is required.
+      </Step>
+      <Step title="Enable the server">
+        Toggle the server to **Enabled** and close Settings.
+      </Step>
+      <Step title="Use it in the AI panel">
+        Open the Cursor chat panel and ask:
+
+        > *"What country clubs in New York are currently accepting applications?"*
+
+        Cursor's AI will invoke `search_clubs` automatically.
+      </Step>
+    </Steps>
+
+    <Note>
+      Cursor also supports `mcp_config.json` in your project root. You can use the same JSON snippet shown in the Claude Desktop tab.
+    </Note>
+  </Tab>
+
+  <Tab title="Windsurf">
+    Windsurf (by Codeium) supports MCP servers via its configuration file.
+
+    <Steps>
+      <Step title="Locate the Windsurf MCP config">
+        Windsurf reads MCP config from:
+        - **macOS / Linux:** `~/.codeium/windsurf/mcp_config.json`
+        - **Windows:** `%USERPROFILE%\.codeium\windsurf\mcp_config.json`
+
+        Create the file if it doesn't exist.
+      </Step>
+      <Step title="Add the server">
+        ```json mcp_config.json
+        {
+          "mcpServers": {
+            "theprivateclubs": {
+              "url": "https://www.theprivateclubs.com/api/mcp"
+            }
+          }
+        }
+        ```
+      </Step>
+      <Step title="Restart Windsurf">
+        Close and reopen Windsurf. The server will connect automatically on startup.
+      </Step>
+      <Step title="Verify in Cascade">
+        Open Cascade (Windsurf's AI panel) and ask about private clubs. The ThePrivateClubs.com tools will be available to Cascade automatically.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Claude Code">
+    Claude Code (the CLI) supports MCP servers either via a config file or a command-line flag.
+
+    **Option A — Config file (recommended for persistent use)**
+
+    <Steps>
+      <Step title="Edit your Claude Code config">
+        Add the server to `~/.claude/claude_desktop_config.json` (Claude Code shares this file with Claude Desktop):
+
+        ```json claude_desktop_config.json
+        {
+          "mcpServers": {
+            "theprivateclubs": {
+              "url": "https://www.theprivateclubs.com/api/mcp"
+            }
+          }
+        }
+        ```
+      </Step>
+      <Step title="Start a session">
+        Launch Claude Code normally. The server will be available in every session.
+
+        ```bash
+        claude
+        ```
+      </Step>
+    </Steps>
+
+    **Option B — Command-line flag (one-off sessions)**
+
+    Pass the server directly when launching Claude Code:
+
+    ```bash
+    claude --mcp-server theprivateclubs=https://www.theprivateclubs.com/api/mcp
+    ```
+
+    This connects the server for the current session only, without modifying your config file.
+  </Tab>
+
+  <Tab title="GitHub Copilot">
+    GitHub Copilot supports MCP servers through the MCP extension in VS Code.
+
+    <Steps>
+      <Step title="Install the MCP extension">
+        Open VS Code, go to the **Extensions** panel, and search for **GitHub Copilot MCP**. Install it if you haven't already.
+      </Step>
+      <Step title="Open MCP Settings">
+        Open the VS Code Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`) and run:
+
+        ```
+        GitHub Copilot: Open MCP Settings
+        ```
+      </Step>
+      <Step title="Add the server">
+        In the MCP settings JSON, add the `theprivateclubs` entry:
+
+        ```json settings.json (MCP section)
+        {
+          "mcpServers": {
+            "theprivateclubs": {
+              "url": "https://www.theprivateclubs.com/api/mcp"
+            }
+          }
+        }
+        ```
+
+        Save the file.
+      </Step>
+      <Step title="Use Copilot Chat">
+        Open **GitHub Copilot Chat** in VS Code and ask club-related questions. Copilot will invoke the ThePrivateClubs.com tools when relevant.
+      </Step>
+    </Steps>
+
+    <Note>
+      MCP support in GitHub Copilot requires Copilot Chat and the MCP extension. Make sure both are up to date.
+    </Note>
+  </Tab>
+
+  <Tab title="n8n">
+    In n8n you connect to the MCP endpoint via the **HTTP Request** node configured as an MCP client, or using the native **MCP Client** node if your n8n version includes it.
+
+    <Steps>
+      <Step title="Open your workflow">
+        Create a new workflow or open an existing one in n8n.
+      </Step>
+      <Step title="Add an HTTP Request node">
+        Drop in an **HTTP Request** node. Configure it as follows:
+
+        | Field | Value |
+        |-------|-------|
+        | Method | `POST` |
+        | URL | `https://www.theprivateclubs.com/api/mcp` |
+        | Content-Type | `application/json` |
+        | Accept | `text/event-stream` |
+
+        No authentication headers are needed.
+      </Step>
+      <Step title="Build your MCP request body">
+        In the request **Body**, pass a JSON-RPC MCP call. For example, to search for clubs:
+
+        ```json
+        {
+          "jsonrpc": "2.0",
+          "method": "tools/call",
+          "params": {
+            "name": "search_clubs",
+            "arguments": {
+              "state": "Florida",
+              "type": "golf",
+              "limit": 10
+            }
+          },
+          "id": 1
+        }
+        ```
+
+        You can map any field to n8n expression variables to make the node dynamic.
+      </Step>
+      <Step title="Parse the SSE response">
+        The endpoint returns Server-Sent Events. Add a **Code** node after the HTTP Request node to parse the `data:` lines from the SSE stream and extract the JSON payload.
+      </Step>
+      <Step title="Connect downstream nodes">
+        Use the parsed club data in subsequent n8n nodes — a **Spreadsheet** node, a **Send Email** node, a **Slack** message, or any other action in your workflow.
+      </Step>
+    </Steps>
+
+    <Note>
+      If your n8n instance has a dedicated **MCP Client** node, you can point it directly at `https://www.theprivateclubs.com/api/mcp` and select tool calls from a dropdown — no manual JSON-RPC body needed.
+    </Note>
+  </Tab>
+
+  <Tab title="Notion AI">
+    Notion AI supports external integrations including MCP-compatible servers through its **Connections** settings.
+
+    <Steps>
+      <Step title="Open Notion Settings">
+        In Notion, click your workspace name in the top-left corner and select **Settings & Members**.
+      </Step>
+      <Step title="Go to Connections">
+        Navigate to **Connections → Browse integrations** in the left sidebar.
+      </Step>
+      <Step title="Add a custom MCP connection">
+        Look for **Custom AI integrations** or **MCP servers** (the exact label depends on your Notion plan). Click **Add connection** and enter:
+        - **Name:** `ThePrivateClubs.com`
+        - **Server URL:** `https://www.theprivateclubs.com/api/mcp`
+        - **Authentication:** None
+
+        Save the connection.
+      </Step>
+      <Step title="Use it in an AI block">
+        In any Notion page, insert an **AI block** and ask about private clubs. Notion AI will invoke the ThePrivateClubs.com tools when your query is about club search, fees, or membership data.
+      </Step>
+    </Steps>
+
+    <Note>
+      MCP integrations in Notion AI may require a Business or Enterprise plan. Check your workspace's plan if the **Custom AI integrations** option isn't visible.
+    </Note>
+  </Tab>
+</Tabs>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The tools don't appear after adding the server">
+    Make sure you fully restarted your client after saving the config file. Some clients (Claude Desktop, Windsurf) only read MCP configs on launch — a reload or hot-reload is not sufficient.
+  </Accordion>
+  <Accordion title="I'm getting connection errors">
+    Check that the URL is exactly `https://www.theprivateclubs.com/api/mcp` — no trailing slash, no path segments. Also verify your machine can reach `theprivateclubs.com` (try opening the URL in a browser).
+  </Accordion>
+  <Accordion title="The AI isn't calling the tools automatically">
+    Some clients require you to explicitly enable MCP tool use in the chat settings. Look for a **Tools** or **Plugins** toggle in the chat interface and make sure it is turned on.
+  </Accordion>
+  <Accordion title="Can I restrict which tools are available?">
+    Tool filtering depends on your client. Most clients let you enable or disable individual tools per server in their MCP settings panel. The server itself exposes all five tools on every connection.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="MCP Tools Reference" icon="wrench" href="/api/mcp-tools">
+    Full parameter docs for all five tools
+  </Card>
+  <Card title="Data Model" icon="database" href="/api/data-model">
+    Understand every field returned by the tools
+  </Card>
+</CardGroup>

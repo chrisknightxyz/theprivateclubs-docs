@@ -1,0 +1,192 @@
+---
+title: "Market Statistics: Counts, Reviews, and Distribution"
+sidebarTitle: "Statistics"
+description: "Access TPC market stats — 51,633+ clubs, counts by type and state, waitlist distribution, 16,972 Google Reviews — via /ai/context.md or get_statistics."
+---
+
+The Private Clubs dataset is the largest structured index of private membership clubs in North America. Beyond individual club records, the platform exposes aggregate market statistics covering club counts by type and state, waitlist status distribution, Google Reviews coverage, and photo counts. You can access these figures through the `/ai/context.md` endpoint or, if you are using an MCP-connected AI client, through the `get_statistics` tool.
+
+## Overview of the Dataset
+
+| Metric | Value |
+|---|---|
+| Total clubs indexed | 51,633+ |
+| Countries covered | United States and Canada |
+| Google Reviews indexed | 16,972 reviews across 3,446 clubs |
+| Club photos | 14,213 photos |
+
+## MCP get_statistics Tool
+
+If you are working inside an AI client connected to the TPC MCP server, the `get_statistics` tool returns a structured snapshot of the entire dataset. No arguments are required.
+
+```
+get_statistics()
+```
+
+### What it returns
+
+<ResponseField name="total_clubs" type="integer">
+  Total number of clubs indexed across all types and regions (e.g., `51633`).
+</ResponseField>
+
+<ResponseField name="counts_by_type" type="object">
+  A map of club type → club count. Keys match the `type` enum used in [Search Clubs](/api/search-clubs).
+
+  <Expandable title="Example counts_by_type">
+  ```json
+  {
+    "golf": 12400,
+    "country_club": 8950,
+    "yacht": 2300,
+    "tennis": 1870,
+    "social": 4100,
+    "equestrian": 980,
+    "aviation": 620,
+    "ski": 410,
+    "fishing": 1750,
+    "beach": 890,
+    "hunting": 1300,
+    "wellness": 2200,
+    "arts": 1100,
+    "automotive": 340,
+    "adventure": 420
+  }
+  ```
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="counts_by_state" type="object">
+  A map of US state name → club count, covering all 50 states plus Canadian provinces.
+
+  <Expandable title="Example top states">
+  ```json
+  {
+    "Florida": 4210,
+    "California": 3980,
+    "Texas": 3450,
+    "New York": 2870,
+    "Georgia": 1940,
+    "North Carolina": 1820,
+    "Pennsylvania": 1760,
+    "Ohio": 1540,
+    "Virginia": 1430,
+    "Michigan": 1390
+  }
+  ```
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="waitlist_distribution" type="object">
+  Breakdown of membership availability across all indexed clubs.
+
+  <Expandable title="Example waitlist_distribution">
+  ```json
+  {
+    "open": 18240,
+    "waitlist": 7610,
+    "closed": 3120,
+    "unknown": 22663
+  }
+  ```
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="reviews" type="object">
+  Google Reviews coverage across the dataset.
+
+  <Expandable title="Example reviews">
+  ```json
+  {
+    "total_reviews": 16972,
+    "clubs_with_reviews": 3446
+  }
+  ```
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="photos" type="object">
+  Club photo coverage across the dataset.
+
+  <Expandable title="Example photos">
+  ```json
+  {
+    "total_photos": 14213
+  }
+  ```
+  </Expandable>
+</ResponseField>
+
+## GET /ai/context.md
+
+The `/ai/context.md` endpoint returns a complete Markdown summary document that includes all of the statistics above alongside fee benchmarks and notable club examples. It is designed to be pasted directly into an LLM context window or system prompt.
+
+```bash
+curl "https://www.theprivateclubs.com/ai/context.md"
+```
+
+A representative excerpt of the document looks like this:
+
+```markdown
+## The Private Clubs — AI Context Summary
+
+**Total Clubs:** 51,633+
+**Countries:** United States, Canada
+
+### Clubs by Type
+| Type | Count |
+|---|---|
+| Golf | 12,400+ |
+| Country Club | 8,950+ |
+| ...
+
+### Average Initiation Fees by Type
+| Type | Avg. Initiation Fee |
+|---|---|
+| Golf | $81,595 |
+| Country Club | $59,150 |
+| ...
+
+### Reviews & Media
+- 16,972 Google Reviews across 3,446 clubs
+- 14,213 club photos indexed
+```
+
+<Note>
+`/ai/context.md` is cached at the CDN level for one hour. The statistics it contains represent a periodic snapshot of the live dataset, not a real-time count. For the absolute latest total, call `get_statistics()` via MCP.
+</Note>
+
+## Using Statistics in LLM Workflows
+
+Statistics from `get_statistics()` and `/ai/context.md` are particularly useful for:
+
+- **Answering market-level questions:** "How many golf clubs are in Florida?" or "What percentage of clubs have a waitlist?"
+- **Benchmarking fees:** "Is this club's $150,000 initiation fee above or below average for golf clubs?"
+- **Generating data-driven summaries:** Inject `/ai/context.md` into a system prompt to give your model authoritative baseline knowledge without per-request API calls.
+
+<CodeGroup>
+```python Inject context into system prompt
+import urllib.request
+
+with urllib.request.urlopen("https://www.theprivateclubs.com/ai/context.md") as r:
+    context = r.read().decode("utf-8")
+
+system_prompt = f"""You are an expert private club advisor for the US and Canada.
+Use the following authoritative dataset summary as your baseline knowledge:
+
+{context}
+
+Answer user questions based on this data. When a user asks about a specific club,
+use the get_club tool to retrieve detailed information."""
+```
+
+```bash Fetch raw stats as Markdown
+curl "https://www.theprivateclubs.com/ai/context.md"
+```
+</CodeGroup>
+
+## Related Pages
+
+- [Fee Data](/api/fee-data) — Detailed fee averages, medians, and ranges by type and state
+- [Search Clubs](/api/search-clubs) — Browse and filter individual club records
+- [MCP Tools](/api/mcp-tools) — Full tool reference including `get_statistics` and `get_fee_data`
+- [Rate Limits](/api/rate-limits) — Caching and request frequency guidance

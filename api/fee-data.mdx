@@ -1,0 +1,131 @@
+---
+title: "Fee Data: Averages, Ranges, and Benchmarks"
+sidebarTitle: "Fee Data"
+description: "Access private club fee statistics — averages, medians, and ranges by club type and state — via the MCP get_fee_data tool or GET /ai/context.md."
+---
+
+The Private Clubs dataset covers initiation fees and annual dues for thousands of clubs across the US and Canada. Rather than pulling and aggregating raw records yourself, you can access pre-computed fee statistics in two ways: the `get_fee_data` MCP tool for structured programmatic access, and the `/ai/context.md` endpoint for a human-readable Markdown summary ready to drop into an LLM context window.
+
+## MCP get_fee_data Tool
+
+If you are working inside an AI client connected to the TPC MCP server (Claude, Cursor, Windsurf, or similar), the `get_fee_data` tool returns aggregate fee statistics for any combination of club type and US state.
+
+### What it returns
+
+For each query, `get_fee_data` returns the following statistics for both initiation fees and annual dues:
+
+| Statistic | Description |
+|---|---|
+| `average` | Mean fee across all clubs with a disclosed fee in the filtered set |
+| `min` | Lowest disclosed fee in the filtered set |
+| `max` | Highest disclosed fee in the filtered set |
+| `median` | Median (50th percentile) fee — more representative than average for skewed distributions |
+
+<Note>
+Statistics are calculated only from clubs with **disclosed** fees. Clubs where `initiation_fee_usd` or `annual_dues_usd` is `null` are excluded from aggregate calculations. See [Data Conventions](/api/conventions) for more on null fees.
+</Note>
+
+### Filtering
+
+You can call `get_fee_data` with any combination of `state` and `type` filters, or with neither to get nationwide statistics.
+
+```
+get_fee_data()                                    # All clubs, all states
+get_fee_data(type="golf")                         # All golf clubs, nationwide
+get_fee_data(state="Florida")                     # All clubs in Florida
+get_fee_data(type="country_club", state="Texas")  # Country clubs in Texas
+```
+
+### Example output
+
+```json
+{
+  "type": "golf",
+  "state": null,
+  "initiation_fee": {
+    "average": 81595,
+    "min": 500,
+    "max": 600000,
+    "median": 45000
+  },
+  "annual_dues": {
+    "average": 14200,
+    "min": 800,
+    "max": 75000,
+    "median": 11000
+  },
+  "clubs_with_fee_data": 1842
+}
+```
+
+## Fee Benchmarks by Club Type
+
+The table below shows representative average initiation fees by club type based on the TPC dataset. These values come from the `/ai/context.md` summary and are updated periodically as new clubs are added or fees are revised.
+
+| Club Type | Avg. Initiation Fee (USD) |
+|---|---|
+| Golf | $81,595 |
+| Country Club | $59,150 |
+| Yacht | ~$25,000–$80,000 |
+| Equestrian | ~$10,000–$40,000 |
+| Tennis | ~$5,000–$25,000 |
+| Social | ~$2,000–$15,000 |
+
+<Note>
+Ranges shown for club types without a single published average. Use `get_fee_data(type=...)` or `/ai/context.md` for the most current figures.
+</Note>
+
+## GET /ai/context.md
+
+For AI and LLM workflows, `/ai/context.md` returns a pre-built Markdown document that includes:
+
+- Total club count and coverage breakdown
+- Average initiation fees and annual dues grouped by club type
+- Top clubs by initiation fee
+- Waitlist status distribution
+- Google Reviews and photo coverage statistics
+
+```bash
+curl "https://www.theprivateclubs.com/ai/context.md"
+```
+
+The response is plain Markdown text, making it straightforward to inject directly into a system prompt or context window:
+
+```python
+import urllib.request
+
+with urllib.request.urlopen("https://www.theprivateclubs.com/ai/context.md") as r:
+    tpc_context = r.read().decode("utf-8")
+
+# Inject into your LLM system prompt
+system_prompt = f"""You are a private club advisor.
+Use the following data as your authoritative reference:
+
+{tpc_context}
+"""
+```
+
+<Tip>
+Cache the `/ai/context.md` response for up to one hour — the CDN already caches it at that TTL, so you will get a fast response. Re-fetch it at the start of each new user session rather than on every turn of an LLM conversation.
+</Tip>
+
+## Currency Display
+
+All fees in the TPC dataset are stored and returned in **US dollars (USD)**. The Private Clubs platform can display converted amounts across 49 currencies for end users. If your application needs to show fees in a different currency, retrieve the USD value from the API and apply your own conversion using a current exchange rate. The stored USD values are always authoritative.
+
+## Null Fees — What They Mean
+
+When `initiation_fee_usd` or `annual_dues_usd` is `null` in a club record, it means the fee is **not publicly disclosed** — not that the club is free. Many of the most prestigious and exclusive clubs deliberately withhold fee information. When surfacing fee data to users:
+
+- Display `"Not publicly available"` instead of `"$0"` or a blank
+- Do not include null-fee clubs in client-side averages without noting the exclusion
+- Direct users to the club's profile page or the [Concierge Service](https://www.theprivateclubs.com) for enquiries
+
+For the full list of display conventions, see [Data Conventions](/api/conventions).
+
+## Related Pages
+
+- [Search Clubs](/api/search-clubs) — Retrieve raw fee data for individual clubs
+- [Statistics](/api/statistics) — Total counts, distribution by type, and market-level metrics
+- [MCP Tools](/api/mcp-tools) — Full reference for `get_fee_data` and other MCP tools
+- [Data Conventions](/api/conventions) — Handling null values and currency display

@@ -1,38 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mintlify Starter Kit",
+  "theme": "willow",
+  "name": "The Private Clubs",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#171717"
   },
-  "favicon": "/favicon.svg",
-  "navigation": {
-    "pages": [
-      {
-        "group": "Getting Started",
-        "pages": [
-          "index",
-          "quickstart"
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
+  "favicon": "https://icons.duckduckgo.com/ip3/theprivateclubs.com.ico",
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
@@ -41,32 +14,101 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:data@theprivateclubs.com"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://app.mintlify.com"
+      "label": "Visit Platform",
+      "href": "https://www.theprivateclubs.com"
     }
   },
-  "contextual": {
-    "options": [
-      "copy",
-      "view",
-      "chatgpt",
-      "claude",
-      "perplexity",
-      "mcp",
-      "cursor",
-      "vscode"
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Platform",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "introduction",
+              "platform/how-it-works",
+              "platform/club-types"
+            ]
+          },
+          {
+            "group": "For Members",
+            "pages": [
+              "members/searching-clubs",
+              "members/comparing-clubs",
+              "members/applying-for-membership",
+              "members/concierge-service",
+              "members/member-community"
+            ]
+          },
+          {
+            "group": "For Clubs",
+            "pages": [
+              "clubs/claiming-your-listing",
+              "clubs/verified-profile",
+              "clubs/lead-management",
+              "clubs/analytics-dashboard",
+              "clubs/ai-discovery",
+              "clubs/director-community"
+            ]
+          },
+          {
+            "group": "Pricing & Plans",
+            "pages": [
+              "pricing/members-plans",
+              "pricing/clubs-plans"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API & Integrations",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "api/overview",
+              "api/authentication",
+              "api/rate-limits"
+            ]
+          },
+          {
+            "group": "REST API",
+            "pages": [
+              "api/search-clubs",
+              "api/get-club",
+              "api/fee-data",
+              "api/statistics"
+            ]
+          },
+          {
+            "group": "MCP Integration",
+            "pages": [
+              "api/mcp-overview",
+              "api/mcp-tools",
+              "api/mcp-connect"
+            ]
+          },
+          {
+            "group": "Data Reference",
+            "pages": [
+              "api/data-model",
+              "api/club-types-reference",
+              "api/conventions"
+            ]
+          }
+        ]
+      }
     ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/theprivateclubs"
     }
   }
 }

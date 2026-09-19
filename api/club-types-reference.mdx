@@ -1,0 +1,192 @@
+---
+title: "Club Types Reference — API Values & Descriptions"
+sidebarTitle: "Club Types"
+description: "Every valid club type value for ThePrivateClubs.com API filters, with descriptions and website URL mappings."
+---
+
+Club types are the primary way to filter and categorize private membership clubs across ThePrivateClubs.com. Every club record has a `type` field that contains exactly one of the values below. When you pass a type to any MCP tool or REST endpoint, use the **API value** (snake_case) — human-readable labels like "Country Club" or "Golf Club" will not be recognized.
+
+The same values power the website's type browse pages at `https://www.theprivateclubs.com/clubs/type/{type-slug}`, so the API values and the URL slugs are identical.
+
+## All Club Types
+
+<ResponseField name="golf" type="API value: golf">
+  Dedicated golf clubs whose primary focus is the golf course and related facilities. May include a clubhouse and dining, but golf is the central membership benefit.
+</ResponseField>
+
+<ResponseField name="country_club" type="API value: country_club">
+  Full-service country clubs offering golf alongside a broad range of amenities — tennis, swimming, dining, fitness, and family programming. The most comprehensive private club category.
+</ResponseField>
+
+<ResponseField name="yacht" type="API value: yacht">
+  Clubs centered on boating, sailing, and waterfront activities. Members typically gain access to moorings, docking, sailing programs, and a waterfront clubhouse.
+</ResponseField>
+
+<ResponseField name="aviation" type="API value: aviation">
+  Private aviation clubs providing shared access to aircraft, hangars, flight instruction, and pilot lounges. Members may fly club-owned aircraft or co-own fractional shares.
+</ResponseField>
+
+<ResponseField name="equestrian" type="API value: equestrian">
+  Horse-focused clubs with boarding, riding arenas, trails, and training programs. Membership commonly includes access to stables, show facilities, and groomed trails.
+</ResponseField>
+
+<ResponseField name="social" type="API value: social">
+  Clubs whose primary value is social connection — events, dining, and networking — rather than a specific sport or activity. Often urban, with a strong events calendar.
+</ResponseField>
+
+<ResponseField name="tennis" type="API value: tennis">
+  Clubs centered on tennis, with courts (hard, clay, or grass), professional instruction, leagues, and competitive play. May also offer pickleball and paddle tennis.
+</ResponseField>
+
+<ResponseField name="automotive" type="API value: automotive">
+  Collector car and motorsport clubs providing track access, garaging, vehicle storage, driving events, and concours competitions for automotive enthusiasts.
+</ResponseField>
+
+<ResponseField name="ski" type="API value: ski">
+  Mountain and ski clubs offering private slope access, ski-in/ski-out lodges, reserved lift lines, and après-ski amenities. Most are located at or near major ski resorts.
+</ResponseField>
+
+<ResponseField name="fishing" type="API value: fishing">
+  Fly fishing, sport fishing, and angling clubs with access to private rivers, streams, ponds, or coastal waters. May include rod-and-gun programming.
+</ResponseField>
+
+<ResponseField name="beach" type="API value: beach">
+  Coastal or lakefront clubs providing private beach access, cabanas, water sports, and beachside dining. Common in Florida, the Hamptons, and New England.
+</ResponseField>
+
+<ResponseField name="hunting" type="API value: hunting">
+  Hunting preserves and sporting clubs with managed land, lodges, guides, and dog kennels. Common in the South, Midwest, and Mountain West.
+</ResponseField>
+
+<ResponseField name="wellness" type="API value: wellness">
+  Health and wellness clubs focused on spa, fitness, recovery, and holistic programming. Typically high-service environments with personal trainers, nutritionists, and spa treatments.
+</ResponseField>
+
+<ResponseField name="arts" type="API value: arts">
+  Arts and cultural clubs supporting visual arts, performing arts, literature, or all of the above. Members gain access to galleries, studios, performances, and curated programming.
+</ResponseField>
+
+<ResponseField name="adventure" type="API value: adventure">
+  Clubs centered on outdoor adventure and expedition activities — mountaineering, backcountry travel, diving, and similar pursuits.
+</ResponseField>
+
+<ResponseField name="city" type="API value: city">
+  Urban membership clubs in a city setting, often combining dining, accommodations, business facilities, and social programming for working professionals and executives.
+</ResponseField>
+
+<ResponseField name="athletic" type="API value: athletic">
+  Multi-sport athletic clubs emphasizing fitness, racket sports, aquatics, and competitive programming — distinct from single-sport or wellness-only clubs.
+</ResponseField>
+
+<ResponseField name="dining" type="API value: dining">
+  Private dining clubs where membership grants access to exclusive restaurant spaces, chef's tables, wine cellars, and curated culinary events.
+</ResponseField>
+
+<ResponseField name="residential" type="API value: residential">
+  Clubs integrated into a residential community or development, where homeowners in a planned neighborhood receive automatic or optional club membership.
+</ResponseField>
+
+<ResponseField name="business" type="API value: business">
+  Executive and business clubs focused on professional networking, private meeting rooms, concierge services, and corporate event hosting.
+</ResponseField>
+
+---
+
+## Quick Reference Table
+
+| API Value | Display Name | Primary Activity |
+|-----------|-------------|-----------------|
+| `golf` | Golf Club | Golf |
+| `country_club` | Country Club | Golf + multi-amenity |
+| `yacht` | Yacht Club | Sailing & boating |
+| `aviation` | Aviation Club | Flying & aircraft |
+| `equestrian` | Equestrian Club | Horses & riding |
+| `social` | Social Club | Events & networking |
+| `tennis` | Tennis Club | Tennis & racket sports |
+| `automotive` | Automotive Club | Cars & motorsport |
+| `ski` | Ski Club | Skiing & mountain |
+| `fishing` | Fishing Club | Angling & fly fishing |
+| `beach` | Beach Club | Beachfront & water |
+| `hunting` | Hunting Club | Hunting & shooting |
+| `wellness` | Wellness Club | Spa & fitness |
+| `arts` | Arts Club | Culture & arts |
+| `adventure` | Adventure Club | Outdoor expedition |
+| `city` | City Club | Urban social |
+| `athletic` | Athletic Club | Multi-sport fitness |
+| `dining` | Dining Club | Private dining |
+| `residential` | Residential Club | Community-based |
+| `business` | Business Club | Executive & corporate |
+
+---
+
+## Website URL Pattern
+
+Club type browse pages on ThePrivateClubs.com use the same snake_case values:
+
+```
+https://www.theprivateclubs.com/clubs/type/{type}
+```
+
+**Examples:**
+
+```
+https://www.theprivateclubs.com/clubs/type/golf
+https://www.theprivateclubs.com/clubs/type/country_club
+https://www.theprivateclubs.com/clubs/type/yacht
+```
+
+---
+
+## Filtering by Type in the API
+
+Pass the `type` parameter to `search_clubs` or `get_fee_data` to scope results to a single category. Combine `type` with `state` and fee filters for precise searches.
+
+<CodeGroup>
+  ```json search_clubs — golf in Florida
+  {
+    "tool": "search_clubs",
+    "arguments": {
+      "state": "Florida",
+      "type": "golf",
+      "max_initiation_fee": 75000,
+      "limit": 10
+    }
+  }
+  ```
+
+  ```json get_fee_data — country club stats in California
+  {
+    "tool": "get_fee_data",
+    "arguments": {
+      "state": "California",
+      "type": "country_club"
+    }
+  }
+  ```
+
+  ```json search_clubs — yacht clubs open for applications
+  {
+    "tool": "search_clubs",
+    "arguments": {
+      "type": "yacht",
+      "waitlist_status": "open",
+      "limit": 20
+    }
+  }
+  ```
+</CodeGroup>
+
+<Note>
+  The `type` parameter accepts only the exact API values listed above. Passing `"Country Club"`, `"golf club"`, or any other variation will not match records — use `"country_club"` and `"golf"` respectively.
+</Note>
+
+## Related Pages
+
+<CardGroup cols={2}>
+  <Card title="MCP Tools Reference" icon="wrench" href="/api/mcp-tools">
+    Full parameter docs including how to combine type with other filters
+  </Card>
+  <Card title="Conventions" icon="book-open" href="/api/conventions">
+    snake_case rules, state names, and other data conventions
+  </Card>
+</CardGroup>
