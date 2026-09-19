@@ -1,7 +1,7 @@
 ---
 title: "Club Types Reference — API Values & Descriptions"
 sidebarTitle: "Club Types"
-description: "Every valid club type value for ThePrivateClubs.com API filters, with descriptions and website URL mappings."
+description: "All 15 valid club type values for ThePrivateClubs.com API and MCP tools — snake_case API values, descriptions, and website URL patterns for each type."
 ---
 
 Club types are the primary way to filter and categorize private membership clubs across ThePrivateClubs.com. Every club record has a `type` field that contains exactly one of the values below. When you pass a type to any MCP tool or REST endpoint, use the **API value** (snake_case) — human-readable labels like "Country Club" or "Golf Club" will not be recognized.
@@ -70,26 +70,6 @@ The same values power the website's type browse pages at `https://www.theprivate
   Clubs centered on outdoor adventure and expedition activities — mountaineering, backcountry travel, diving, and similar pursuits.
 </ResponseField>
 
-<ResponseField name="city" type="API value: city">
-  Urban membership clubs in a city setting, often combining dining, accommodations, business facilities, and social programming for working professionals and executives.
-</ResponseField>
-
-<ResponseField name="athletic" type="API value: athletic">
-  Multi-sport athletic clubs emphasizing fitness, racket sports, aquatics, and competitive programming — distinct from single-sport or wellness-only clubs.
-</ResponseField>
-
-<ResponseField name="dining" type="API value: dining">
-  Private dining clubs where membership grants access to exclusive restaurant spaces, chef's tables, wine cellars, and curated culinary events.
-</ResponseField>
-
-<ResponseField name="residential" type="API value: residential">
-  Clubs integrated into a residential community or development, where homeowners in a planned neighborhood receive automatic or optional club membership.
-</ResponseField>
-
-<ResponseField name="business" type="API value: business">
-  Executive and business clubs focused on professional networking, private meeting rooms, concierge services, and corporate event hosting.
-</ResponseField>
-
 ---
 
 ## Quick Reference Table
@@ -111,11 +91,6 @@ The same values power the website's type browse pages at `https://www.theprivate
 | `wellness` | Wellness Club | Spa & fitness |
 | `arts` | Arts Club | Culture & arts |
 | `adventure` | Adventure Club | Outdoor expedition |
-| `city` | City Club | Urban social |
-| `athletic` | Athletic Club | Multi-sport fitness |
-| `dining` | Dining Club | Private dining |
-| `residential` | Residential Club | Community-based |
-| `business` | Business Club | Executive & corporate |
 
 ---
 
@@ -139,9 +114,13 @@ https://www.theprivateclubs.com/clubs/type/yacht
 
 ## Filtering by Type in the API
 
-Pass the `type` parameter to `search_clubs` or `get_fee_data` to scope results to a single category. Combine `type` with `state` and fee filters for precise searches.
+Pass the `type` parameter to `search_clubs` or `get_fee_data` to scope results to a single category. Combine `type` with `state` and fee filters for precise searches. The REST endpoint also accepts `type` as a query parameter.
 
 <CodeGroup>
+  ```bash curl — golf clubs in Florida
+  curl "https://www.theprivateclubs.com/api/clubs?type=golf&state=Florida&limit=10"
+  ```
+
   ```json search_clubs — golf in Florida
   {
     "tool": "search_clubs",

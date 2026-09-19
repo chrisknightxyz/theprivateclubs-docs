@@ -1,5 +1,5 @@
 ---
-title: "API Rate Limits and Best Practices"
+title: "TPC API Rate Limits, 429 Handling, and Best Practices"
 sidebarTitle: "Rate Limits"
 description: "Understand per-IP request limits for each TPC endpoint, how HTTP 429 responses work, and how to stay well within limits using caching and pagination."
 ---
@@ -12,11 +12,11 @@ The Private Clubs API is public and generously rate-limited for standard use. Mo
 |---|---|---|
 | `GET /ai/clubs.json` | 100 requests / min per IP | No auth required |
 | `GET /api/clubs` | 100 requests / min per IP | No auth required |
-| `POST /api/mcp` | 60 calls / min per MCP session | Session-scoped, not IP-scoped |
+| `GET /api/mcp` | 60 calls / min per MCP session | Session-scoped, not IP-scoped |
 | `GET /llms.txt` | No limit | Response cached for 1 hour |
 | `GET /llms-full.txt` | No limit | Response cached for 1 hour |
-| `GET /ai/context.md` | Not documented — treat conservatively | Response is static summary |
-| `GET /openapi.json` | Not documented — treat conservatively | Rarely needs re-fetching |
+| `GET /ai/context.md` | No limit | Static summary; cache for up to 1 hour |
+| `GET /openapi.json` | No limit | Schema file; fetch once and cache locally |
 
 <Note>
 Rate limits apply **per IP address** for the REST endpoints and **per MCP session** for the MCP endpoint. If your service routes all outbound requests through a shared IP (e.g., a NAT gateway or a serverless execution environment), all requests from that IP count toward the same bucket.

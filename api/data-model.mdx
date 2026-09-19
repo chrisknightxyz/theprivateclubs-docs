@@ -1,7 +1,7 @@
 ---
-title: "Club Data Model — Field Reference"
+title: "Club Data Model — Complete Field Reference Guide"
 sidebarTitle: "Data Model"
-description: "Every field on a ThePrivateClubs.com Club record, grouped by category, with types, nullability, and usage notes."
+description: "Every field on a ThePrivateClubs.com club record, grouped by category — types, nullability, fee logic, golf course data, and profile URL construction."
 ---
 
 Every club in the ThePrivateClubs.com database is represented as a single Club entity. Whether you retrieve it through the [`get_club`](/api/mcp-tools#get-club) MCP tool or the REST API, you'll receive the same set of fields. This page documents all of them — what they mean, when they're null, and how to display them responsibly.
@@ -286,7 +286,9 @@ Where `{state-slug}` is the lowercase, hyphenated state name and `{club-slug}` i
 | The Breakers (Florida) | `https://www.theprivateclubs.com/clubs/florida/the-breakers` |
 | Bel-Air Country Club (California) | `https://www.theprivateclubs.com/clubs/california/bel-air-country-club` |
 
-The `profile_url` field on every Club record contains the fully resolved URL — you don't need to construct it yourself.
+<ResponseField name="profile_url" type="string">
+  Fully resolved canonical profile URL for the club on ThePrivateClubs.com. Use this field directly — you do not need to construct the URL from `state` and `slug` manually.
+</ResponseField>
 
 <Note>
   Profile URLs always use the full state name slug (`/clubs/florida/`), never the two-letter abbreviation (`/clubs/fl/`). See [Conventions](/api/conventions#profile-urls) for details.

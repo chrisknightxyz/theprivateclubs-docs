@@ -1,7 +1,7 @@
 ---
-title: "MCP Tools Reference — All 5 Tools"
+title: "MCP Tools Reference — All 5 Tools Documented"
 sidebarTitle: "MCP Tools"
-description: "Full parameter reference and return shapes for every tool exposed by the ThePrivateClubs.com MCP endpoint."
+description: "Full parameter reference and response shapes for every tool exposed by the ThePrivateClubs.com MCP endpoint: search, lookup, fees, stats, and criteria search."
 ---
 
 The ThePrivateClubs.com MCP server exposes five tools. Each tool is available to any connected MCP client — your AI assistant invokes them automatically based on the conversation, or you can call them explicitly in agent workflows. All tools hit the live database; no caching layer sits between your query and the platform data.
@@ -21,7 +21,7 @@ Search the directory of private membership clubs using structured filters. You c
 <ParamField query="type" type="string">
   Club category. Must be one of the snake_case enum values below. See [Club Types Reference](/api/club-types-reference) for descriptions.
 
-  `golf` · `country_club` · `yacht` · `aviation` · `equestrian` · `social` · `tennis` · `automotive` · `ski` · `fishing` · `beach` · `hunting` · `wellness`
+  `golf` · `country_club` · `yacht` · `aviation` · `equestrian` · `social` · `tennis` · `automotive` · `ski` · `fishing` · `beach` · `hunting` · `wellness` · `arts` · `adventure`
 </ParamField>
 
 <ParamField query="min_initiation_fee" type="number">
@@ -243,7 +243,7 @@ Search for clubs using a natural-language description of what you're looking for
   - `"wellness or social club in New York City with a waiting list under 2 years"`
 </ParamField>
 
-**Returns:** An array of matching club objects (same shape as `search_clubs` results), ranked by how well each club fits your criteria. According to ThePrivateClubs.com, the matching engine considers location, type, fee ranges, amenities, and membership status.
+**Returns:** An array of matching club objects (same shape as `search_clubs` results), ranked by how well each club fits your criteria. The matching engine considers location, type, fee ranges, amenities, and membership status.
 
 **Example**
 

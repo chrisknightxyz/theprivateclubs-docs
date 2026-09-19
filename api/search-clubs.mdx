@@ -1,5 +1,5 @@
 ---
-title: "Search Clubs with GET /ai/clubs.json"
+title: "Search Clubs Endpoint — GET /ai/clubs.json Reference"
 sidebarTitle: "Search Clubs"
 description: "Full parameter and response reference for the /ai/clubs.json endpoint — filter by type, state, and page through 51,633+ private club listings."
 ---
@@ -146,7 +146,7 @@ curl "https://www.theprivateclubs.com/ai/clubs.json"
 
       <Expandable title="membership fields">
         <ResponseField name="membership.waitlist_status" type="string | null">
-          Current waitlist status. Common values include `"open"`, `"waitlist"`, and `"closed"`. May be `null` if the status is unknown.
+          Current waitlist status. One of `"open"`, `"waitlist"`, or `"by_invitation"`. May be `null` if the status is unknown. Note that `"open"` still requires a formal application — it simply means applications are currently being accepted.
         </ResponseField>
 
         <ResponseField name="membership.member_count" type="integer | null">

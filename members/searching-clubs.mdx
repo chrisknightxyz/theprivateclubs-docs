@@ -1,14 +1,14 @@
 ---
-title: "How to Search the Private Club Directory"
-sidebarTitle: "Search"
-description: "Browse 51,633+ private clubs by state, club type, initiation fee, annual dues, and membership availability — and build a precise shortlist for your search."
+title: "Search the Private Club Directory by State, Type & Fees"
+sidebarTitle: "Search Clubs"
+description: "Browse 51,633+ private clubs by state, club type, initiation fee, annual dues, and membership availability to build a precise shortlist."
 ---
 
 The Private Clubs directory is the most comprehensive private membership database in North America, and it is built to be searched. Rather than relying on referrals or cold-calling membership offices, you can filter the entire directory down to a precise shortlist in minutes using combinations of geography, club type, price range, and current availability. This guide walks you through every search tool available and shares tips for getting to the right clubs faster.
 
 ## Where to Start
 
-Navigate to [theprivateclubs.com/clubs](/clubs) to open the full directory. By default, results show all club types across all states, ordered by relevance. From here, apply any combination of filters described below to narrow your results.
+Navigate to [theprivateclubs.com/clubs](https://www.theprivateclubs.com/clubs) to open the full directory. By default, results show all club types across all states, ordered by relevance. From here, apply any combination of filters described below to narrow your results.
 
 ## Browsing by State
 
@@ -23,7 +23,7 @@ For example:
 - `/clubs/new-york` — all clubs in New York
 - `/clubs/california` — all clubs in California
 
-State pages surface the most prominent clubs in that state and let you apply all other filters within the geographic boundary. If you are relocating or have a specific target market, start at the state page rather than the national directory.
+State slugs are the full lowercase state name with spaces replaced by hyphens. State pages surface the most prominent clubs in that state and let you apply all other filters within the geographic boundary. If you are relocating or have a specific target market, start at the state page rather than the national directory.
 
 ## Filtering by Club Type
 
@@ -33,15 +33,13 @@ Every listing is tagged with a primary club type. Use the **Club Type** filter t
 /clubs/type/[type-slug]
 ```
 
-Supported type slugs include:
+Supported type slugs are:
 
 | Slug | Category |
 |---|---|
 | `golf` | Golf clubs |
 | `country_club` | Country clubs |
 | `yacht` | Yacht & sailing clubs |
-| `city` | City clubs |
-| `athletic` | Athletic clubs |
 | `aviation` | Aviation clubs |
 | `equestrian` | Equestrian clubs |
 | `social` | Social clubs |
@@ -54,9 +52,6 @@ Supported type slugs include:
 | `wellness` | Wellness clubs |
 | `arts` | Arts clubs |
 | `adventure` | Adventure clubs |
-| `dining` | Dining clubs |
-| `residential` | Residential clubs |
-| `business` | Business clubs |
 
 For a full description of each category, see the [Club Types reference](/platform/club-types).
 
@@ -80,11 +75,11 @@ Annual dues are a recurring cost that compounds over your membership lifetime. U
 
 Not all clubs are actively accepting applications. The directory supports three availability statuses:
 
-| Status | What It Means |
-|---|---|
-| **Open** | The club is actively accepting membership applications. You can apply directly through the listing. |
-| **Waitlist** | The club has a waiting list. You can submit an inquiry to join the waitlist, but membership may take months or years. |
-| **By Invitation** | The club requires a sponsor who is an existing member before it will consider your application. |
+| Status | API Value | What It Means |
+|---|---|---|
+| **Open** | `open` | The club is actively accepting membership applications. You can apply directly through the listing. Note that "open" still requires a completed application — it is not immediate enrollment. |
+| **Waitlist** | `waitlist` | The club has a waiting list. You can submit an inquiry to join the waitlist, but membership may take months or years. |
+| **By Invitation** | `by_invitation` | The club requires a sponsor who is an existing member before it will consider your application. |
 
 Filter to **Open** clubs when you need to join quickly. Filter to **Waitlist** and **By Invitation** clubs when you are planning ahead and want to position yourself for a more exclusive membership.
 

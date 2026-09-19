@@ -1,7 +1,7 @@
 ---
-title: "MCP Integration Overview"
+title: "MCP Integration — AI Access to Private Club Data"
 sidebarTitle: "MCP Overview"
-description: "Connect any MCP-compatible AI tool to ThePrivateClubs.com's live private club database — no authentication required."
+description: "Connect any MCP-compatible AI assistant to ThePrivateClubs.com's live database of 51,633+ private clubs — no API key or authentication required."
 ---
 
 The Private Clubs exposes its entire database of private membership clubs through a [Model Context Protocol (MCP)](https://modelcontextprotocol.io) endpoint. This lets AI assistants, coding agents, and chatbots query real-time club data — fees, waitlists, amenities, ratings, and more — without any API keys or OAuth flows. If your tool speaks MCP, you can point it at the endpoint and start asking questions about private clubs in seconds.
@@ -56,7 +56,7 @@ The MCP endpoint works with any client that supports Streamable HTTP (SSE) trans
 
 <CardGroup cols={3}>
   <Card title="Claude Desktop" icon="message-circle">
-    Add to `mcp_config.json`
+    Add to `claude_desktop_config.json`
   </Card>
   <Card title="Cursor" icon="mouse-pointer-2">
     MCP settings panel
@@ -73,6 +73,9 @@ The MCP endpoint works with any client that supports Streamable HTTP (SSE) trans
   <Card title="n8n" icon="workflow">
     HTTP node with MCP URL
   </Card>
+  <Card title="Notion AI" icon="book-open">
+    Custom AI integrations settings
+  </Card>
 </CardGroup>
 
 Step-by-step instructions for each client are in the [Connect a Client](/api/mcp-connect) guide.
@@ -86,11 +89,11 @@ The MCP integration is the right choice when you are:
 - **Prototyping a chatbot** for a real-estate, relocation, or lifestyle application
 - **Exploring data** interactively inside Cursor or Windsurf while building a club-search feature
 
-If you need programmatic, non-AI access to the same data, use the [REST API](/api) instead.
+If you need programmatic, non-AI access to the same data, use the [REST API](/api) instead. The REST API supports up to 100 requests per minute per IP, while the MCP endpoint allows up to 60 tool calls per minute per session.
 
 ## Data Freshness
 
-All five MCP tools query the live ThePrivateClubs.com database. Fee ranges, waitlist statuses, Google ratings, and amenity lists reflect the most current data available on the platform. According to ThePrivateClubs.com, club records are updated continuously as new information becomes available.
+All five MCP tools query the live ThePrivateClubs.com database. Fee ranges, waitlist statuses, Google ratings, and amenity lists reflect the most current data available on the platform. Club records are updated continuously as new information becomes available.
 
 ## Next Steps
 

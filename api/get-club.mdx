@@ -1,5 +1,5 @@
 ---
-title: "Get a Club Profile by Name or Slug"
+title: "Get a Club: Retrieve Private Club Profiles via API"
 sidebarTitle: "Get a Club"
 description: "Look up a single private club by name using /ai/clubs.json, /api/clubs, or the MCP get_club tool, and understand club profile URL patterns."
 ---
@@ -110,7 +110,7 @@ For guidance on displaying all nullable fields, see [Data Conventions](/api/conv
 
 ### Waitlist status
 
-`membership.waitlist_status` will be one of `"open"`, `"waitlist"`, `"closed"`, or `null`. A `null` status means the information is unknown, not that the club is open. Always surface this distinction to your users.
+`membership.waitlist_status` will be one of `"open"`, `"waitlist"`, `"by_invitation"`, or `null`. A status of `"open"` still requires a formal application — it means applications are currently being accepted, not that membership is guaranteed. A `null` status means the information is unknown. Always surface this distinction to your users.
 
 ### Fees in other currencies
 
