@@ -108,7 +108,21 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/theprivateclubs"
-    }
+      "x": "https://x.com/theprivateclubs",
+      "instagram": "https://www.instagram.com/theprivateclubs",
+      "linkedin": "https://www.linkedin.com/company/theprivateclubs",
+      "youtube": "https://www.youtube.com/@theprivateclubs"
+    },
+    "links": [
+      {
+        "header": "Social",
+        "items": [
+          {
+            "label": "TikTok",
+            "href": "https://www.tiktok.com/@theprivateclubs"
+          }
+        ]
+      }
+    ]
   }
 }
