@@ -14,7 +14,7 @@
       "dark": "#0A0A0A"
     }
   },
-  "favicon": "https://icons.duckduckgo.com/ip3/theprivateclubs.com.ico",
+  "favicon": "/favicon.svg",
   "icons": {
     "library": "tabler"
   },
