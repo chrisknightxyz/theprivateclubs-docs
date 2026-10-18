@@ -28,7 +28,7 @@ To ask about a data feed license, email support@theprivateclubs.com. See the [da
 | `page` | 1 | Starts at 1. `page` times `limit`, with `limit` clamped to 50, can be at most 500, and a larger product returns 403 `data_feed_required`. A value that is not a whole number from 1, such as `0`, returns 400 `invalid_page`. Leading zeros are fine, and an empty `page=` counts as not sent. |
 | `limit` | 50 | The maximum is 50, and larger values are clamped to 50. A value that is not a whole number from 1, such as `0`, returns 400 `invalid_limit`. Leading zeros are fine, and an empty `limit=` counts as not sent. |
 
-The API returns the first 500 results of a search. Stop paging when `page * limit` reaches `total` or 500, whichever comes first. A page past the last result, within the first 500, returns 200 with an empty `clubs` array and the real `total`. A page that reaches past result 500 returns 403 with `data_feed_required`, even when `total` is larger.
+The API returns the first 500 results of a search. Stop paging when `page * limit` reaches `total` or 500, whichever comes first. A page past the last result, within the first 500, returns 200 with an empty `clubs` array and the real `total`. A page that reaches past result 500 returns 403 with `data_feed_required` whatever the `total`, even when `total` is below 500.
 
 ## Rate limit headers
 

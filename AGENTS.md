@@ -64,7 +64,7 @@ Copy these exactly.
 
 - Every sentence must be true today. Never invent features, prices, limits, numbers, endpoints, fields, UI labels or vendor steps.
 - Fees: the MCP server never returns fees, and API calls from a server or script never return fee figures. Never state, estimate or imply a club's fees, and never paste fee figures.
-- API paging: `limit` defaults to 50, the maximum is 50 and larger values are clamped. `page` times `limit` can be at most 500 (the first 500 results of a search); past that, `GET /api/v1/clubs` answers 403 `data_feed_required`. Never show a loop or guide that pages through every result to download a state, a type or the directory: that is bulk use.
+- API paging: `limit` defaults to 50, the maximum is 50 and larger values are clamped. `page` times `limit`, with `limit` clamped to 50, can be at most 500 (the first 500 results of a search); past that, `GET /api/v1/clubs` answers 403 `data_feed_required` before any read, whatever the `total`, even when `total` is below 500. Never show a loop or guide that pages through every result to download a state, a type or the directory: that is bulk use.
 - Data feed: bulk access is a paid monthly data feed license (Chris, 2026-10-18). No price, plan name or SLA is set, so never invent one. Say to email support@theprivateclubs.com, and link `/data/license` and `/legal/terms`.
 - Rate limits: REST responses carry static `RateLimit` and `RateLimit-Policy` headers, but nothing counts requests or returns 429. Describe the headers as the advertised policy and never claim enforcement.
 - The REST API sends no CORS headers, so tell readers to call it from a server. The MCP server allows any origin.

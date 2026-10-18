@@ -61,7 +61,7 @@ The codes:
 |---|---|---|
 | `invalid_page` | 400 | `page` is not a whole number from 1, such as `abc`, `0` or `-1`. An empty `page=` counts as not sent. |
 | `invalid_limit` | 400 | `limit` is not a whole number from 1, such as `abc` or `0`. An empty `limit=` counts as not sent. |
-| `data_feed_required` | 403 | `page` times `limit` is above 500, so the page reaches past the first 500 results of a search. Bulk access needs a paid data feed license. See [Bulk data](/api/usage-limits#bulk-data). |
+| `data_feed_required` | 403 | `page` times `limit`, with `limit` clamped to 50, is above 500, so the page reaches past the first 500 results of a search, whatever the `total`. Bulk access needs a paid data feed license. See [Bulk data](/api/usage-limits#bulk-data). |
 | `not_found` | 404 | The `/api/v1` path does not exist. |
 | `clubs_unavailable` | 500 | The directory could not be read. |
 

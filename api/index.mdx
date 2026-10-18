@@ -93,7 +93,7 @@ Ask for the next page with `page=2`:
 curl "https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Arizona&page=2"
 ```
 
-The API returns the first 500 results of a search, so `page` times `limit` can be at most 500. At the default `limit` of 50, the last page you can ask for is page 10. A page that reaches past result 500 answers 403 with `data_feed_required`, even when `total` is larger.
+The API returns the first 500 results of a search, so `page` times `limit`, with `limit` clamped to 50, can be at most 500. At the default `limit` of 50, the last page you can ask for is page 10. A page that reaches past result 500 answers 403 with `data_feed_required` whatever the `total`, even when `total` is below 500.
 
 Stop when `page * limit` reaches `total` or 500, whichever comes first. A page past the last result, within the first 500, answers 200 with an empty `clubs` array and the real `total`, so an empty page also means you are done. When `total` is above 500, add filters such as `type`, `state` or `q` to find the clubs you need.
 
