@@ -1,9 +1,9 @@
 ---
 title: "API quickstart"
-description: "Make your first request to the Clubs API in five steps"
+description: "Make your first request to the Private Clubs API in five steps"
 ---
 
-The Clubs API returns club records from the Private Clubs directory as JSON. It is free, and you need no API key and no account. Call it from your server or a script. The API sends no CORS headers, so a web page on another site cannot read its responses.
+The API returns club records from the Private Clubs directory as JSON. It is free, and you need no API key and no account. Call it from your server or a script. The API sends no CORS headers, so a web page on another site cannot read its responses.
 
 ## 1. Send your first request
 
@@ -98,7 +98,7 @@ url="https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Arizona&limit=
 page=1
 
 while true; do
-  body=$(curl -fsS "$url&page=$page")
+  body=$(curl -fsS --retry 3 "$url&page=$page")
   echo "$body" | jq -r '.clubs[] | [.name, .city] | @tsv'
   total=$(echo "$body" | jq '.total')
   if (( page * 200 >= total )); then break; fi

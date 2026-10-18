@@ -4,7 +4,7 @@ sidebarTitle: "Real estate agents"
 description: "Name the clubs in a town, check membership status and compare golf courses for a buyer"
 ---
 
-You are a real estate agent, and buyers ask about the clubs near a listing. Ask your AI app which clubs are in the town, what a club's membership status is and how two golf courses compare. Clubs answers from the public directory at theprivateclubs.com, with a profile link you can send to your buyer.
+You are a real estate agent, and buyers ask about the clubs near a listing. Ask your AI app which clubs are in the town, what a club's membership status is and how two golf courses compare. Private Clubs answers from the public directory at theprivateclubs.com, with a profile link you can send to your buyer.
 
 ## What you can ask
 
@@ -14,18 +14,18 @@ You are a real estate agent, and buyers ask about the clubs near a listing. Ask 
 
 ## Run it in your AI app
 
-<Card title="Connect Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
-  Install the Clubs MCP server in your AI app. Free, no account or API key needed.
+<Card title="Connect Private Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
+  Install the Private Clubs MCP server in your AI app. Free, no account or API key needed.
 </Card>
 
 Adapt this starting prompt:
 
 ```text
-Use the Clubs MCP. List the private clubs in [Naples], [Florida]. Then
-check the membership status at [club name]. Then compare the golf courses
-at [first club] and [second club]: holes, par, yardage, course architect
-and founded year. Include each club's profile link, and say that fees are
-on the club's profile at theprivateclubs.com.
+Use the Private Clubs MCP. List the private clubs in [Naples], [Florida].
+Then check the membership status at [club name]. Then compare the golf
+courses at [first club] and [second club]: holes, par, yardage, course
+architect and founded year. Include each club's profile link, and say that
+fees are on the club's profile at theprivateclubs.com.
 ```
 
 ## How it works
@@ -38,7 +38,7 @@ on the club's profile at theprivateclubs.com.
     {"query": "Naples", "state": "Florida"}
     ```
 
-    `query` matches part of a club's name, type or city, so a club in another town can appear when its name holds the town's name. Check the `city` field. The tool returns up to 25 clubs, A to Z. Naples reaches that limit, so treat the list as partial and narrow it with `type`. `type` is an exact match, so `golf` leaves out clubs stored as `country_club`. Search each type you need.
+    `query` matches part of a club's name, type or city, so a club in another town can appear when its name holds the town's name. Check the `city` field. The tool returns up to 25 clubs, best known first. Naples reaches that limit, so treat the list as partial and narrow it with `type`. `type` is an exact match, so `golf` leaves out clubs stored as `country_club`. Search each type you need.
   </Step>
   <Step title="Check membership status">
     `get_membership_info` takes one slug from the search:
@@ -69,13 +69,13 @@ on the club's profile at theprivateclubs.com.
     {"slugs": ["bay-colony", "colliers-reserve"]}
     ```
 
-    You get holes, par, yardage, course architect and founded year side by side, with each club's location, waitlist status, amenities, website and profile link. A field Clubs does not know comes back `null`.
+    You get holes, par, yardage, course architect and founded year side by side, with each club's location, waitlist status, amenities, website and profile link. A field Private Clubs does not know comes back `null`.
   </Step>
 </Steps>
 
 ## What each system did
 
-- Clubs returned the listed clubs, their membership status, their course details and a profile link for each one.
+- Private Clubs returned the listed clubs, their membership status, their course details and a profile link for each one.
 - Your AI app chose the tool for each question and wrote the answer.
 
 ## Before you share

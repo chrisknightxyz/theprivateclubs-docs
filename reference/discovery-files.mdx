@@ -1,15 +1,15 @@
 ---
 title: "Discovery files"
-description: "The public files that tell AI apps and crawlers where Clubs lives"
+description: "The public files that tell AI apps and crawlers where to find the Private Clubs MCP server and API"
 ---
 
-Private Clubs publishes a few plain files at fixed addresses on https://www.theprivateclubs.com. AI apps, agents and crawlers read them to find the Clubs MCP server and the Clubs API without help.
+Private Clubs publishes a few plain files at fixed addresses on https://www.theprivateclubs.com. AI apps, agents and crawlers read them to find the Private Clubs MCP server and API without help.
 
 ## Files
 
 | File | What it holds |
 |---|---|
-| [`/mcp.json`](https://www.theprivateclubs.com/mcp.json) | The MCP server card: name, version, endpoint, transport, the five tools, the server key `clubs`, `auth` set to `none`, and the setup page. |
+| [`/mcp.json`](https://www.theprivateclubs.com/mcp.json) | The MCP server card: name, version, endpoint, transport, the five tools, the server key, `auth` set to `none`, and the setup page. |
 | [`/openapi.json`](https://www.theprivateclubs.com/openapi.json) | The REST API spec. See [API overview](/api/openapi). |
 | [`/llms.txt`](https://www.theprivateclubs.com/llms.txt) | A site overview for AI tools, regenerated hourly. |
 | [`/mcp/setup.md`](https://www.theprivateclubs.com/mcp/setup.md) | Setup steps an agent reads and follows for its own app. |
@@ -29,7 +29,7 @@ That group allows `/` and disallows a short list of private paths, including sig
 
 ## Which file to use
 
-- **Connect an AI app:** point it at `/mcp/setup.md`, or follow [Install Clubs](/mcp/connect).
+- **Connect an AI app:** point it at `/mcp/setup.md`, or follow [Install Private Clubs](/mcp/connect).
 - **Find the MCP server from code:** read `/mcp.json`.
 - **Build on the REST API:** read `/openapi.json`.
 - **Give an AI tool a site overview:** use `/llms.txt`.

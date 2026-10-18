@@ -4,7 +4,7 @@ sidebarTitle: "Members"
 description: "Search clubs, compare a shortlist and check whether a waitlist is open, from your AI app"
 ---
 
-You are choosing a club to join. Ask your AI app to search clubs by place and type, compare the two or three you like, and check each club's waitlist status. Clubs answers from the public directory at theprivateclubs.com, with a profile link for every club.
+You are choosing a club to join. Ask your AI app to search clubs by place and type, compare the two or three you like, and check each club's waitlist status. Private Clubs answers from the public directory at theprivateclubs.com, with a profile link for every club.
 
 ## What you can ask
 
@@ -14,18 +14,18 @@ You are choosing a club to join. Ask your AI app to search clubs by place and ty
 
 ## Run it in your AI app
 
-<Card title="Connect Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
-  Install the Clubs MCP server in your AI app. Free, no account or API key needed.
+<Card title="Connect Private Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
+  Install the Private Clubs MCP server in your AI app. Free, no account or API key needed.
 </Card>
 
 Adapt this starting prompt:
 
 ```text
-Use the Clubs MCP. Find private [golf] clubs in [Arizona] that are listed
-with an open waitlist. Then compare [first club] and [second club] side by
-side. Then check whether the waitlist is open at [the club you like most].
-Include each club's profile link, and say that fees are on the club's
-profile at theprivateclubs.com.
+Use the Private Clubs MCP. Find private [golf] clubs in [Arizona] that are
+listed with an open waitlist. Then compare [first club] and [second club]
+side by side. Then check whether the waitlist is open at [the club you
+like most]. Include each club's profile link, and say that fees are on the
+club's profile at theprivateclubs.com.
 ```
 
 ## How it works
@@ -38,7 +38,7 @@ profile at theprivateclubs.com.
     {"state": "Arizona", "type": "golf", "waitlist": true}
     ```
 
-    `waitlist: true` keeps only clubs whose `waitlist_status` is `open`. The tool returns up to 25 clubs, A to Z, each with a profile `url`. In October 2026 this search returned an empty list. An empty list means no club in that search is listed as open. Leave out `waitlist` to see the listed clubs, then check the ones you like.
+    `waitlist: true` keeps only clubs whose `waitlist_status` is `open`. The tool returns up to 25 clubs, best known first, each with a profile `url`. In October 2026 this search returned an empty list. An empty list means no club in that search is listed as open. Leave out `waitlist` to see the listed clubs, then check the ones you like.
   </Step>
   <Step title="Compare your shortlist">
     `compare_clubs` takes two or three slugs. Take each slug from a search result.
@@ -47,7 +47,7 @@ profile at theprivateclubs.com.
     {"slugs": ["casa-cipriani-new-york", "spring-place-new-york"]}
     ```
 
-    You get each club's location, profile link, waitlist status, amenities and website side by side, plus course fields such as holes, par and yardage. Course fields are `null` for clubs without a course. A slug Clubs does not know is left out without an error.
+    You get each club's location, profile link, waitlist status, amenities and website side by side, plus course fields such as holes, par and yardage. Course fields are `null` for clubs without a course. A slug Private Clubs does not know is left out without an error.
   </Step>
   <Step title="Check the waitlist">
     `get_membership_info` takes one slug and returns the club's waitlist status and profile link. Trimmed result from October 2026:
@@ -62,13 +62,13 @@ profile at theprivateclubs.com.
     }
     ```
 
-    `open` means the club is listed as open to new members, and `waitlist` means it is listed with a waitlist. `by_invitation` and `invite_only` both mean by invitation. `unknown` or `null` means Clubs does not know. See [waitlist values](/reference/conventions#waitlist-values).
+    `open` means the club is listed as open to new members, and `waitlist` means it is listed with a waitlist. `by_invitation` and `invite_only` both mean by invitation. `unknown` or `null` means Private Clubs does not know. See [waitlist values](/reference/conventions#waitlist-values).
   </Step>
 </Steps>
 
 ## What each system did
 
-- Clubs returned listed clubs, their waitlist status and a profile link for each one.
+- Private Clubs returned listed clubs, their waitlist status and a profile link for each one.
 - Your AI app chose the tool for each question and wrote the answer.
 - The club's profile on theprivateclubs.com holds the full listing, with fees for account holders.
 

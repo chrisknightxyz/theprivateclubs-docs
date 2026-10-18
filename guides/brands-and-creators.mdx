@@ -4,7 +4,7 @@ sidebarTitle: "For brands and creators"
 description: "Pull clubs by type and region for research, with the API for longer lists"
 ---
 
-Brands and creators use Clubs to see which clubs of one type sit in a region, before research or outreach. Start in your AI app for a quick look, then move to the API when you need the full list. [Install Clubs](/mcp/connect) first, or read the [API quickstart](/api).
+Brands and creators use Private Clubs to see which clubs of one type sit in a region, before research or outreach. Start in your AI app for a quick look, then move to the API when you need the full list. [Install Private Clubs](/mcp/connect) first, or read the [API quickstart](/api).
 
 ## Start in your AI app
 
@@ -14,8 +14,8 @@ Which equestrian clubs are listed in Kentucky?
 
 Two tools fit a list like this:
 
-- `search_clubs` with `type` and `state` returns up to 25 clubs, A to Z by name.
-- `get_clubs_by_state` with `state` and an optional `type` returns up to 100 clubs, A to Z by name. It covers US states and Canadian provinces.
+- `search_clubs` with `type` and `state` returns up to 25 clubs, best known first.
+- `get_clubs_by_state` with `state` and an optional `type` returns up to 100 clubs, best known first. It covers US states and Canadian provinces.
 
 ```text
 List the golf clubs in Texas
@@ -25,18 +25,22 @@ Both tools match `type` exactly against the club's stored type, so `golf` does n
 
 ## Pull a full list with the API
 
-Ask for 200 rows a page, the most the API returns, and keep paging until you have `total` rows. `page` starts at 1, and rows come back A to Z by name. This loop writes the golf clubs in Texas to a JSON Lines file. It needs `jq`.
+Ask for 200 rows a page, the most the API returns, and keep paging until you have `total` rows. `page` starts at 1, and rows come back A to Z by name. This loop writes the golf clubs in Texas to `clubs.jsonl`, one JSON object per line. It needs `jq`.
 
 ```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+url="https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Texas&limit=200"
 page=1
-limit=200
+
 while true; do
-  body=$(curl -s "https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Texas&limit=$limit&page=$page")
-  echo "$body" | jq -c '.clubs[] | {name, slug, city, state, country, type, waitlist_status}' >> clubs.jsonl
+  body=$(curl -fsS --retry 3 "$url&page=$page")
+  echo "$body" | jq -c '.clubs[] | {name, slug, city, state, country, type, waitlist_status}'
   total=$(echo "$body" | jq '.total')
-  if [ $((page * limit)) -ge "$total" ]; then break; fi
+  if (( page * 200 >= total )); then break; fi
   page=$((page + 1))
-done
+done > clubs.jsonl
 ```
 
 In the API, `type` groups related types, so `type=golf` also returns country clubs. See [club types](/reference/club-types) for the groups. To pull a whole country, swap `state` for `country`, such as `country=United%20Kingdom`.
@@ -57,7 +61,7 @@ API rows carry the same `amenities` field, so you can filter a pulled list in yo
 
 ## Use the list well
 
-Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
+Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
 
 Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
 

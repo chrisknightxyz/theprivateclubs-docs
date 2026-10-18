@@ -3,11 +3,11 @@ title: "Authentication and fees"
 description: "No keys or accounts, and what fee data each caller sees"
 ---
 
-Clubs is open to everyone. This page covers why your requests need no credentials, and what the fee fields in a response hold.
+Anyone can call Private Clubs. This page covers why your requests need no credentials, and what the fee fields in a response hold.
 
 ## No API keys
 
-Neither the Clubs API nor the Clubs MCP server takes an API key, an `Authorization` header or an account. Send a plain request:
+Neither the Private Clubs API nor its MCP server takes an API key, an `Authorization` header or an account. Send a plain request:
 
 ```bash
 curl "https://www.theprivateclubs.com/api/v1/clubs?state=Florida&limit=1"
@@ -44,7 +44,7 @@ Calls without a site session only ever see `none` and `locked`.
 
 ## Fees over MCP
 
-The Clubs MCP server never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
+Private Clubs never returns membership fees over MCP. Account holders see fees on each club's profile at theprivateclubs.com.
 
 Where an MCP tool result has a `membership_fees` field, it holds this message instead of a figure, sometimes followed by a link to the club's profile:
 

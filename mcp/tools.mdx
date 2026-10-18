@@ -1,15 +1,15 @@
 ---
 title: "Available tools"
-description: "The five tools on the Clubs MCP server, with every parameter and returned field"
+description: "The five tools on the Private Clubs MCP server, with every parameter and returned field"
 ---
 
-Anyone can call every tool on the Clubs MCP server, without an account or API key. The tools only read the directory. Each result is one text item that holds JSON. Your app can call `tools/list` for the full input schemas.
+Anyone can call every tool on the Private Clubs MCP server, without an account or API key. The tools only read the directory. Each result is one text item that holds JSON. Your app can call `tools/list` for the full input schemas.
 
-Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
+Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
 
 ## Search clubs
 
-`search_clubs` (title "Search Clubs") finds clubs by place, type, amenities and waitlist status.
+`search_clubs` (title "Search Private Clubs") finds clubs by place, type, amenities and waitlist status.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
@@ -21,7 +21,7 @@ Clubs never returns membership fees. Account holders see fees on each club's pro
 
 Nothing is required. With no `state`, the search is worldwide.
 
-**Returns** up to 25 clubs, A to Z by name, with no paging. Each club has `id`, `name`, `slug`, `city`, `state`, `country`, `type`, `waitlist_status`, `holes`, `par`, `yardage`, `course_architect`, `amenities` and `url`.
+**Returns** up to 25 clubs, best known first, with no paging. Each club has `id`, `name`, `slug`, `city`, `state`, `country`, `type`, `waitlist_status`, `holes`, `par`, `yardage`, `course_architect`, `amenities` and `url`.
 
 **Errors:** `Club search failed. Try again.` when the search cannot run, and every time `query` holds a comma.
 
@@ -56,7 +56,7 @@ Nothing is required. With no `state`, the search is worldwide.
 
 It covers the US and Canada only.
 
-**Returns** up to 100 clubs, A to Z by name. Each club has `id`, `name`, `slug`, `city`, `state`, `country`, `type`, `waitlist_status`, `holes`, `par`, `yardage` and `url`.
+**Returns** up to 100 clubs, best known first. Each club has `id`, `name`, `slug`, `city`, `state`, `country`, `type`, `waitlist_status`, `holes`, `par`, `yardage` and `url`.
 
 **Errors:** `Club search failed. Try again.` when the search cannot run.
 
@@ -161,4 +161,4 @@ Tool errors come back as results marked `isError`, with one text item:
 
 Errors in the request itself, such as a body that is not valid JSON, are covered in [Troubleshooting](/mcp/troubleshooting#the-request-is-rejected).
 
-Next, put the tools to work in [Use cases](/use-cases), or [install Clubs](/mcp/connect) in another app.
+Next, put the tools to work in [Use cases](/use-cases), or [install Private Clubs](/mcp/connect) in another app.

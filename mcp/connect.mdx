@@ -1,32 +1,47 @@
 ---
-title: "Install Clubs"
-description: "Add the Clubs MCP server to Claude, ChatGPT, Claude Code, Codex, Cursor, Grok, Perplexity, OpenClaw, Hermes or any other AI app"
+title: "Install Private Clubs"
+description: "Add the Private Clubs MCP server to Claude, ChatGPT, Claude Code, Codex, Cursor, Grok, Perplexity, OpenClaw, Hermes or any other AI app"
 ---
 
-The Clubs MCP server lives at one address:
+Private Clubs runs its MCP server at one address:
 
 ```text
 https://www.theprivateclubs.com/api/mcp
 ```
 
-Add it under the server key `clubs`, with the display name Clubs. The server uses Streamable HTTP. Free, no account or API key needed. For pictures of each step, see the [setup page](https://www.theprivateclubs.com/mcp).
+Add it under the server key `private-clubs`, with the display name Private Clubs. The server uses Streamable HTTP. Free, no account or API key needed. For pictures of each step, see the [setup page](https://www.theprivateclubs.com/mcp).
 
 ## Use the setup line
 
 Paste this line into your AI app:
 
 ```text
-Set up the Clubs MCP for me: read https://www.theprivateclubs.com/mcp/setup.md and follow the steps for this app
+Set up the Private Clubs MCP for me: read https://www.theprivateclubs.com/mcp/setup.md and follow the steps for this app
 ```
 
 Your app reads the setup steps on theprivateclubs.com and follows the section for itself.
 
-- **Agent apps** (Claude Code, Codex, Cursor, OpenClaw and Hermes) show you each command or config change and run it once you agree. They add `clubs` beside your other MCP servers and keep them.
+- **Agent apps** (Claude Code, Codex, Cursor, OpenClaw and Hermes) show you each command or config change and run it once you agree. They add the server beside your other MCP servers and keep them.
 - **Chat apps** (Claude, ChatGPT, Grok and Perplexity) cannot add a connector themselves, so they tell you the clicks.
 
 ## Choose your app
 
-To set up Clubs by hand, pick your app.
+To set up Private Clubs by hand, pick your app. The [setup page](https://www.theprivateclubs.com/mcp) shows each app in three steps:
+
+<Columns cols={3}>
+  <Frame>
+    <img className="block dark:hidden" src="/images/step-1-light.png" alt="Step 1 on the setup page: get the plugin or copy the address" />
+    <img className="hidden dark:block" src="/images/step-1-dark.png" alt="Step 1 on the setup page: get the plugin or copy the address" />
+  </Frame>
+  <Frame>
+    <img className="block dark:hidden" src="/images/step-2-light.png" alt="Step 2 on the setup page: add it to your AI app" />
+    <img className="hidden dark:block" src="/images/step-2-dark.png" alt="Step 2 on the setup page: add it to your AI app" />
+  </Frame>
+  <Frame>
+    <img className="block dark:hidden" src="/images/step-3-light.png" alt="Step 3 on the setup page: connect it" />
+    <img className="hidden dark:block" src="/images/step-3-dark.png" alt="Step 3 on the setup page: connect it" />
+  </Frame>
+</Columns>
 
 <Tabs>
   <Tab title="Claude">
@@ -36,7 +51,7 @@ To set up Clubs by hand, pick your app.
 
     <Steps>
       <Step title="Download the plugin">
-        Download [`clubs.claude-plugin.zip`](https://www.theprivateclubs.com/mcp/clubs.claude-plugin.zip). It includes the Clubs skill and the MCP connection.
+        Download [`clubs.claude-plugin.zip`](https://www.theprivateclubs.com/mcp/clubs.claude-plugin.zip). It includes the Private Clubs skill and the MCP connection.
       </Step>
       <Step title="Upload it to Claude">
         Open **Customize > Plugins**, choose **Add > Upload plugin** and upload the ZIP.
@@ -51,7 +66,7 @@ To set up Clubs by hand, pick your app.
         Select **Connect** again.
       </Step>
       <Step title="Use it in a chat">
-        In a chat, press **Use** on the `clubs` connector.
+        In a chat, press **Use** on the plugin's connector.
       </Step>
     </Steps>
 
@@ -62,14 +77,14 @@ To set up Clubs by hand, pick your app.
         `https://www.theprivateclubs.com/api/mcp`
       </Step>
       <Step title="Add a custom connector">
-        Open **Customize > Connectors**, select **+**, then **Add custom connector**. Name it Clubs, paste the address and select **Continue**.
+        Open **Customize > Connectors**, select **+**, then **Add custom connector**. Name it Private Clubs, paste the address and select **Continue**.
       </Step>
       <Step title="Choose No sign in">
         Select **Add**, then ask Claude about a club.
       </Step>
     </Steps>
 
-    Added `private-clubs` before? Replace that older entry with Clubs.
+    Added it before under the name Clubs? Replace that older entry with Private Clubs.
   </Tab>
   <Tab title="ChatGPT">
     <Steps>
@@ -80,14 +95,14 @@ To set up Clubs by hand, pick your app.
         Go to [chatgpt.com/plugins](https://chatgpt.com/plugins), select **+**, then **Add custom MCP server**.
       </Step>
       <Step title="Create the plugin">
-        Name it Clubs, paste the address, tick **I understand and want to continue**, then select **Create as a plugin**.
+        Name it Private Clubs, paste the address, tick **I understand and want to continue**, then select **Create as a plugin**.
       </Step>
       <Step title="Start asking">
-        Clubs tools are then available in ChatGPT, free and without an account.
+        Private Clubs tools are then available in ChatGPT, free and without an account.
       </Step>
     </Steps>
 
-    Added `private-clubs` before? Replace that older entry with Clubs.
+    Added it before under the name Clubs? Replace that older entry with Private Clubs.
   </Tab>
   <Tab title="Claude Code">
     Needs Claude Code. User scope adds it to every project.
@@ -95,17 +110,17 @@ To set up Clubs by hand, pick your app.
     <Steps>
       <Step title="Run this in your terminal">
         ```bash
-        claude mcp add --transport http clubs --scope user https://www.theprivateclubs.com/api/mcp
+        claude mcp add --transport http private-clubs --scope user https://www.theprivateclubs.com/api/mcp
         ```
       </Step>
       <Step title="Ask about clubs">
-        Start Claude Code. `/mcp` shows `clubs` connected.
+        Start Claude Code. `/mcp` shows `private-clubs` connected.
       </Step>
     </Steps>
 
     Prefer the plugin? Upload the Claude plugin in Claude, as the Claude tab shows. The plugin syncs to Claude Code on the same account.
 
-    Added `private-clubs` before? Run `claude mcp remove private-clubs` first.
+    Added `clubs` before? Run `claude mcp remove clubs` first.
   </Tab>
   <Tab title="Codex">
     The Codex CLI, IDE extension and ChatGPT desktop app share this setup.
@@ -113,7 +128,7 @@ To set up Clubs by hand, pick your app.
     <Steps>
       <Step title="Run this in your terminal">
         ```bash
-        codex mcp add clubs --url https://www.theprivateclubs.com/api/mcp
+        codex mcp add private-clubs --url https://www.theprivateclubs.com/api/mcp
         ```
       </Step>
       <Step title="Ask about clubs">
@@ -121,39 +136,39 @@ To set up Clubs by hand, pick your app.
       </Step>
     </Steps>
 
-    **In the ChatGPT desktop app:** open **Settings > MCP servers**, then **Add server**. Name it `clubs`, choose Streamable HTTP, paste the address, then **Save** and restart.
+    **In the ChatGPT desktop app:** open **Settings > MCP servers**, then **Add server**. Name it `private-clubs`, choose Streamable HTTP, paste the address, then **Save** and restart.
 
-    **With the plugin:** download [`clubs.codex-plugin.zip`](https://www.theprivateclubs.com/mcp/clubs.codex-plugin.zip) and add the downloaded plugin in Codex. Start a new session to use Clubs.
+    **With the plugin:** download [`clubs.codex-plugin.zip`](https://www.theprivateclubs.com/mcp/clubs.codex-plugin.zip) and add the downloaded plugin in Codex. Start a new session to use Private Clubs.
 
-    Added `private-clubs` before? Run `codex mcp remove private-clubs` first.
+    Added `clubs` before? Run `codex mcp remove clubs` first.
   </Tab>
   <Tab title="Cursor">
     Needs the Cursor app. The link opens it.
 
     <Steps>
       <Step title="Add to Cursor">
-        Select [Add to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=clubs&config=eyJ1cmwiOiJodHRwczovL3d3dy50aGVwcml2YXRlY2x1YnMuY29tL2FwaS9tY3AifQ%3D%3D).
+        Select [Add to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=private-clubs&config=eyJ1cmwiOiJodHRwczovL3d3dy50aGVwcml2YXRlY2x1YnMuY29tL2FwaS9tY3AifQ%3D%3D).
       </Step>
       <Step title="Ask about clubs">
         Open a chat in Cursor and ask about a club.
       </Step>
     </Steps>
 
-    **By hand:** add the `clubs` server inside `mcpServers` in `~/.cursor/mcp.json`, beside any servers already there. Create the file if it is missing.
+    **By hand:** add the `private-clubs` server inside `mcpServers` in `~/.cursor/mcp.json`, beside any servers already there. Create the file if it is missing.
 
     ```json ~/.cursor/mcp.json
     {
       "mcpServers": {
-        "clubs": {
+        "private-clubs": {
           "url": "https://www.theprivateclubs.com/api/mcp"
         }
       }
     }
     ```
 
-    **With the plugin:** extract [`clubs.cursor-plugin.zip`](https://www.theprivateclubs.com/mcp/clubs.cursor-plugin.zip) to `~/.cursor/plugins/local/clubs`. Reload Cursor and confirm Clubs under **Customize**.
+    **With the plugin:** extract [`clubs.cursor-plugin.zip`](https://www.theprivateclubs.com/mcp/clubs.cursor-plugin.zip) to `~/.cursor/plugins/local/private-clubs`. Reload Cursor and confirm the plugin under **Customize**.
 
-    Added `private-clubs` before? Replace that older entry with `clubs`.
+    Added `clubs` before? Replace that older entry with `private-clubs`.
   </Tab>
   <Tab title="Grok">
     Every Grok user can add it. Business and Enterprise admins add it for their team first.
@@ -169,11 +184,11 @@ To set up Clubs by hand, pick your app.
         Paste the address you copied.
       </Step>
       <Step title="Start asking">
-        Ask Grok about a club. Clubs tools are then available in Grok, free and without an account.
+        Ask Grok about a club. Private Clubs tools are then available in Grok, free and without an account.
       </Step>
     </Steps>
 
-    Added `private-clubs` before? Replace that older entry with Clubs.
+    Added it before under the name Clubs? Replace that older entry with Private Clubs.
   </Tab>
   <Tab title="Perplexity">
     On Enterprise, an admin turns on member connectors first.
@@ -186,16 +201,16 @@ To set up Clubs by hand, pick your app.
         Open **Plugins** in the sidebar, select **Add custom**, **Connector**, then **Add MCP connector**.
       </Step>
       <Step title="Add and turn it on">
-        Choose **Remote**, name it Clubs, paste the address and pick Streamable HTTP. Set Authentication to **None** and tick the box. Select **Add**, then select the card to turn it on.
+        Choose **Remote**, name it Private Clubs, paste the address and pick Streamable HTTP. Set Authentication to **None** and tick the box. Select **Add**, then select the card to turn it on.
       </Step>
       <Step title="Start asking">
-        Clubs tools are then available in Perplexity, free and without an account.
+        Private Clubs tools are then available in Perplexity, free and without an account.
       </Step>
     </Steps>
 
     No **Plugins** in your sidebar? Use **Customize > Connectors**.
 
-    Added `private-clubs` before? Replace that older entry with Clubs.
+    Added it before under the name Clubs? Replace that older entry with Private Clubs.
   </Tab>
   <Tab title="OpenClaw">
     Needs OpenClaw, or use **Control UI > Settings > MCP > Add server**.
@@ -203,17 +218,17 @@ To set up Clubs by hand, pick your app.
     <Steps>
       <Step title="Run this in your terminal">
         ```bash
-        openclaw mcp add clubs --url https://www.theprivateclubs.com/api/mcp --transport streamable-http
+        openclaw mcp add private-clubs --url https://www.theprivateclubs.com/api/mcp --transport streamable-http
         ```
       </Step>
       <Step title="Check the connection">
         ```bash
-        openclaw mcp doctor clubs --probe
+        openclaw mcp doctor private-clubs --probe
         ```
       </Step>
     </Steps>
 
-    Added `private-clubs` before? Run `openclaw mcp remove private-clubs` first.
+    Added `clubs` before? Run `openclaw mcp remove clubs` first.
   </Tab>
   <Tab title="Hermes">
     Needs Hermes Agent. The server goes in `~/.hermes/config.yaml`.
@@ -222,7 +237,7 @@ To set up Clubs by hand, pick your app.
       <Step title="Add this to your config">
         ```yaml ~/.hermes/config.yaml
         mcp_servers:
-          clubs:
+          private-clubs:
             url: "https://www.theprivateclubs.com/api/mcp"
         ```
       </Step>
@@ -235,11 +250,11 @@ To set up Clubs by hand, pick your app.
       </Step>
     </Steps>
 
-    Added `private-clubs` before? Replace that older entry with `clubs`.
+    Added `clubs` before? Replace that older entry with `private-clubs`.
   </Tab>
 </Tabs>
 
-After you install Clubs, [check it worked](#check-it-worked).
+After you install Private Clubs, [check it worked](#check-it-worked).
 
 ## Another app
 
@@ -247,25 +262,25 @@ Add a remote MCP server in your app's settings with these values:
 
 | Setting | Value |
 |---|---|
-| Name | Clubs |
-| Server key | `clubs` |
+| Name | Private Clubs |
+| Server key | `private-clubs` |
 | Address | `https://www.theprivateclubs.com/api/mcp` |
 | Transport | Streamable HTTP |
 | Authentication | None |
 
 ## Replace an older entry
 
-Added `private-clubs` before? It is the same server under its old name. Replace it with `clubs`, so your app does not show Clubs twice.
+Added `clubs` before? It is the same server under an earlier name. Replace it with `private-clubs`, so your app does not show the tools twice.
 
-In apps with a command line, remove the old entry first, then add Clubs as your app's tab shows:
+In apps with a command line, remove the old entry first, then add Private Clubs as your app's tab shows:
 
 ```bash
-claude mcp remove private-clubs
-codex mcp remove private-clubs
-openclaw mcp remove private-clubs
+claude mcp remove clubs
+codex mcp remove clubs
+openclaw mcp remove clubs
 ```
 
-In Cursor and Hermes, replace the `private-clubs` entry in the config file with the `clubs` entry. In Claude, ChatGPT, Grok and Perplexity, replace the older connector with Clubs.
+In Cursor and Hermes, replace the `clubs` entry in the config file with the `private-clubs` entry. In Claude, ChatGPT, Grok and Perplexity, replace the older connector with Private Clubs.
 
 ## Check it worked
 
@@ -275,7 +290,7 @@ Start a new session if your app needs one, then ask:
 Search clubs in Florida
 ```
 
-The `search_clubs` tool answers with clubs and a link to each profile. No Clubs tools? See [Troubleshooting](/mcp/troubleshooting#clubs-tools-do-not-appear).
+The `search_clubs` tool answers with clubs and a link to each profile. No Private Clubs tools? See [Troubleshooting](/mcp/troubleshooting#private-clubs-tools-do-not-appear).
 
 ## Call the server without an app
 

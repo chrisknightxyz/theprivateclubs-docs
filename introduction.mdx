@@ -3,15 +3,20 @@ title: "Introduction"
 description: "Search and compare private clubs from your AI app or your own product, free and without an account"
 ---
 
-Clubs is the MCP server and REST API from Private Clubs. It serves the public clubs directory at theprivateclubs.com, which lists private membership clubs worldwide. Listings carry profile basics, course data, amenities and waitlist status where known, and MCP answers link to each club's profile.
+<Frame>
+  <img className="block dark:hidden" src="/images/showcase-light.png" alt="Illustration of an AI app asking about clubs, calling search_clubs and showing three clubs from the directory" />
+  <img className="hidden dark:block" src="/images/showcase-dark.png" alt="Illustration of an AI app asking about clubs, calling search_clubs and showing three clubs from the directory" />
+</Frame>
 
-Free, no account or API key needed. Calls to the MCP server and the API cost nothing. The Clubs MCP server never returns membership fees, and API calls from your server or script return none. Account holders see fees on each club's profile at theprivateclubs.com.
+Private Clubs has an MCP server and a REST API. Both serve the public clubs directory at theprivateclubs.com, which lists private membership clubs worldwide. Listings carry profile basics, course data, amenities and waitlist status where known, and MCP answers link to each club's profile.
 
-## Start using Clubs
+Free, no account or API key needed. Calls to the MCP server and the API cost nothing. Private Clubs never returns membership fees over MCP, and API calls from your server or script return none. Account holders see fees on each club's profile at theprivateclubs.com.
+
+## Start using Private Clubs
 
 <CardGroup cols={2}>
   <Card title="Connect an AI app" icon="plug" href="/mcp/getting-started">
-    Install Clubs in Claude, ChatGPT, Cursor or another AI app, then ask about clubs in your own words.
+    Install Private Clubs in Claude, ChatGPT, Cursor or another AI app, then ask about clubs in your own words.
   </Card>
   <Card title="Build with the API" icon="brackets-angle" href="/api">
     Call `GET /api/v1/clubs` from your server to search clubs by type, place, name and waitlist status.
@@ -20,11 +25,11 @@ Free, no account or API key needed. Calls to the MCP server and the API cost not
 
 ## What a club record holds
 
-A **club record** is the set of fields Clubs returns for one listed club. It names the club and gives its city, state, country and type. It adds course data such as holes, par, yardage and course architect, the club's amenities and its waitlist status. MCP results also carry a `url` to the club's profile, but API rows do not.
+A **club record** is the set of fields Private Clubs returns for one listed club. It names the club and gives its city, state, country and type. It adds course data such as holes, par, yardage and course architect, the club's amenities and its waitlist status. MCP results also carry a `url` to the club's profile, but API rows do not.
 
 A field that is not known comes back as `null`. Leave it out of your answer rather than fill it in.
 
-See every field in the [club object](/reference/club-object). For the questions people bring to Clubs from their AI app, browse the [use cases](/use-cases).
+See every field in the [club object](/reference/club-object). For the questions people bring to Private Clubs from their AI app, browse the [use cases](/use-cases).
 
 ## Get help
 

@@ -1,31 +1,31 @@
 ---
 title: "Troubleshooting"
-description: "Fix common problems with the Clubs MCP server, from missing tools to empty results"
+description: "Fix common problems with the Private Clubs MCP server, from missing tools to empty results"
 ---
 
 Find the symptom you see, then follow the fix. Tool errors come back as results marked `isError`. Request errors come back as JSON-RPC error bodies with an HTTP status.
 
-## Clubs tools do not appear
+## Private Clubs tools do not appear
 
-Start a new session if your app needs one, then check the entry. The server key is `clubs` and the address is `https://www.theprivateclubs.com/api/mcp`. Some apps also need one more step:
+Start a new session if your app needs one, then check the entry. The server key is `private-clubs` and the address is `https://www.theprivateclubs.com/api/mcp`. Some apps also need one more step:
 
-- **Claude:** in a chat, press **Use** on the `clubs` connector.
-- **Claude Code:** run `/mcp` and check that `clubs` shows as connected.
-- **Cursor plugin:** reload Cursor and confirm Clubs under **Customize**.
-- **Perplexity:** select the Clubs card to turn it on.
+- **Claude:** in a chat, press **Use** on the plugin's connector.
+- **Claude Code:** run `/mcp` and check that `private-clubs` shows as connected.
+- **Cursor plugin:** reload Cursor and confirm the plugin under **Customize**.
+- **Perplexity:** select the Private Clubs card to turn it on.
 - **Hermes:** run `/reload-mcp` in a running Hermes session.
-- **OpenClaw:** run `openclaw mcp doctor clubs --probe` to check the connection.
+- **OpenClaw:** run `openclaw mcp doctor private-clubs --probe` to check the connection.
 
 To check the server itself, [call it without an app](/mcp/connect#call-the-server-without-an-app).
 
-## You see two Clubs entries
+## You see two Private Clubs entries
 
-You added Clubs under its old name before. An entry named `private-clubs` is the same server, so remove it and keep `clubs`.
+You added the server under an earlier name before. An entry named `clubs` is the same server, so remove it and keep `private-clubs`.
 
 ```bash
-claude mcp remove private-clubs
-codex mcp remove private-clubs
-openclaw mcp remove private-clubs
+claude mcp remove clubs
+codex mcp remove clubs
+openclaw mcp remove clubs
 ```
 
 In other apps, see [Replace an older entry](/mcp/connect#replace-an-older-entry).
@@ -38,7 +38,7 @@ A browser sends a GET request. The server answers POST only, so GET returns 405 
 {"jsonrpc":"2.0","error":{"code":-32000,"message":"Method not allowed, send MCP requests as POST"},"id":null}
 ```
 
-This is expected. Add the address in your app instead. See [Install Clubs](/mcp/connect).
+This is expected. Add the address in your app instead. See [Install Private Clubs](/mcp/connect).
 
 ## A club is not found
 
@@ -58,11 +58,11 @@ With 1 slug, or more than 3, the call fails the input schema. The result starts 
 
 ## A search stops at 25 clubs
 
-`search_clubs` returns at most 25 clubs, A to Z by name, with no paging. To see more:
+`search_clubs` returns at most 25 clubs, best known first, with no paging. To see more:
 
 - Narrow the search with `state`, `type` or `query`.
 - Use `get_clubs_by_state`, which returns up to 100 clubs in a US state or Canadian province.
-- Use the [Clubs API](/api), which pages through every result.
+- Use the [Private Clubs API](/api), which pages through every result.
 
 ## A state search returns nothing
 
@@ -82,7 +82,7 @@ Run the search without `amenities` first. Copy the values from the results, then
 
 ## The answer has no fees
 
-This is by design. Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
+This is by design. Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
 
 `get_club` and `get_membership_info` say where to find them in `membership_fees`. Open the club's profile from its `url`.
 
@@ -113,4 +113,4 @@ Every POST response carries an `X-Request-Id` header that starts with `req_`. Th
 
 Email support@theprivateclubs.com. Include the `X-Request-Id`, the app you use and the tool call that failed.
 
-You can also go back to [Install Clubs](/mcp/connect) or [Available tools](/mcp/tools).
+You can also go back to [Install Private Clubs](/mcp/connect) or [Available tools](/mcp/tools).

@@ -1,10 +1,12 @@
-# Clubs docs
+# Private Clubs docs
 
-The docs for the Clubs MCP server and the Clubs REST API from Private Clubs, built with [Mintlify](https://mintlify.com). They cover the free MCP server at `https://www.theprivateclubs.com/api/mcp` and the `GET /api/v1/clubs` endpoint.
+The docs for the Private Clubs MCP server and REST API, built with [Mintlify](https://mintlify.com). They cover the free MCP server at `https://www.theprivateclubs.com/api/mcp` and the `GET /api/v1/clubs` endpoint.
 
 ## What is here
 
 - `docs.json`: navigation, theme and settings
+- `style.css`: the website's type, colours and surfaces, which Mintlify loads on every page
+- `logo/`, `favicon.png` and `images/`: our logo, the site's favicon and the illustrations from `/mcp`
 - `introduction.mdx` and `how-clubs-works.mdx`: getting started
 - `guides/` and `use-cases/`: how-tos and example asks by audience
 - `mcp/`: setup, tools and troubleshooting for the MCP server

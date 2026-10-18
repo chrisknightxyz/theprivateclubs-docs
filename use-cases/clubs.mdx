@@ -4,28 +4,28 @@ sidebarTitle: "Club teams"
 description: "Read your profile as AI apps see it and compare it with clubs in your state"
 ---
 
-You run or market a club. AI apps that connect Clubs read your listing from the public directory at theprivateclubs.com. Ask the questions they can answer, and you see what they see: your profile, the clubs listed in your state and how you compare with clubs nearby.
+You run or market a club. AI apps that connect Private Clubs read your listing from the public directory at theprivateclubs.com. Ask the questions they can answer, and you see what they see: your profile, the clubs listed in your state and how you compare with clubs nearby.
 
 ## What you can ask
 
-- "How does our club's profile read on Clubs?" uses `get_club`.
+- "How does our club's profile read on Private Clubs?" uses `get_club`.
 - "Which yacht clubs are listed in our state?" uses `get_clubs_by_state`.
 - "Compare our club with two clubs nearby" uses `compare_clubs`.
 
 ## Run it in your AI app
 
-<Card title="Connect Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
-  Install the Clubs MCP server in your AI app. Free, no account or API key needed.
+<Card title="Connect Private Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
+  Install the Private Clubs MCP server in your AI app. Free, no account or API key needed.
 </Card>
 
 Adapt this starting prompt:
 
 ```text
-Use the Clubs MCP. Find [club name] in [state] and show me its full
-profile as Clubs returns it, and list any empty fields. Then list the
-[yacht] clubs listed in [state]. Then compare [club name] with [nearby
-club] and [second nearby club]. Include each club's profile link, and say
-that fees are on the club's profile at theprivateclubs.com.
+Use the Private Clubs MCP. Find [club name] in [state] and show me its
+full profile as Private Clubs returns it, and list any empty fields. Then
+list the [yacht] clubs listed in [state]. Then compare [club name] with
+[nearby club] and [second nearby club]. Include each club's profile link,
+and say that fees are on the club's profile at theprivateclubs.com.
 ```
 
 ## How it works
@@ -59,7 +59,7 @@ that fees are on the club's profile at theprivateclubs.com.
     }
     ```
 
-    A `null` field means Clubs does not know the value. `membership_fees` is always this message, never a figure.
+    A `null` field means Private Clubs does not know the value. `membership_fees` is always this message, never a figure.
   </Step>
   <Step title="List the clubs in your state">
     `get_clubs_by_state` fits this ask. Send your state and, if you like, a type:
@@ -68,10 +68,10 @@ that fees are on the club's profile at theprivateclubs.com.
     {"state": "Florida", "type": "yacht"}
     ```
 
-    It covers US states and Canadian provinces and returns up to 100 clubs, A to Z, each with a profile `url`. `type` is an exact match on the stored type, so see [club types](/reference/club-types) for the names. For a longer list, use the [API](/api) with paging.
+    It covers US states and Canadian provinces and returns up to 100 clubs, best known first, each with a profile `url`. `type` is an exact match on the stored type, so see [club types](/reference/club-types) for the names. For a longer list, use the [API](/api) with paging.
   </Step>
   <Step title="Compare with clubs nearby">
-    `compare_clubs` takes two or three slugs. Clubs does not measure distance, so choose the nearby clubs yourself, for example from step 2 or from a `search_clubs` search by city.
+    `compare_clubs` takes two or three slugs. Private Clubs does not measure distance, so choose the nearby clubs yourself, for example from step 2 or from a `search_clubs` search by city.
 
     ```json
     {"slugs": ["desert-forest-golf-club", "desert-highlands-golf-club-az-ut21", "the-estancia-club"]}
@@ -83,7 +83,7 @@ that fees are on the club's profile at theprivateclubs.com.
 
 ## What each system did
 
-- Clubs returned your listing, the clubs listed in your state and a profile link for each one.
+- Private Clubs returned your listing, the clubs listed in your state and a profile link for each one.
 - Your AI app chose the tool for each question and wrote the answer.
 
 ## Before you share

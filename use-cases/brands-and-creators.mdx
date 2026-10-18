@@ -4,7 +4,7 @@ sidebarTitle: "Brands and creators"
 description: "Find the clubs of one type in a state before you plan outreach or research"
 ---
 
-You plan a partnership, a campaign or a piece of research, and you need the clubs of one type in one place. Ask your AI app for a list by type and state. Clubs answers from the public directory at theprivateclubs.com, with a profile link for each club.
+You plan a partnership, a campaign or a piece of research, and you need the clubs of one type in one place. Ask your AI app for a list by type and state. Private Clubs answers from the public directory at theprivateclubs.com, with a profile link for each club.
 
 ## What you can ask
 
@@ -14,18 +14,18 @@ You plan a partnership, a campaign or a piece of research, and you need the club
 
 ## Run it in your AI app
 
-<Card title="Connect Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
-  Install the Clubs MCP server in your AI app. Free, no account or API key needed.
+<Card title="Connect Private Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
+  Install the Private Clubs MCP server in your AI app. Free, no account or API key needed.
 </Card>
 
 Adapt this starting prompt:
 
 ```text
-Use the Clubs MCP. List the [equestrian] clubs in [Kentucky]. Then list
-the [golf] clubs in [Texas]. Then find the [ski] clubs in [Colorado].
-Show each list as a table with name, city, type and profile link, and
-tell me when a list stops at the tool's limit. Say that fees are on each
-club's profile at theprivateclubs.com.
+Use the Private Clubs MCP. List the [equestrian] clubs in [Kentucky]. Then
+list the [golf] clubs in [Texas]. Then find the [ski] clubs in [Colorado].
+Show each list as a table with name, city, type and profile link, and tell
+me when a list stops at the tool's limit. Say that fees are on each club's
+profile at theprivateclubs.com.
 ```
 
 ## How it works
@@ -38,7 +38,7 @@ club's profile at theprivateclubs.com.
     {"state": "Kentucky", "type": "equestrian"}
     ```
 
-    It returns up to 25 clubs, A to Z, each with a profile `url`. `type` is an exact match on the stored type, so check [club types](/reference/club-types) for the name you need.
+    It returns up to 25 clubs, best known first, each with a profile `url`. `type` is an exact match on the stored type, so check [club types](/reference/club-types) for the name you need.
   </Step>
   <Step title="List up to 100 clubs in a state">
     `get_clubs_by_state` fits a longer list:
@@ -47,7 +47,7 @@ club's profile at theprivateclubs.com.
     {"state": "Texas", "type": "golf"}
     ```
 
-    It returns up to 100 clubs, A to Z. Golf clubs in Texas reach that limit, so the answer is a partial list. For the full list, use the API with `type` and `state`, paged with `limit=200`, as [Build a list of clubs](/guides/brands-and-creators#pull-a-full-list-with-the-api) shows. The API groups types, so its `golf` also includes clubs stored as `country_club`.
+    It returns up to 100 clubs, best known first. Golf clubs in Texas reach that limit, so the answer is a partial list. For the full list, use the API with `type` and `state`, paged with `limit=200`, as [Build a list of clubs](/guides/brands-and-creators#pull-a-full-list-with-the-api) shows. The API groups types, so its `golf` also includes clubs stored as `country_club`.
   </Step>
   <Step title="Search another region">
     `search_clubs` works the same way for any US state or Canadian province:
@@ -85,7 +85,7 @@ club's profile at theprivateclubs.com.
 
 ## What each system did
 
-- Clubs returned the listed clubs of the type and state you named, each with a profile link.
+- Private Clubs returned the listed clubs of the type and state you named, each with a profile link.
 - Your AI app chose the tool for each question, built the tables and wrote the answer.
 
 ## Before you share

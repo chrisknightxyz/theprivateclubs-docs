@@ -1,25 +1,43 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Clubs",
-  "description": "Documentation for the Clubs MCP and REST API from Private Clubs",
+  "theme": "luma",
+  "name": "Private Clubs",
+  "description": "Documentation for the Private Clubs MCP server and REST API",
   "colors": {
-    "primary": "#171717",
-    "light": "#E5E5E5",
-    "dark": "#171717"
+    "primary": "#2563EB",
+    "light": "#60A5FA",
+    "dark": "#2563EB"
   },
   "background": {
     "color": {
-      "light": "#FFFFFF",
-      "dark": "#0A0A0A"
+      "light": "#FAFAFA",
+      "dark": "#0B0B0B"
     }
   },
-  "favicon": "/favicon.svg",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://www.theprivateclubs.com"
+  },
+  "favicon": "/favicon.png",
+  "fonts": {
+    "heading": {
+      "family": "Instrument Sans",
+      "weight": 550
+    },
+    "body": {
+      "family": "Instrument Sans",
+      "weight": 450
+    }
+  },
+  "appearance": {
+    "default": "system"
+  },
   "icons": {
     "library": "tabler"
   },
   "styling": {
-    "codeblocks": "dark"
+    "codeblocks": "system"
   },
   "navbar": {
     "links": [
@@ -30,7 +48,7 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Open Clubs",
+      "label": "Open Private Clubs",
       "href": "https://www.theprivateclubs.com/mcp"
     }
   },
@@ -108,6 +126,35 @@
       }
     ]
   },
+  "redirects": [
+    { "source": "/api/overview", "destination": "/api/openapi" },
+    { "source": "/api/rate-limits", "destination": "/api/usage-limits" },
+    { "source": "/api/search-clubs", "destination": "/api" },
+    { "source": "/api/get-club", "destination": "/mcp/tools#get-club-details" },
+    { "source": "/api/fee-data", "destination": "/api/authentication" },
+    { "source": "/api/statistics", "destination": "/introduction" },
+    { "source": "/api/mcp-overview", "destination": "/mcp/getting-started" },
+    { "source": "/api/mcp-tools", "destination": "/mcp/tools" },
+    { "source": "/api/mcp-connect", "destination": "/mcp/connect" },
+    { "source": "/api/data-model", "destination": "/reference/club-object" },
+    { "source": "/api/club-types-reference", "destination": "/reference/club-types" },
+    { "source": "/api/conventions", "destination": "/reference/conventions" },
+    { "source": "/platform/how-it-works", "destination": "/how-clubs-works" },
+    { "source": "/platform/club-types", "destination": "/reference/club-types" },
+    { "source": "/members/searching-clubs", "destination": "/guides/members" },
+    { "source": "/members/comparing-clubs", "destination": "/guides/members#compare-two-or-three-clubs" },
+    { "source": "/members/applying-for-membership", "destination": "/guides/members" },
+    { "source": "/members/concierge-service", "destination": "/guides/members" },
+    { "source": "/members/member-community", "destination": "/guides/members" },
+    { "source": "/clubs/claiming-your-listing", "destination": "/guides/clubs#claim-your-listing" },
+    { "source": "/clubs/verified-profile", "destination": "/guides/clubs" },
+    { "source": "/clubs/lead-management", "destination": "/guides/clubs" },
+    { "source": "/clubs/analytics-dashboard", "destination": "/guides/clubs" },
+    { "source": "/clubs/ai-discovery", "destination": "/mcp/getting-started" },
+    { "source": "/clubs/director-community", "destination": "/guides/clubs" },
+    { "source": "/pricing/members-plans", "destination": "/introduction" },
+    { "source": "/pricing/clubs-plans", "destination": "/introduction" }
+  ],
   "footer": {
     "socials": {
       "x": "https://x.com/theprivateclubs",

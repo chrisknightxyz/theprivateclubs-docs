@@ -1,6 +1,6 @@
-# Clubs docs: instructions for agents
+# Private Clubs docs: instructions for agents
 
-This repo holds the Mintlify docs for the Clubs MCP server and the Clubs REST API from Private Clubs. Pages are MDX files with YAML frontmatter, and `docs.json` holds the navigation and settings. `IA.md` is the plan: page outlines, standard lines and the fact sheet. Read it before you write a page.
+This repo holds the Mintlify docs for the Private Clubs MCP server and REST API. Pages are MDX files with YAML frontmatter, and `docs.json` holds the navigation and settings. `IA.md` is the plan: page outlines, standard lines and the fact sheet. Read it before you write a page.
 
 ## Sources of truth
 
@@ -11,12 +11,14 @@ Check every fact against one of these before you write it. If you cannot verify 
 
 ## Terminology
 
-- **Clubs**: the MCP server and the REST API. Write "the Clubs MCP", "the Clubs MCP server" or "the Clubs API". The server key is `clubs` and the display name is Clubs.
-- **Private Clubs**: the company and the site. Never write "The Private Clubs", "ThePrivateClubs.com" or "TPC". The domain stays theprivateclubs.com, and you can write theprivateclubs.com when you mean the site.
-- **Club record**: the fields Clubs returns for one listed club.
+- **Private Clubs**: the company, the site, the MCP server and the REST API (Chris, 2026-10-18: "rename everything from Clubs to Private Clubs"; this reverses the short-lived Clubs naming). Write "the Private Clubs MCP", "the Private Clubs MCP server" or "the Private Clubs API". The server key is `private-clubs` and the display name is Private Clubs.
+- Never write "The Private Clubs", "ThePrivateClubs.com" or "TPC", and do not start a sentence with "The Private Clubs ...": restructure it. The domain stays theprivateclubs.com, and you can write theprivateclubs.com when you mean the site.
+- **clubs**, lowercase, is the plain noun ("search clubs", "golf clubs"). Audience labels such as Clubs or Club teams stay as they are.
+- **Club record**: the fields Private Clubs returns for one listed club.
 - **Slug**: a club's short ID, such as `desert-forest-golf-club`, and the last part of its profile URL.
 - **Agent**: an AI agent. The audience is always "real estate agents", in full.
-- **Older entry**: `private-clubs`, the server key before the rename. Tell readers to replace it with `clubs`.
+- **Older entry**: `clubs`, the server key under the short-lived Clubs name. Tell readers to replace it with `private-clubs`.
+- **Plugin ZIPs**: link the live file names (`clubs.claude-plugin.zip`, `clubs.codex-plugin.zip`, `clubs.cursor-plugin.zip`) until the app ships the renamed files. Do not name labels that come from inside a ZIP, such as the connector name, because they change with the app.
 - Tool names go in code font: `search_clubs`, `get_club`, `get_clubs_by_state`, `compare_clubs`, `get_membership_info`.
 
 ## House style
@@ -31,6 +33,8 @@ Check every fact against one of these before you write it. If you cannot verify 
 - Internal links are root-relative with no extension, such as `/mcp/connect` or `/reference/club-object`.
 - Use the components in `IA.md`: `Card`, `CardGroup`, `Steps`, `Tabs`, `Note`, `Columns`, and rarely `Accordion` or `Info`. Icons come from the Tabler set named in `IA.md`.
 - End every page with short next steps: a line, a list or cards.
+- The look follows the website (the Wander standard): `style.css` holds the type scale, colours and surfaces, and `docs.json` sets the theme, blue, ground and Instrument Sans. Change the look there, never with inline styles in a page.
+- Images are screenshots of the site's own illustrations, saved in `images/` as light and dark pairs and shown in a `Frame` with `className="block dark:hidden"` and `className="hidden dark:block"`. Alt text says plainly what the picture shows. No captions with new copy.
 
 ## Standard lines
 
@@ -40,14 +44,15 @@ Copy these exactly.
 |---|---|
 | Address | `https://www.theprivateclubs.com/api/mcp` |
 | Transport | Streamable HTTP |
-| Server key and name | key `clubs`, display name Clubs |
+| Server key and name | key `private-clubs`, display name Private Clubs |
 | Free line | Free, no account or API key needed |
-| Setup line | `Set up the Clubs MCP for me: read https://www.theprivateclubs.com/mcp/setup.md and follow the steps for this app` |
+| Setup line | `Set up the Private Clubs MCP for me: read https://www.theprivateclubs.com/mcp/setup.md and follow the steps for this app` |
 | Check prompt | `Search clubs in Florida` |
 | First ask | `Find yacht clubs in Florida` |
-| Older entry | Added `private-clubs` before? It is the same server under its old name. Replace it with `clubs`. |
-| Fees | Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com. |
-| Fees (pages that cover the API too) | The Clubs MCP server never returns membership fees, and API calls from your server or script return none. Account holders see fees on each club's profile at theprivateclubs.com. |
+| Older entry | Added `clubs` before? It is the same server under an earlier name. Replace it with `private-clubs`. |
+| Older entry (chat apps) | Added it before under the name Clubs? Replace that older entry with Private Clubs. |
+| Fees | Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com. |
+| Fees (pages that cover the API too) | Private Clubs never returns membership fees over MCP, and API calls from your server or script return none. Account holders see fees on each club's profile at theprivateclubs.com. |
 | Tool fee message (quote only as tool output) | `Membership fees are available to account holders at theprivateclubs.com. Members see exact verified fees.` |
 | Attribution | Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use. |
 | Help | Email support@theprivateclubs.com |
@@ -77,7 +82,7 @@ Document:
 
 Do not document:
 
-- Sign in with Clubs, the signed-in server at `/mcp`, OAuth, API keys or any Authorize step.
+- Sign in with Private Clubs, the signed-in server at `/mcp`, OAuth, API keys or any Authorize step.
 - Tools beyond the five live ones, or anything described as coming soon, planned or not yet available.
 - Fee figures, fee bands over MCP, saves, enquiries, events, homes or network tools.
 - Prices from `/pricing`. Link the page instead.

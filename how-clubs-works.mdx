@@ -1,23 +1,23 @@
 ---
-title: "How Clubs works"
+title: "How Private Clubs works"
 description: "One clubs directory, served to AI apps through MCP and to your product through the REST API"
 ---
 
-Clubs reads the club listings on theprivateclubs.com and serves them in two ways. AI apps reach them through the Clubs MCP server, and your own product reaches them through the Clubs REST API. Both read the same listed clubs, and MCP answers link people back to each club's profile.
+Private Clubs serves the club listings on theprivateclubs.com in two ways. AI apps reach them through the Private Clubs MCP server, and your own product reaches them through the Private Clubs REST API. Both read the same listed clubs, and MCP answers link people back to each club's profile.
 
 ```mermaid
 flowchart LR
-  A["Club listings on theprivateclubs.com"] --> B["Clubs MCP server"]
-  A --> C["Clubs REST API"]
+  A["Club listings on theprivateclubs.com"] --> B["Private Clubs MCP server"]
+  A --> C["Private Clubs REST API"]
   B --> D["AI apps: answers with profile links"]
   C --> E["Your product: club rows as JSON"]
 ```
 
 ## Choose MCP or the API
 
-MCP (Model Context Protocol) connects Clubs to compatible AI apps and agents, such as Claude, ChatGPT and Cursor. The server offers five tools: `search_clubs`, `get_club`, `get_clubs_by_state`, `compare_clubs` and `get_membership_info`. Your AI app picks the tool that fits the question. Start with the [MCP quickstart](/mcp/getting-started).
+MCP (Model Context Protocol) connects Private Clubs to compatible AI apps and agents, such as Claude, ChatGPT and Cursor. The server offers five tools: `search_clubs`, `get_club`, `get_clubs_by_state`, `compare_clubs` and `get_membership_info`. Your AI app picks the tool that fits the question. Start with the [MCP quickstart](/mcp/getting-started).
 
-The REST API lets you integrate Clubs into an application, backend or automated workflow. It has one endpoint, `GET /api/v1/clubs`. Call it from your server, because it sends no CORS headers. Start with the [API quickstart](/api).
+The REST API lets you integrate Private Clubs into an application, backend or automated workflow. It has one endpoint, `GET /api/v1/clubs`. Call it from your server, because it sends no CORS headers. Start with the [API quickstart](/api).
 
 Both read the same directory, so choose the one that fits where you work.
 
@@ -31,16 +31,12 @@ MCP results carry a `url` that opens the club's profile on theprivateclubs.com. 
 
 ## How fees work
 
-The Clubs MCP server never returns membership fees, and API calls from your server or script return none. Account holders see fees on each club's profile at theprivateclubs.com.
+Private Clubs never returns membership fees over MCP, and API calls from your server or script return none. Account holders see fees on each club's profile at theprivateclubs.com.
 
 API responses carry a `fee_access` field. For calls without a theprivateclubs.com session, which is every call from your server or script, it is `locked` and the fee fields come back as `null`. See [Authentication and fees](/api/authentication).
 
 ## Keep a listing current
 
 A club can claim its listing for free at [theprivateclubs.com/list](https://www.theprivateclubs.com/list). It takes a work email and no credit card. See [Check your club's listing](/guides/clubs).
-
-<Note>
-  Clubs is the name of the MCP server and API. Private Clubs is the company and the site at theprivateclubs.com.
-</Note>
 
 Next, [connect an AI app](/mcp/getting-started) or [make your first API request](/api).

@@ -4,7 +4,7 @@ sidebarTitle: "Home buyers"
 description: "Find the golf clubs in a town, check a club's waitlist and compare two clubs side by side"
 ---
 
-You are looking at homes in or near a private club. Before you buy, ask your AI app which golf clubs are in the town, whether a club's waitlist is open and how two clubs compare. Clubs answers about the clubs, with a profile link for each one. It returns club data only, so check home details with your real estate agent.
+You are looking at homes in or near a private club. Before you buy, ask your AI app which golf clubs are in the town, whether a club's waitlist is open and how two clubs compare. Private Clubs answers about the clubs, with a profile link for each one. It returns club data only, so check home details with your real estate agent.
 
 ## What you can ask
 
@@ -14,17 +14,17 @@ You are looking at homes in or near a private club. Before you buy, ask your AI 
 
 ## Run it in your AI app
 
-<Card title="Connect Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
-  Install the Clubs MCP server in your AI app. Free, no account or API key needed.
+<Card title="Connect Private Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
+  Install the Private Clubs MCP server in your AI app. Free, no account or API key needed.
 </Card>
 
 Adapt this starting prompt:
 
 ```text
-Use the Clubs MCP. List the golf clubs in [Scottsdale], [Arizona]. Then
-check whether the waitlist is open at [club name]. Then compare [first
-club] and [second club], the clubs these homes sit in. Include each club's
-profile link, and say that fees are on the club's profile at
+Use the Private Clubs MCP. List the golf clubs in [Scottsdale], [Arizona].
+Then check whether the waitlist is open at [club name]. Then compare
+[first club] and [second club], the clubs these homes sit in. Include each
+club's profile link, and say that fees are on the club's profile at
 theprivateclubs.com.
 ```
 
@@ -38,7 +38,7 @@ theprivateclubs.com.
     {"query": "Scottsdale", "state": "Arizona", "type": "golf"}
     ```
 
-    The tool returns up to 25 clubs, A to Z, each with a profile `url`. Scottsdale reaches that limit, so the list is partial. To find one club, set `query` to its name. `type` is an exact match, so search `country_club` as well to catch clubs stored under that type.
+    The tool returns up to 25 clubs, best known first, each with a profile `url`. Scottsdale reaches that limit, so the list is partial. To find one club, set `query` to its name. `type` is an exact match, so search `country_club` as well to catch clubs stored under that type.
   </Step>
   <Step title="Check the club's waitlist">
     `get_membership_info` takes the club's slug:
@@ -47,7 +47,7 @@ theprivateclubs.com.
     {"slug": "the-estancia-club"}
     ```
 
-    It returns the club's `waitlist_status`, its profile `url` and a message that points to the profile for fees. For this club, the status was `by_invitation` in October 2026. If the status is `unknown` or `null`, Clubs does not know, so ask the club. See [waitlist values](/reference/conventions#waitlist-values).
+    It returns the club's `waitlist_status`, its profile `url` and a message that points to the profile for fees. For this club, the status was `by_invitation` in October 2026. If the status is `unknown` or `null`, Private Clubs does not know, so ask the club. See [waitlist values](/reference/conventions#waitlist-values).
   </Step>
   <Step title="Compare two clubs">
     `compare_clubs` takes two or three slugs:
@@ -85,13 +85,13 @@ theprivateclubs.com.
     ]
     ```
 
-    A `null` field means Clubs does not know the value. The order of the clubs is not fixed.
+    A `null` field means Private Clubs does not know the value. The order of the clubs is not fixed.
   </Step>
 </Steps>
 
 ## What each system did
 
-- Clubs returned the listed clubs, their waitlist status and a profile link for each one.
+- Private Clubs returned the listed clubs, their waitlist status and a profile link for each one.
 - Your AI app chose the tool for each question and wrote the answer.
 
 ## Before you share
