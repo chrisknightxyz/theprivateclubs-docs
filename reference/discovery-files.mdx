@@ -3,19 +3,21 @@ title: "Discovery files"
 description: "The public files that tell AI apps and crawlers where to find the Private Clubs MCP server and API"
 ---
 
-Private Clubs publishes a few plain files at fixed addresses on https://www.theprivateclubs.com. AI apps, agents and crawlers read them to find the Private Clubs MCP server and API without help.
+Private Clubs publishes a few files at fixed addresses on https://www.theprivateclubs.com. AI apps, agents and crawlers read them to find the Private Clubs MCP server and API without help.
 
 ## Files
 
 | File | What it holds |
 |---|---|
-| [`/mcp.json`](https://www.theprivateclubs.com/mcp.json) | The MCP server card: name, version, endpoint, transport, the five tools, the server key, `auth` set to `none`, and the setup page. |
+| [`/mcp.json`](https://www.theprivateclubs.com/mcp.json) | The MCP server card: the name Private Clubs, version, logo, endpoint, transport, the five tools, the server key `private-clubs`, `auth` set to `none`, and the setup page. |
 | [`/openapi.json`](https://www.theprivateclubs.com/openapi.json) | The REST API spec. See [API overview](/api/openapi). |
-| [`/llms.txt`](https://www.theprivateclubs.com/llms.txt) | A site overview for AI tools, regenerated hourly. |
+| [`/llms.txt`](https://www.theprivateclubs.com/llms.txt) | A site overview for AI tools, regenerated hourly. It notes that the API and the MCP tools take a full state name or a two-letter code, such as `Florida` or `FL`. |
+| [`/ai/context.md`](https://www.theprivateclubs.com/ai/context.md) | A short Markdown summary of Private Clubs for AI tools: club counts, how fees are shown, waitlist shares and key URLs, with `/api/v1/clubs` as the club data API. It carries no fee figures. |
 | [`/mcp/setup.md`](https://www.theprivateclubs.com/mcp/setup.md) | Setup steps an agent reads and follows for its own app. |
 | [`/robots.txt`](https://www.theprivateclubs.com/robots.txt) | Crawler rules, open to AI crawlers. |
+| [`/data/license`](https://www.theprivateclubs.com/data/license) | The data license, a web page: non-commercial use with attribution to Private Clubs, AI training with citation, the attribution formats, and support@theprivateclubs.com for commercial use. |
 
-`/mcp.json`, `/llms.txt` and `/mcp/setup.md` are served with `Cache-Control: public, max-age=3600`, so a cached copy can be up to an hour old.
+`/mcp.json`, `/llms.txt`, `/ai/context.md` and `/mcp/setup.md` are served with `Cache-Control: public, max-age=3600`, so a cached copy can be up to an hour old.
 
 ## For AI crawlers
 
@@ -32,7 +34,8 @@ That group allows `/` and disallows a short list of private paths, including sig
 - **Connect an AI app:** point it at `/mcp/setup.md`, or follow [Install Private Clubs](/mcp/connect).
 - **Find the MCP server from code:** read `/mcp.json`.
 - **Build on the REST API:** read `/openapi.json`.
-- **Give an AI tool a site overview:** use `/llms.txt`.
+- **Give an AI tool a site overview:** use `/llms.txt`, or `/ai/context.md` for a shorter summary.
 - **Check crawler rules:** read `/robots.txt`.
+- **Check the terms of use:** read `/data/license`.
 
 Next: [Conventions](/reference/conventions) and [API overview](/api/openapi).

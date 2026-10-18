@@ -121,6 +121,11 @@
               "reference/conventions",
               "reference/discovery-files"
             ]
+          },
+          {
+            "group": "API endpoints",
+            "openapi": "https://www.theprivateclubs.com/openapi.json",
+            "pages": ["GET /api/v1/clubs"]
           }
         ]
       }

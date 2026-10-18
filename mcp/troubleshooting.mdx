@@ -11,7 +11,7 @@ Start a new session if your app needs one, then check the entry. The server key 
 
 - **Claude:** in a chat, press **Use** on the plugin's connector.
 - **Claude Code:** run `/mcp` and check that `private-clubs` shows as connected.
-- **Cursor plugin:** reload Cursor and confirm the plugin under **Customize**.
+- **Cursor plugin:** reload Cursor and confirm Private Clubs under **Customize**.
 - **Perplexity:** select the Private Clubs card to turn it on.
 - **Hermes:** run `/reload-mcp` in a running Hermes session.
 - **OpenClaw:** run `openclaw mcp doctor private-clubs --probe` to check the connection.
@@ -52,10 +52,6 @@ Get the slug from a `search_clubs` result. It is also the last part of the club'
 
 With 1 slug, or more than 3, the call fails the input schema. The result starts with `MCP error -32602: Input validation error`.
 
-## A search fails every time
-
-`search_clubs` answers `Club search failed. Try again.` on every call when `query` holds a comma, such as `Naples, Florida`. Put the town in `query` and the state in `state`, for example `{"query": "Naples", "state": "Florida"}`.
-
 ## A search stops at 25 clubs
 
 `search_clubs` returns at most 25 clubs, best known first, with no paging. To see more:
@@ -68,7 +64,7 @@ With 1 slug, or more than 3, the call fails the input schema. The result starts 
 
 `state` in `search_clubs` and `get_clubs_by_state` covers US states and Canadian provinces only. A region elsewhere, such as Scotland, returns an empty list.
 
-Outside the US and Canada, use `search_clubs` with a city in `query` and no `state`. Inside them, check the spelling. Use the full name, such as `Florida`, or a two-letter code, such as `FL`.
+Outside the US and Canada, use `search_clubs` with no `state`, and put the city and country in `query`, such as `Sydney, Australia`. Inside them, check the spelling. Use the full name, such as `Florida`, or a two-letter code, such as `FL`. See [place names](/mcp/tools#place-names).
 
 ## A type search misses clubs
 

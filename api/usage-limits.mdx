@@ -19,10 +19,10 @@ Under the [data license](https://www.theprivateclubs.com/data/license), non-comm
 
 | Parameter | Default | Rules |
 |---|---|---|
-| `page` | 1 | Starts at 1. A value that is not a whole number returns 400 `invalid_page`. |
-| `limit` | 50 | The maximum is 200, and larger values are clamped to 200. A value that is not a whole number returns 400 `invalid_limit`. |
+| `page` | 1 | Starts at 1. A value that is not a whole number from 1, such as `0`, returns 400 `invalid_page`. Leading zeros are fine. |
+| `limit` | 50 | The maximum is 200, and larger values are clamped to 200. A value that is not a whole number from 1, such as `0`, returns 400 `invalid_limit`. Leading zeros are fine. |
 
-Stop paging when `page * limit` reaches `total`. A page past the last one returns a 500 `clubs_unavailable` error.
+Stop paging when `page * limit` reaches `total`. A page past the last one, however large, returns 200 with an empty `clubs` array and the real `total`.
 
 ## Rate limit headers
 
@@ -53,6 +53,6 @@ The MCP server has no request rate limit. When a search needs more than 25 or 10
 
 ## Need more
 
-Email support@theprivateclubs.com. For commercial use, follow the contact on the [data license](https://www.theprivateclubs.com/data/license) page.
+Email support@theprivateclubs.com. The [data license](https://www.theprivateclubs.com/data/license) names the same address for commercial use, bulk data access and API integrations beyond the public endpoints.
 
 Next: [Authentication and fees](/api/authentication) and the [API quickstart](/api).

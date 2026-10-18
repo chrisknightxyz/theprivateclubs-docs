@@ -14,7 +14,7 @@ The docs for the Private Clubs MCP server and REST API, built with [Mintlify](ht
 - `IA.md`: the plan, with page outlines and the fact sheet
 - `AGENTS.md`: rules for AI agents that edit these docs
 
-The generated API endpoint page is held back. The live spec at https://www.theprivateclubs.com/openapi.json states limits the code does not apply, so the `API endpoints` group stays out of `docs.json` until the spec fix in `IA.md` section 5 ships.
+The `API endpoints` group in `docs.json` generates the `GET /api/v1/clubs` page at `/api-reference/clubs/search-clubs` from the live spec at https://www.theprivateclubs.com/openapi.json. Mintlify reads the spec when it builds, so a spec change shows after the next deploy of these docs.
 
 ## Preview locally
 
