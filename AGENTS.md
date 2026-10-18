@@ -55,7 +55,7 @@ Copy these exactly.
 | Fees (pages that cover the API too) | Private Clubs never returns membership fees over MCP, and API calls from your server or script return none. Account holders see fees on each club's profile at theprivateclubs.com. |
 | Tool fee message (quote only as tool output) | `Membership fees are available to account holders at theprivateclubs.com. Members see exact verified fees.` |
 | Attribution | Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for the attribution format and bulk use. |
-| Free use and the data feed | Looking up, searching and comparing clubs through the MCP server and the API is free, including for work, with credit to Private Clubs and a link to each club's profile. Bulk download, scraping, mirroring or storing the directory, building a dataset from it, training AI models on it or reselling it needs a paid monthly data feed license: email support@theprivateclubs.com. |
+| Free use and the data feed | Looking up, searching and comparing clubs through the MCP server and the API is at no charge, including for work, with credit to Private Clubs and a link to each club's profile. Bulk download, paging through results to collect the directory, scraping, mirroring or storing the directory, building a dataset from it, collecting AI training data through the MCP server or the API, or reselling it needs a paid monthly data feed license: email support@theprivateclubs.com. See the [terms of service](https://www.theprivateclubs.com/legal/terms). |
 | Bulk data link | [Bulk data](/api/usage-limits#bulk-data) |
 | Help | Email support@theprivateclubs.com |
 | Setup page | https://www.theprivateclubs.com/mcp |

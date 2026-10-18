@@ -23,7 +23,7 @@ Private Clubs publishes a few files at fixed addresses on https://www.theprivate
 
 `robots.txt` lets crawlers fetch the public site. Its catch-all group allows `/` and disallows a short list of private paths, including sign-in, account, dashboard, admin and `/api/`. Named AI crawlers each get their own `Allow: /` group. They include OAI-SearchBot, ChatGPT-User, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot, Perplexity-User, Google-Extended, Meta-WebIndexer, Amazonbot and Applebot-Extended.
 
-What you may do with the data is set by the [data license](https://www.theprivateclubs.com/data/license): scraping or mirroring the directory, building a dataset from it and training AI models on it need a paid data feed license. See [Bulk data](/api/usage-limits#bulk-data).
+Crawlers that follow `robots.txt` may read the public pages for search, AI answers and AI training, as its catch-all group's `Content-Signal: search=yes, ai-input=yes, ai-train=yes` line says. The [data license](https://www.theprivateclubs.com/data/license) and section 8 of the [terms of service](https://www.theprivateclubs.com/legal/terms) set the rest: scraping or mirroring the directory, building a dataset from it, collecting AI training data through the MCP server or the API, or reselling it needs a paid data feed license. See [Bulk data](/api/usage-limits#bulk-data).
 
 ## Which file to use
 

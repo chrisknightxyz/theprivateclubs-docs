@@ -3,7 +3,7 @@ title: "API quickstart"
 description: "Make your first request to the Private Clubs API in five steps"
 ---
 
-The API returns club records from the Private Clubs directory as JSON. It is free for looking up, searching and comparing clubs, and you need no API key and no account. It returns up to 50 clubs a page and the first 500 results of a search. Call it from your server or a script. The API sends no CORS headers, so a web page on another site cannot read its responses.
+The API returns club records from the Private Clubs directory as JSON. Looking up, searching and comparing clubs with it is at no charge, with credit to Private Clubs and a link to each club's profile, and you need no API key and no account. Bulk use needs a paid data feed license, as [Bulk data](#bulk-data) explains. It returns up to 50 clubs a page and the first 500 results of a search. Call it from your server or a script. The API sends no CORS headers, so a web page on another site cannot read its responses.
 
 ## 1. Send your first request
 
@@ -97,6 +97,8 @@ The API returns the first 500 results of a search, so `page` times `limit`, with
 
 Stop when `page * limit` reaches `total` or 500, whichever comes first. A page past the last result, within the first 500, answers 200 with an empty `clubs` array and the real `total`, so an empty page also means you are done. When `total` is above 500, add filters such as `type`, `state` or `q` to find the clubs you need.
 
+Paging through results or splitting up queries to collect the directory, or a large part of it, needs a paid data feed license, as [Bulk data](#bulk-data) explains.
+
 ## 5. Handle errors
 
 Errors come back as `application/problem+json`. Each body has `type`, `title`, `status`, `detail`, `code`, `hint` and `instance`. Branch on `code`, which stays stable.
@@ -147,7 +149,7 @@ A 500 with `clubs_unavailable` only means the directory could not be read. Wait 
 
 ## Bulk data
 
-The free API is for looking up, searching and comparing clubs, with credit to Private Clubs and a link to each club's profile. Bulk access is a paid monthly data feed license. You need one to download the directory in bulk, scrape, mirror, cache or store the directory or a substantial part of it, build or enrich a database or dataset with it, train AI models on it or resell it. Paging through results or splitting up queries to collect the directory counts as bulk use.
+The free API is for looking up, searching and comparing clubs, with credit to Private Clubs and a link to each club's profile. Bulk access is a paid monthly data feed license. You need one to download the directory in bulk, scrape, mirror, cache or store the directory or a substantial part of it, build or enrich a database or dataset with it, collect AI training data through the API or the MCP server, or resell it. Paging through results or splitting up queries to collect the directory counts as bulk use.
 
 To ask about a data feed license, email support@theprivateclubs.com. See the [data license](https://www.theprivateclubs.com/data/license) and section 8 of the [terms of service](https://www.theprivateclubs.com/legal/terms).
 
