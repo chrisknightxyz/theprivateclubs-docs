@@ -1,0 +1,164 @@
+---
+title: "Available tools"
+description: "The five tools on the Clubs MCP server, with every parameter and returned field"
+---
+
+Anyone can call every tool on the Clubs MCP server, without an account or API key. The tools only read the directory. Each result is one text item that holds JSON. Your app can call `tools/list` for the full input schemas.
+
+Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
+
+## Search clubs
+
+`search_clubs` (title "Search Clubs") finds clubs by place, type, amenities and waitlist status.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `query` | string | No | Case-insensitive part match on the club's name, type or city; no commas, because a comma makes the search fail |
+| `state` | string | No | A US state or Canadian province, full name recommended; setting it keeps results in the US and Canada |
+| `type` | string | No | Case-insensitive exact match on the club's stored type, with no grouping |
+| `amenities` | array of strings | No | Stored amenity values; a club must have all of them |
+| `waitlist` | boolean | No | `true` keeps clubs whose `waitlist_status` is `open`; `false` does not filter |
+
+Nothing is required. With no `state`, the search is worldwide.
+
+**Returns** up to 25 clubs, A to Z by name, with no paging. Each club has `id`, `name`, `slug`, `city`, `state`, `country`, `type`, `waitlist_status`, `holes`, `par`, `yardage`, `course_architect`, `amenities` and `url`.
+
+**Errors:** `Club search failed. Try again.` when the search cannot run, and every time `query` holds a comma.
+
+```json
+{ "state": "Arizona", "type": "golf" }
+```
+
+## Get club details
+
+`get_club` (title "Get Club Details") returns the profile of one club.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `slug` | string | Yes | The club's URL slug, as `search_clubs` returns it |
+
+**Returns** one club with `id`, `name`, `slug`, `city`, `state`, `country`, `type`, `description`, `waitlist_status`, `holes`, `par`, `yardage`, `course_architect`, `founded_year`, `total_members`, `amenities`, `website`, `phone`, `hero_image_url`, `url` and `membership_fees`. The `membership_fees` field holds the fee message, never a figure.
+
+**Errors:** `Club not found: <slug>` when no listed club has that slug.
+
+```json
+{ "slug": "desert-forest-golf-club" }
+```
+
+## Get clubs by state
+
+`get_clubs_by_state` (title "Get Clubs by State") lists the clubs in one US state or Canadian province.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `state` | string | Yes | A US state or Canadian province, full name recommended |
+| `type` | string | No | Case-insensitive exact match on the club's stored type |
+
+It covers the US and Canada only.
+
+**Returns** up to 100 clubs, A to Z by name. Each club has `id`, `name`, `slug`, `city`, `state`, `country`, `type`, `waitlist_status`, `holes`, `par`, `yardage` and `url`.
+
+**Errors:** `Club search failed. Try again.` when the search cannot run.
+
+```json
+{ "state": "Florida", "type": "yacht" }
+```
+
+## Compare clubs
+
+`compare_clubs` (title "Compare Clubs") puts two or three clubs side by side. It works for clubs in any country.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `slugs` | array of strings | Yes | 2 or 3 club slugs |
+
+**Returns** one entry per club with `name`, `slug`, `location`, `url`, `waitlist_status`, `holes`, `par`, `yardage`, `course_architect`, `founded_year`, `amenities` and `website`. The `location` field is the city and state in one string, such as `New York, New York`. When the city or state is not stored, that part reads as the text `null`, such as `Sydney, null`, and the string never names the country. Use the club's `url`, or `get_club`, for the full place.
+
+Unknown slugs are left out without an error, and the order is not fixed.
+
+**Errors:** fewer than 2 or more than 3 slugs fail the input schema. `Club search failed. Try again.` means the comparison cannot run.
+
+```json
+{ "slugs": ["casa-cipriani-new-york", "spring-place-new-york"] }
+```
+
+## Get membership info
+
+`get_membership_info` (title "Get Membership Info") returns a club's waitlist status and where to see its fees.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `slug` | string | Yes | The club's URL slug, as `search_clubs` returns it |
+
+**Returns** `name`, `slug`, `type`, `waitlist_status`, `url` and `membership_fees`. The `membership_fees` field is the fee message, followed by `See <url>` when the club has a profile link.
+
+**Errors:** `Club not found: <slug>` when no listed club has that slug.
+
+```json
+{ "slug": "the-estancia-club" }
+```
+
+Result from October 2026:
+
+```json
+{
+  "name": "The Estancia Club",
+  "slug": "the-estancia-club",
+  "type": "golf",
+  "waitlist_status": "by_invitation",
+  "url": "https://www.theprivateclubs.com/clubs/arizona/the-estancia-club",
+  "membership_fees": "Membership fees are available to account holders at theprivateclubs.com. Members see exact verified fees. See https://www.theprivateclubs.com/clubs/arizona/the-estancia-club"
+}
+```
+
+## How the tools behave
+
+### Which clubs appear
+
+Only listed public clubs appear. Drafts, closed or hidden listings and merged duplicates never do.
+
+### Profile links
+
+The `url` field links the club's profile:
+
+```text
+https://www.theprivateclubs.com/clubs/{region}/{slug}
+```
+
+The region is the state or province for clubs in the US and Canada, and the country elsewhere. The field is `null` when a club has no region. Use the link as the tool returns it.
+
+### Place names
+
+Use full names, such as `Florida` or `Ontario`. Two-letter codes such as `FL` also resolve, but the tool descriptions ask for full names. Outside the US and Canada, leave `state` empty and put a city in `query`.
+
+### Types
+
+`type` is an exact match on the club's stored type, and case does not matter. The `search_clubs` description lists 13 types: `golf`, `city`, `yacht`, `athletic`, `beach`, `equestrian`, `ski`, `automotive`, `aviation`, `outdoor`, `business`, `wellness` and `dining`. Legacy types such as `country_club` stay separate, so `golf` does not include them. See [Club types](/reference/club-types).
+
+### Amenities
+
+Amenity values come back as each listing stores them. Most are snake_case codes such as `golf_course` or `pro_shop`, and some clubs store labels such as `Spa`. The match is exact and case-sensitive, so copy values from a live result before you filter.
+
+### Waitlist values
+
+`waitlist_status` can be `open`, `waitlist`, `by_invitation`, `invite_only` or `unknown`, and it can be `null`. See [Waitlist values](/reference/conventions#waitlist-values) for what each one means.
+
+### Fees
+
+No tool returns fees, as a figure or a range. `get_club` and `get_membership_info` return this message in `membership_fees`:
+
+```text
+Membership fees are available to account holders at theprivateclubs.com. Members see exact verified fees.
+```
+
+### Errors
+
+Tool errors come back as results marked `isError`, with one text item:
+
+- `Club not found: <slug>` from `get_club` and `get_membership_info`.
+- `Club search failed. Try again.` from `search_clubs`, `get_clubs_by_state` and `compare_clubs`.
+- Arguments that break the input schema, such as one slug in `compare_clubs`, return a result that starts with `MCP error -32602: Input validation error`.
+
+Errors in the request itself, such as a body that is not valid JSON, are covered in [Troubleshooting](/mcp/troubleshooting#the-request-is-rejected).
+
+Next, put the tools to work in [Use cases](/use-cases), or [install Clubs](/mcp/connect) in another app.

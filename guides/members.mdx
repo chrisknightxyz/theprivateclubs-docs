@@ -1,0 +1,97 @@
+---
+title: "Find and compare clubs"
+sidebarTitle: "For members"
+description: "Search clubs by place and type, compare a shortlist and check membership status from your AI app"
+---
+
+Use Clubs to find clubs in a place, compare the ones you like and check whether they take new members. Each task works in your AI app once you [install Clubs](/mcp/connect). Where the REST API also fits, a second tab shows the call. The [API quickstart](/api) covers the basics.
+
+## Search by place and type
+
+<Tabs>
+  <Tab title="MCP">
+    Ask your AI app:
+
+    ```text
+    Find golf clubs in Arizona
+    ```
+
+    The tool that fits is `search_clubs`. Set `state` to a US state or Canadian province, `type` to a club type such as `golf` or `yacht`, and `query` to part of a club's name, type or city. It returns up to 25 clubs, A to Z by name, with a link to each club's profile. With no `state`, the search covers every country.
+
+    In MCP, `type` is an exact match on the club's stored type, so `golf` does not include `country_club`.
+  </Tab>
+  <Tab title="API">
+    ```bash
+    curl "https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Arizona"
+    ```
+
+    Filter with `type`, `state`, `country` and `q`, which matches part of the club name. In the API, `type=golf` also returns country clubs. Outside the US and Canada, add `country` next to `state`, for example `country=United%20Kingdom&state=Scotland`.
+  </Tab>
+</Tabs>
+
+## Find clubs with an open waitlist
+
+<Tabs>
+  <Tab title="MCP">
+    ```text
+    Which private golf clubs in Arizona have an open waitlist?
+    ```
+
+    Add `waitlist: true` to `search_clubs`. It keeps the clubs whose `waitlist_status` is `open` and drops the rest.
+  </Tab>
+  <Tab title="API">
+    ```bash
+    curl "https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Arizona&waitlist=open"
+    ```
+
+    `waitlist` takes a comma-separated list of `open`, `waitlist` and `by_invitation`.
+  </Tab>
+</Tabs>
+
+An empty list means no club in that search is listed as open. Few clubs carry the `open` status. In October 2026, the Arizona golf search above returned an empty list. Try a wider search, or check each club's status as shown below.
+
+## Compare two or three clubs
+
+```text
+Compare Casa Cipriani New York and Spring Place New York
+```
+
+The tool that fits is `compare_clubs`, with `slugs` set to two or three club slugs, such as `casa-cipriani-new-york` and `spring-place-new-york`. Each club comes back with its location, profile `url`, waitlist status, course data, founded year, amenities and website.
+
+A slug that matches no listed club is left out without an error, so take slugs from a search first. Comparing is an MCP task, so there is no API tab.
+
+## Check membership status
+
+```text
+Is the waitlist open at The Estancia Club?
+```
+
+The tool that fits is `get_membership_info`, with `slug` set to the club's slug, such as `the-estancia-club`. It returns the club's name, type, `waitlist_status` and profile `url`, plus a note on where to see fees. The status values mean:
+
+- `open`: listed as open to new members
+- `waitlist`: listed with a waitlist
+- `by_invitation` or `invite_only`: by invitation
+- `unknown` or `null`: not known
+
+See [waitlist values](/reference/conventions#waitlist-values). A status can change, so confirm it on the club's profile.
+
+## See fees and enquire
+
+Clubs answers carry no fees. To see them, open the club's profile from the `url` in the answer. Account holders see fees there. With a free account, you see a price range. Select **Enquire** on the profile to contact the club. Searching, saving, comparing and enquiring with clubs are free.
+
+## Use the answers well
+
+Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
+
+Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Shortlist clubs to join" icon="users" href="/use-cases/members">
+    Run the member asks in order with one prompt you can adapt.
+  </Card>
+  <Card title="Available tools" icon="terminal-2" href="/mcp/tools">
+    Read every parameter and returned field of the five tools.
+  </Card>
+</CardGroup>

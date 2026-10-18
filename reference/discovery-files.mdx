@@ -1,0 +1,38 @@
+---
+title: "Discovery files"
+description: "The public files that tell AI apps and crawlers where Clubs lives"
+---
+
+Private Clubs publishes a few plain files at fixed addresses on https://www.theprivateclubs.com. AI apps, agents and crawlers read them to find the Clubs MCP server and the Clubs API without help.
+
+## Files
+
+| File | What it holds |
+|---|---|
+| [`/mcp.json`](https://www.theprivateclubs.com/mcp.json) | The MCP server card: name, version, endpoint, transport, the five tools, the server key `clubs`, `auth` set to `none`, and the setup page. |
+| [`/openapi.json`](https://www.theprivateclubs.com/openapi.json) | The REST API spec. See [API overview](/api/openapi). |
+| [`/llms.txt`](https://www.theprivateclubs.com/llms.txt) | A site overview for AI tools, regenerated hourly. |
+| [`/mcp/setup.md`](https://www.theprivateclubs.com/mcp/setup.md) | Setup steps an agent reads and follows for its own app. |
+| [`/robots.txt`](https://www.theprivateclubs.com/robots.txt) | Crawler rules, open to AI crawlers. |
+
+`/mcp.json`, `/llms.txt` and `/mcp/setup.md` are served with `Cache-Control: public, max-age=3600`, so a cached copy can be up to an hour old.
+
+## For AI crawlers
+
+`robots.txt` opens the site to search, AI input and AI training. Its catch-all group carries this line:
+
+```text
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+```
+
+That group allows `/` and disallows a short list of private paths, including sign-in, account, dashboard, admin and `/api/`. Named AI crawlers each get their own `Allow: /` group. They include OAI-SearchBot, ChatGPT-User, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot, Perplexity-User, Google-Extended, Meta-WebIndexer, Amazonbot and Applebot-Extended.
+
+## Which file to use
+
+- **Connect an AI app:** point it at `/mcp/setup.md`, or follow [Install Clubs](/mcp/connect).
+- **Find the MCP server from code:** read `/mcp.json`.
+- **Build on the REST API:** read `/openapi.json`.
+- **Give an AI tool a site overview:** use `/llms.txt`.
+- **Check crawler rules:** read `/robots.txt`.
+
+Next: [Conventions](/reference/conventions) and [API overview](/api/openapi).

@@ -1,0 +1,66 @@
+---
+title: "Conventions"
+description: "How Clubs writes places, types, waitlist values and links, and how to cite it"
+---
+
+These rules apply to both the Clubs API and the Clubs MCP server. Follow them when you send filters and when you show results.
+
+## Places
+
+States, provinces and countries are written as full names, such as `Florida`, `Ontario` and `United States`. Two-letter state codes such as `FL` also resolve, in the API and in the MCP tools. Full names are the safer choice.
+
+In the API, `country` also takes an ISO code such as `GB`. A `state` with no `country` stays in the US and Canada, so send `country` too for a region elsewhere.
+
+In the MCP tools, `state` covers US states and Canadian provinces only.
+
+## Types
+
+Types are lower case snake_case, such as `golf`, `yacht` and `country_club`. See [Club types](/reference/club-types) for the 15 current types and how the API groups them.
+
+## Waitlist values
+
+`waitlist_status` holds one of these values:
+
+| Value | Meaning |
+|---|---|
+| `open` | The club is listed as open to new members. |
+| `waitlist` | The club is listed with a waitlist. |
+| `by_invitation` | Membership is by invitation. |
+| `invite_only` | Membership is by invitation, the same as `by_invitation`. |
+| `unknown` | Not known. |
+
+The field can also be `null`, which also means not known. In the API, `waitlist=by_invitation` matches both `by_invitation` and `invite_only`. In the MCP tools, `waitlist: true` keeps `open` clubs only.
+
+Waitlist status can change. Point people to the club's profile before they act on it.
+
+## Profile links
+
+MCP results carry a `url` for each club's profile, in this form:
+
+```text
+https://www.theprivateclubs.com/clubs/{region}/{slug}
+```
+
+The region is the state or province for the US and Canada, and the country elsewhere. `url` is `null` when a club has no region. Use the `url` the tool returns. API rows carry no profile link.
+
+## Fees
+
+Never state, estimate or imply a club's fees. The Clubs MCP server never returns membership fees, and API calls from your server or script return none. Account holders see fees on each club's profile at theprivateclubs.com.
+
+## Missing values
+
+`null` means the value is not known. Leave the field out of what you show, or point people to the club's profile. Never invent a value.
+
+## Attribution
+
+Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
+
+A citation can follow this pattern:
+
+```text
+Data from theprivateclubs.com shows...
+```
+
+The data license gives the exact attribution formats.
+
+Next: [Club object](/reference/club-object) and [Discovery files](/reference/discovery-files).

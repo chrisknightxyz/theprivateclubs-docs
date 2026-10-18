@@ -1,0 +1,83 @@
+---
+title: "Shortlist clubs to join"
+sidebarTitle: "Members"
+description: "Search clubs, compare a shortlist and check whether a waitlist is open, from your AI app"
+---
+
+You are choosing a club to join. Ask your AI app to search clubs by place and type, compare the two or three you like, and check each club's waitlist status. Clubs answers from the public directory at theprivateclubs.com, with a profile link for every club.
+
+## What you can ask
+
+- "Which private golf clubs in Arizona have an open waitlist?" uses `search_clubs`.
+- "Compare the two clubs I'm choosing between" uses `compare_clubs`.
+- "Is the waitlist open at this club?" uses `get_membership_info`.
+
+## Run it in your AI app
+
+<Card title="Connect Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
+  Install the Clubs MCP server in your AI app. Free, no account or API key needed.
+</Card>
+
+Adapt this starting prompt:
+
+```text
+Use the Clubs MCP. Find private [golf] clubs in [Arizona] that are listed
+with an open waitlist. Then compare [first club] and [second club] side by
+side. Then check whether the waitlist is open at [the club you like most].
+Include each club's profile link, and say that fees are on the club's
+profile at theprivateclubs.com.
+```
+
+## How it works
+
+<Steps>
+  <Step title="Search with the waitlist filter">
+    `search_clubs` fits this ask. Send `state`, `type` and `waitlist`:
+
+    ```json
+    {"state": "Arizona", "type": "golf", "waitlist": true}
+    ```
+
+    `waitlist: true` keeps only clubs whose `waitlist_status` is `open`. The tool returns up to 25 clubs, A to Z, each with a profile `url`. In October 2026 this search returned an empty list. An empty list means no club in that search is listed as open. Leave out `waitlist` to see the listed clubs, then check the ones you like.
+  </Step>
+  <Step title="Compare your shortlist">
+    `compare_clubs` takes two or three slugs. Take each slug from a search result.
+
+    ```json
+    {"slugs": ["casa-cipriani-new-york", "spring-place-new-york"]}
+    ```
+
+    You get each club's location, profile link, waitlist status, amenities and website side by side, plus course fields such as holes, par and yardage. Course fields are `null` for clubs without a course. A slug Clubs does not know is left out without an error.
+  </Step>
+  <Step title="Check the waitlist">
+    `get_membership_info` takes one slug and returns the club's waitlist status and profile link. Trimmed result from October 2026:
+
+    ```json
+    {
+      "name": "The Estancia Club",
+      "slug": "the-estancia-club",
+      "type": "golf",
+      "waitlist_status": "by_invitation",
+      "url": "https://www.theprivateclubs.com/clubs/arizona/the-estancia-club"
+    }
+    ```
+
+    `open` means the club is listed as open to new members, and `waitlist` means it is listed with a waitlist. `by_invitation` and `invite_only` both mean by invitation. `unknown` or `null` means Clubs does not know. See [waitlist values](/reference/conventions#waitlist-values).
+  </Step>
+</Steps>
+
+## What each system did
+
+- Clubs returned listed clubs, their waitlist status and a profile link for each one.
+- Your AI app chose the tool for each question and wrote the answer.
+- The club's profile on theprivateclubs.com holds the full listing, with fees for account holders.
+
+## Before you share
+
+- Fees are not included. Point people to the club's profile, where account holders see fees.
+- Waitlist status can change. Check the club's profile before you rely on it.
+- Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
+
+## Next
+
+Read [Find and compare clubs](/guides/members) for every filter, then the [available tools](/mcp/tools).

@@ -1,0 +1,98 @@
+---
+title: "See how your club reads in AI apps"
+sidebarTitle: "Club teams"
+description: "Read your profile as AI apps see it and compare it with clubs in your state"
+---
+
+You run or market a club. AI apps that connect Clubs read your listing from the public directory at theprivateclubs.com. Ask the questions they can answer, and you see what they see: your profile, the clubs listed in your state and how you compare with clubs nearby.
+
+## What you can ask
+
+- "How does our club's profile read on Clubs?" uses `get_club`.
+- "Which yacht clubs are listed in our state?" uses `get_clubs_by_state`.
+- "Compare our club with two clubs nearby" uses `compare_clubs`.
+
+## Run it in your AI app
+
+<Card title="Connect Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
+  Install the Clubs MCP server in your AI app. Free, no account or API key needed.
+</Card>
+
+Adapt this starting prompt:
+
+```text
+Use the Clubs MCP. Find [club name] in [state] and show me its full
+profile as Clubs returns it, and list any empty fields. Then list the
+[yacht] clubs listed in [state]. Then compare [club name] with [nearby
+club] and [second nearby club]. Include each club's profile link, and say
+that fees are on the club's profile at theprivateclubs.com.
+```
+
+## How it works
+
+<Steps>
+  <Step title="Read your profile">
+    `get_club` fits this ask. It takes your club's slug. If you do not know it, `search_clubs` with `query` set to your club's name returns it. The slug is also the last part of your profile URL.
+
+    ```json
+    {"slug": "desert-forest-golf-club"}
+    ```
+
+    Trimmed result from October 2026, with `id`, `country`, `description`, `amenities`, `website`, `phone` and `hero_image_url` left out:
+
+    ```json
+    {
+      "name": "Desert Forest Golf Club",
+      "slug": "desert-forest-golf-club",
+      "city": "Carefree",
+      "state": "Arizona",
+      "type": "golf",
+      "waitlist_status": "by_invitation",
+      "holes": 18,
+      "par": 72,
+      "yardage": 7201,
+      "course_architect": "Red Lawrence, ASGCA",
+      "founded_year": 1962,
+      "total_members": null,
+      "url": "https://www.theprivateclubs.com/clubs/arizona/desert-forest-golf-club",
+      "membership_fees": "Membership fees are available to account holders at theprivateclubs.com. Members see exact verified fees."
+    }
+    ```
+
+    A `null` field means Clubs does not know the value. `membership_fees` is always this message, never a figure.
+  </Step>
+  <Step title="List the clubs in your state">
+    `get_clubs_by_state` fits this ask. Send your state and, if you like, a type:
+
+    ```json
+    {"state": "Florida", "type": "yacht"}
+    ```
+
+    It covers US states and Canadian provinces and returns up to 100 clubs, A to Z, each with a profile `url`. `type` is an exact match on the stored type, so see [club types](/reference/club-types) for the names. For a longer list, use the [API](/api) with paging.
+  </Step>
+  <Step title="Compare with clubs nearby">
+    `compare_clubs` takes two or three slugs. Clubs does not measure distance, so choose the nearby clubs yourself, for example from step 2 or from a `search_clubs` search by city.
+
+    ```json
+    {"slugs": ["desert-forest-golf-club", "desert-highlands-golf-club-az-ut21", "the-estancia-club"]}
+    ```
+
+    You get each club's location, profile link, waitlist status, course fields, founded year, amenities and website. The order of the clubs is not fixed.
+  </Step>
+</Steps>
+
+## What each system did
+
+- Clubs returned your listing, the clubs listed in your state and a profile link for each one.
+- Your AI app chose the tool for each question and wrote the answer.
+
+## Before you share
+
+- Fees are not included. Point people to your club's profile, where account holders see fees.
+- Waitlist status and other fields can change. Check the profile before you quote it.
+- Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
+- You can claim your club's listing free at [theprivateclubs.com/list](https://www.theprivateclubs.com/list), with a work email and no credit card.
+
+## Next
+
+Read [Check your club's listing](/guides/clubs) for the full steps.

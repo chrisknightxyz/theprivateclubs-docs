@@ -1,0 +1,90 @@
+---
+title: "Answer club questions for buyers"
+sidebarTitle: "Real estate agents"
+description: "Name the clubs in a town, check membership status and compare golf courses for a buyer"
+---
+
+You are a real estate agent, and buyers ask about the clubs near a listing. Ask your AI app which clubs are in the town, what a club's membership status is and how two golf courses compare. Clubs answers from the public directory at theprivateclubs.com, with a profile link you can send to your buyer.
+
+## What you can ask
+
+- "Which private clubs are in Naples, Florida?" uses `search_clubs`.
+- "What is the membership status at this club?" uses `get_membership_info`.
+- "Compare the golf courses at these two clubs" uses `compare_clubs`.
+
+## Run it in your AI app
+
+<Card title="Connect Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
+  Install the Clubs MCP server in your AI app. Free, no account or API key needed.
+</Card>
+
+Adapt this starting prompt:
+
+```text
+Use the Clubs MCP. List the private clubs in [Naples], [Florida]. Then
+check the membership status at [club name]. Then compare the golf courses
+at [first club] and [second club]: holes, par, yardage, course architect
+and founded year. Include each club's profile link, and say that fees are
+on the club's profile at theprivateclubs.com.
+```
+
+## How it works
+
+<Steps>
+  <Step title="Find the clubs in a town">
+    `search_clubs` fits this ask. Put the town in `query` and add the state:
+
+    ```json
+    {"query": "Naples", "state": "Florida"}
+    ```
+
+    `query` matches part of a club's name, type or city, so a club in another town can appear when its name holds the town's name. Check the `city` field. The tool returns up to 25 clubs, A to Z. Naples reaches that limit, so treat the list as partial and narrow it with `type`. `type` is an exact match, so `golf` leaves out clubs stored as `country_club`. Search each type you need.
+  </Step>
+  <Step title="Check membership status">
+    `get_membership_info` takes one slug from the search:
+
+    ```json
+    {"slug": "colliers-reserve"}
+    ```
+
+    Result from October 2026:
+
+    ```json
+    {
+      "name": "Collier's Reserve Country Club",
+      "slug": "colliers-reserve",
+      "type": "country_club",
+      "waitlist_status": "waitlist",
+      "url": "https://www.theprivateclubs.com/clubs/florida/colliers-reserve",
+      "membership_fees": "Membership fees are available to account holders at theprivateclubs.com. Members see exact verified fees. See https://www.theprivateclubs.com/clubs/florida/colliers-reserve"
+    }
+    ```
+
+    `waitlist` means the club is listed with a waitlist. See [waitlist values](/reference/conventions#waitlist-values) for the others.
+  </Step>
+  <Step title="Compare the golf courses">
+    `compare_clubs` takes two or three slugs:
+
+    ```json
+    {"slugs": ["bay-colony", "colliers-reserve"]}
+    ```
+
+    You get holes, par, yardage, course architect and founded year side by side, with each club's location, waitlist status, amenities, website and profile link. A field Clubs does not know comes back `null`.
+  </Step>
+</Steps>
+
+## What each system did
+
+- Clubs returned the listed clubs, their membership status, their course details and a profile link for each one.
+- Your AI app chose the tool for each question and wrote the answer.
+
+## Before you share
+
+- Fees are not included. Send your buyer the club's profile, where account holders see fees.
+- Membership status can change. Check the club's profile before you pass it on.
+- Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
+- Under the data license, non-commercial use is free with attribution. Commercial use, bulk data access and API integrations beyond the public endpoints need a commercial license, and the license page gives the contact.
+
+## Next
+
+Read [Look up the club behind a listing](/guides/real-estate-agents), then the [home buyers use case](/use-cases/home-buyers).

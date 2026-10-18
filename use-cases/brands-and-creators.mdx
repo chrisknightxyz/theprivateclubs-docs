@@ -1,0 +1,100 @@
+---
+title: "Map clubs by type and region"
+sidebarTitle: "Brands and creators"
+description: "Find the clubs of one type in a state before you plan outreach or research"
+---
+
+You plan a partnership, a campaign or a piece of research, and you need the clubs of one type in one place. Ask your AI app for a list by type and state. Clubs answers from the public directory at theprivateclubs.com, with a profile link for each club.
+
+## What you can ask
+
+- "Which equestrian clubs are listed in Kentucky?" uses `search_clubs`.
+- "List the golf clubs in Texas" uses `get_clubs_by_state`.
+- "Which ski clubs are there in Colorado?" uses `search_clubs`.
+
+## Run it in your AI app
+
+<Card title="Connect Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
+  Install the Clubs MCP server in your AI app. Free, no account or API key needed.
+</Card>
+
+Adapt this starting prompt:
+
+```text
+Use the Clubs MCP. List the [equestrian] clubs in [Kentucky]. Then list
+the [golf] clubs in [Texas]. Then find the [ski] clubs in [Colorado].
+Show each list as a table with name, city, type and profile link, and
+tell me when a list stops at the tool's limit. Say that fees are on each
+club's profile at theprivateclubs.com.
+```
+
+## How it works
+
+<Steps>
+  <Step title="Search one type in one state">
+    `search_clubs` fits this ask. Send `state` and `type`:
+
+    ```json
+    {"state": "Kentucky", "type": "equestrian"}
+    ```
+
+    It returns up to 25 clubs, A to Z, each with a profile `url`. `type` is an exact match on the stored type, so check [club types](/reference/club-types) for the name you need.
+  </Step>
+  <Step title="List up to 100 clubs in a state">
+    `get_clubs_by_state` fits a longer list:
+
+    ```json
+    {"state": "Texas", "type": "golf"}
+    ```
+
+    It returns up to 100 clubs, A to Z. Golf clubs in Texas reach that limit, so the answer is a partial list. For the full list, use the API with `type` and `state`, paged with `limit=200`, as [Build a list of clubs](/guides/brands-and-creators#pull-a-full-list-with-the-api) shows. The API groups types, so its `golf` also includes clubs stored as `country_club`.
+  </Step>
+  <Step title="Search another region">
+    `search_clubs` works the same way for any US state or Canadian province:
+
+    ```json
+    {"state": "Colorado", "type": "ski"}
+    ```
+
+    Trimmed result from October 2026:
+
+    ```json
+    [
+      {
+        "name": "Snowmass Mountain Club",
+        "city": "Snowmass Village",
+        "type": "ski",
+        "url": "https://www.theprivateclubs.com/clubs/colorado/snowmass-mountain-club-co"
+      },
+      {
+        "name": "The Alpine Club Telluride",
+        "city": "Telluride",
+        "type": "ski",
+        "url": "https://www.theprivateclubs.com/clubs/colorado/alpine-club-telluride-co"
+      },
+      {
+        "name": "The Sixty Two Society",
+        "city": "Vail",
+        "type": "ski",
+        "url": "https://www.theprivateclubs.com/clubs/colorado/sixty-two-society-co"
+      }
+    ]
+    ```
+  </Step>
+</Steps>
+
+## What each system did
+
+- Clubs returned the listed clubs of the type and state you named, each with a profile link.
+- Your AI app chose the tool for each question, built the tables and wrote the answer.
+
+## Before you share
+
+- Fees are not included. Point people to each club's profile, where account holders see fees.
+- Listings and waitlist status can change. Check a club's profile before you contact it.
+- Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
+- Under the data license, non-commercial use is free with attribution. Commercial use, bulk data access and API integrations beyond the public endpoints need a commercial license, and the license page gives the contact.
+
+## Next
+
+Read [Build a list of clubs](/guides/brands-and-creators), then [club types](/reference/club-types).

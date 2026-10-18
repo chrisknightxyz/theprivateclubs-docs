@@ -1,0 +1,72 @@
+---
+title: "Look up the club behind a listing"
+sidebarTitle: "For real estate agents"
+description: "Find the clubs in a town, check membership status and compare courses for a buyer"
+---
+
+Buyers often ask about the club behind a home: which clubs are in town, whether they take new members and how the courses compare. These tasks help real estate agents answer from Clubs in an AI app. [Install Clubs](/mcp/connect) first.
+
+## Find the clubs in a town
+
+<Tabs>
+  <Tab title="MCP">
+    ```text
+    Which private clubs are in Naples, Florida?
+    ```
+
+    The tool that fits is `search_clubs`, with `query` set to the town and `state` set to the state. Results stop at 25, A to Z by name. Add `type`, such as `golf`, to narrow a busy town.
+
+    `query` matches part of a club's name, type or city. A club with the town in its name can appear even when it sits in a nearby town, so check the `city` field.
+  </Tab>
+  <Tab title="API">
+    In the API, `q` matches club names only, not towns. For a town, pull the state and keep the rows whose `city` matches:
+
+    ```bash
+    curl -s "https://www.theprivateclubs.com/api/v1/clubs?state=Florida&limit=200&page=1" \
+      | jq -c '.clubs[] | select(.city == "Naples") | {name, slug, type, waitlist_status}'
+    ```
+
+    Repeat with `page=2` and up, and stop once `page * limit` reaches `total`.
+  </Tab>
+</Tabs>
+
+## Check membership status
+
+```text
+What is the membership status at Bay Colony Golf Club?
+```
+
+The tool that fits is `get_membership_info`, with `slug` set to the club's slug, such as `bay-colony`. It returns the club's `waitlist_status` and profile `url`, plus a note on where to see fees.
+
+`open` means the club is listed as open to new members. `waitlist` means it is listed with a waitlist, and `by_invitation` or `invite_only` means by invitation. `unknown` or `null` means the status is not known. See [waitlist values](/reference/conventions#waitlist-values). A status can change, so ask buyers to confirm it on the profile.
+
+## Compare the golf courses
+
+```text
+Compare the golf courses at Bay Colony Golf Club and Collier's Reserve Country Club
+```
+
+The tool that fits is `compare_clubs`, with two or three slugs, such as `bay-colony` and `colliers-reserve`. For each club it returns holes, par, yardage, course architect and founded year. It also gives the location, waitlist status, amenities, website and profile `url`. A slug that matches no listed club is left out without an error.
+
+## Share the profile link
+
+Give buyers the `url` from a Clubs answer, such as `https://www.theprivateclubs.com/clubs/florida/bay-colony`. It opens the club's profile on theprivateclubs.com. Fees stay on the profile, where account holders see them, so do not state or estimate a club's fees yourself.
+
+## Use the answers well
+
+Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
+
+Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
+
+Under the data license, non-commercial use is free with attribution. Commercial use, bulk data access and API integrations beyond the public endpoints need a commercial license, and the license page gives the contact.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Answer club questions for buyers" icon="briefcase" href="/use-cases/real-estate-agents">
+    Name the clubs in a town, check status and compare courses with one prompt.
+  </Card>
+  <Card title="Check the club before you buy a home" icon="home" href="/use-cases/home-buyers">
+    The same checks, written for the buyer.
+  </Card>
+</CardGroup>

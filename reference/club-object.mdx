@@ -1,0 +1,118 @@
+---
+title: "Club object"
+description: "Every field a club carries in API responses and MCP tool results"
+---
+
+A **club record** is the set of fields Clubs returns for one listed club. The API and the MCP tools return different sets of fields, so each has its own section below. Only listed public clubs appear in either.
+
+## API club
+
+`GET /api/v1/clubs` wraps its rows in a response object:
+
+| Field | Type | Notes |
+|---|---|---|
+| `clubs` | array | The club objects on this page. |
+| `total` | integer | Clubs that match your filters, across all pages. |
+| `fee_access` | string | `locked` for calls without a site session. See [Authentication and fees](/api/authentication). |
+
+Each club object has these fields:
+
+| Field | Type | Notes |
+|---|---|---|
+| `id` | string | The club's UUID. |
+| `name` | string | The club's name. |
+| `slug` | string | The club's identifier in profile links and MCP tool arguments. |
+| `city` | string or null | The city. |
+| `state` | string or null | The state, province or region. See [place fields](#place-fields). |
+| `country` | string or null | The country, as a full name. |
+| `type` | string | The stored club type. See [Club types](/reference/club-types). |
+| `status` | string | The listing's status. See [status](#status). |
+| `verified` | boolean | Whether the listing is marked verified. |
+| `hero_image_url` | string or null | The URL of the club's main image. |
+| `initiation_fee` | number or null | `null` for calls without a site session. |
+| `annual_dues` | number or null | `null` for calls without a site session. |
+| `monthly_dues` | number or null | `null` for calls without a site session. |
+| `fee_tier` | string or null | `verified`, `estimate` or `none`. A label, never a figure. |
+| `waitlist_status` | string or null | See [waitlist status](#waitlist-status). |
+| `holes` | integer or null | Number of holes. |
+| `par` | integer or null | Course par. |
+| `yardage` | integer or null | Course length in yards. |
+| `course_architect` | string or null | The course designer. |
+| `founded_year` | integer or null | The year the club was founded. |
+| `opened_year` | integer or null | The year the club opened. See [founded and opened years](#founded-and-opened-years). |
+| `currency` | string | A three-letter ISO 4217 code, such as `USD`. |
+| `amenities` | array of strings or null | See [amenities](#amenities). |
+| `description` | string or null | Editorial text about the club. |
+| `google_rating` | number or null | The club's Google rating, when stored. |
+| `google_review_count` | integer or null | The number of Google reviews behind that rating. |
+| `fee_views` | object | `initiation`, `annual`, `monthly` and `firstYear`, each with a `kind`. See [fee fields](/api/authentication#fee-fields). |
+
+There is no `url` field. API rows do not include a link to the club's profile.
+
+## MCP results
+
+Each MCP tool returns its own set of fields:
+
+| Tool | Fields |
+|---|---|
+| `search_clubs` | `id`, `name`, `slug`, `city`, `state`, `country`, `type`, `waitlist_status`, `holes`, `par`, `yardage`, `course_architect`, `amenities`, `url` |
+| `get_club` | `id`, `name`, `slug`, `city`, `state`, `country`, `type`, `description`, `waitlist_status`, `holes`, `par`, `yardage`, `course_architect`, `founded_year`, `total_members`, `amenities`, `website`, `phone`, `hero_image_url`, `url`, `membership_fees` |
+| `get_clubs_by_state` | `id`, `name`, `slug`, `city`, `state`, `country`, `type`, `waitlist_status`, `holes`, `par`, `yardage`, `url` |
+| `compare_clubs` | `name`, `slug`, `location`, `url`, `waitlist_status`, `holes`, `par`, `yardage`, `course_architect`, `founded_year`, `amenities`, `website` |
+| `get_membership_info` | `name`, `slug`, `type`, `waitlist_status`, `url`, `membership_fees` |
+
+Six fields appear only in MCP results: `url`, `location`, `membership_fees`, `total_members`, `website` and `phone`. Three of them need a note:
+
+- `url` is the club's profile link, in the form `https://www.theprivateclubs.com/clubs/{region}/{slug}`. It is `null` when a club has no region. See [profile links](/reference/conventions#profile-links).
+- `location` appears in `compare_clubs` only. It is one string built from the city and state, such as `New York, New York`. When the city or state is not stored, that part reads as the text `null`, such as `Sydney, null`, and the string never names the country. Use the club's `url`, or `get_club`, for the full place.
+- `membership_fees` holds a fixed message that points to the club's profile. It never holds a figure.
+
+[Available tools](/mcp/tools) covers each tool's parameters.
+
+## Field notes
+
+### Place fields
+
+`city`, `state` and `country` use full names, such as `Arizona` and `United States`. In the US and Canada, `state` holds the state or province. Elsewhere, `state` holds a region when one is stored, such as `Scotland` with `country` set to `United Kingdom`. It is often `null` outside the US and Canada.
+
+### Type
+
+`type` holds one stored type in lower case snake_case, such as `golf`, `yacht` or `country_club`. Some rows still carry a legacy type. [Club types](/reference/club-types) lists the current types and how the API groups them.
+
+### Status
+
+`status` is the listing's status on the site. Values seen in live responses include `active`, `published`, `unclaimed` and `coming_soon`. These are examples, not a complete list. A `coming_soon` club has not opened yet.
+
+### Waitlist status
+
+`waitlist_status` holds one of five values: `open`, `waitlist`, `by_invitation`, `invite_only` or `unknown`. It can also be `null`. [Conventions](/reference/conventions#waitlist-values) explains each value.
+
+### Amenities
+
+`amenities` is an array of strings, or `null`. Most entries are snake_case codes, such as `golf_course`, `club_house` or `fine_dining`. Some rows hold plain-text entries instead.
+
+### Course fields
+
+`holes`, `par`, `yardage` and `course_architect` describe a golf course. They are often `null`, and usually `null` for clubs without a course.
+
+### Founded and opened years
+
+`founded_year` is the year the club was founded. `opened_year` is the year the club opened. For a `coming_soon` club, it is the year the club expects to open. Either can be `null`, and they can hold the same year.
+
+### Google rating
+
+`google_rating` and `google_review_count` appear in API rows only. Both are often `null`.
+
+### Description
+
+`description` is editorial text about the club, and it can be `null`. Link to the club's profile rather than copying the text.
+
+### Currency
+
+`currency` is the three-letter ISO 4217 code for the club's fees, such as `USD` or `GBP`. The fee figures themselves stay `null` for calls without a site session.
+
+## Empty values
+
+`null` means the value is not known. Never fill it in or guess it. Leave the field out of what you show, or point people to the club's profile.
+
+Next: [Club types](/reference/club-types) and [Conventions](/reference/conventions).
