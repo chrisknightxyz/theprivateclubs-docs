@@ -12,7 +12,7 @@ A **club record** is the set of fields Private Clubs returns for one listed club
 | Field | Type | Notes |
 |---|---|---|
 | `clubs` | array | The club objects on this page. |
-| `total` | integer | Clubs that match your filters, across all pages. |
+| `total` | integer | Clubs that match your filters, across all pages. The API returns the first 500 of them. |
 | `fee_access` | string | `locked` for calls without a site session. See [Authentication and fees](/api/authentication). |
 
 Each club object has these fields:

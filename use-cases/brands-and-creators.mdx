@@ -47,7 +47,7 @@ profile at theprivateclubs.com.
     {"state": "Texas", "type": "golf"}
     ```
 
-    It returns up to 100 clubs, best known first. Golf clubs in Texas reach that limit, so the answer is a partial list. For the full list, use the API with `type` and `state`, paged with `limit=200`, as [Build a list of clubs](/guides/brands-and-creators#pull-a-full-list-with-the-api) shows. The API groups types, so its `golf` also includes clubs stored as `country_club`.
+    It returns up to 100 clubs, best known first. Golf clubs in Texas reach that limit, so the answer is a partial list. To search further, use the API with `type` and `state`, as [Build a list of clubs](/guides/brands-and-creators#search-further-with-the-api) shows. It returns the first 500 results of a search, 50 a page. The API groups types, so its `golf` also includes clubs stored as `country_club`. Collecting the directory page by page or building a dataset from it is bulk use, which needs a paid [data feed license](/api/usage-limits#bulk-data).
   </Step>
   <Step title="Search another region">
     `search_clubs` works the same way for any US state or Canadian province:
@@ -92,8 +92,8 @@ profile at theprivateclubs.com.
 
 - Fees are not included. Point people to each club's profile, where account holders see fees.
 - Listings and waitlist status can change. Check a club's profile before you contact it.
-- Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
-- Under the data license, non-commercial use is free with attribution. Commercial use, bulk data access and API integrations beyond the public endpoints need a commercial license, and the license page gives the contact.
+- Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for the attribution format and bulk use.
+- Looking up, searching and comparing clubs through the MCP server and the API is free, including for work, with credit to Private Clubs and a link to each club's profile. Bulk download, scraping, mirroring or storing the directory, building a dataset from it, training AI models on it or reselling it needs a paid monthly data feed license: email support@theprivateclubs.com.
 
 ## Next
 

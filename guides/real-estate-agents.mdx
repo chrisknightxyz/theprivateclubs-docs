@@ -8,27 +8,15 @@ Buyers often ask about the club behind a home: which clubs are in town, whether 
 
 ## Find the clubs in a town
 
-<Tabs>
-  <Tab title="MCP">
-    ```text
-    Which private clubs are in Naples, Florida?
-    ```
+```text
+Which private clubs are in Naples, Florida?
+```
 
-    The tool that fits is `search_clubs`, with `query` set to the town and `state` set to the state. Results stop at 25, best known first. Add `type`, such as `golf`, to narrow a busy town.
+The tool that fits is `search_clubs`, with `query` set to the town and `state` set to the state. Results stop at 25, best known first. Add `type`, such as `golf`, to narrow a busy town.
 
-    `query` matches part of a club's name, type or city. A club with the town in its name can appear even when it sits in a nearby town, so check the `city` field.
-  </Tab>
-  <Tab title="API">
-    In the API, `q` matches club names only, not towns. For a town, pull the state and keep the rows whose `city` matches:
+`query` matches part of a club's name, type or city. A club with the town in its name can appear even when it sits in a nearby town, so check the `city` field.
 
-    ```bash
-    curl -s "https://www.theprivateclubs.com/api/v1/clubs?state=Florida&limit=200&page=1" \
-      | jq -c '.clubs[] | select(.city == "Naples") | {name, slug, type, waitlist_status}'
-    ```
-
-    Repeat with `page=2` and up, and stop once `page * limit` reaches `total`.
-  </Tab>
-</Tabs>
+In the API, `q` matches club names only, not towns, so use `search_clubs` to find the clubs in a town.
 
 ## Check membership status
 
@@ -56,9 +44,9 @@ Give buyers the `url` from a Private Clubs answer, such as `https://www.thepriva
 
 Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
 
-Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
+Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for the attribution format and bulk use.
 
-Under the data license, non-commercial use is free with attribution. Commercial use, bulk data access and API integrations beyond the public endpoints need a commercial license, and the license page gives the contact.
+Looking up, searching and comparing clubs through the MCP server and the API is free, including for work, with credit to Private Clubs and a link to each club's profile. Bulk download, scraping, mirroring or storing the directory, building a dataset from it, training AI models on it or reselling it needs a paid monthly data feed license: email support@theprivateclubs.com.
 
 ## Next steps
 

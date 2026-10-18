@@ -11,11 +11,11 @@ Private Clubs publishes a few files at fixed addresses on https://www.theprivate
 |---|---|
 | [`/mcp.json`](https://www.theprivateclubs.com/mcp.json) | The MCP server card: the name Private Clubs, version, logo, endpoint, transport, the five tools, the server key `private-clubs`, `auth` set to `none`, and the setup page. |
 | [`/openapi.json`](https://www.theprivateclubs.com/openapi.json) | The REST API spec. See [API overview](/api/openapi). |
-| [`/llms.txt`](https://www.theprivateclubs.com/llms.txt) | A site overview for AI tools, regenerated hourly. It notes that the API and the MCP tools take a full state name or a two-letter code, such as `Florida` or `FL`. |
+| [`/llms.txt`](https://www.theprivateclubs.com/llms.txt) | A site overview for AI tools, regenerated hourly. It notes that the API and the MCP tools take a full state name or a two-letter code, such as `Florida` or `FL`, and states the free use limits and the data feed. |
 | [`/ai/context.md`](https://www.theprivateclubs.com/ai/context.md) | A short Markdown summary of Private Clubs for AI tools: club counts, how fees are shown, waitlist shares and key URLs, with `/api/v1/clubs` as the club data API. It carries no fee figures. |
 | [`/mcp/setup.md`](https://www.theprivateclubs.com/mcp/setup.md) | Setup steps an agent reads and follows for its own app. |
 | [`/robots.txt`](https://www.theprivateclubs.com/robots.txt) | Crawler rules, open to AI crawlers. |
-| [`/data/license`](https://www.theprivateclubs.com/data/license) | The data license, a web page: non-commercial use with attribution to Private Clubs, AI training with citation, the attribution formats, and support@theprivateclubs.com for commercial use. |
+| [`/data/license`](https://www.theprivateclubs.com/data/license) | The data license, a web page: citing and linking individual clubs at no charge with attribution to Private Clubs, the attribution formats, and the paid monthly data feed license for bulk use, with support@theprivateclubs.com to ask about it. |
 
 `/mcp.json`, `/llms.txt`, `/ai/context.md` and `/mcp/setup.md` are served with `Cache-Control: public, max-age=3600`, so a cached copy can be up to an hour old.
 
@@ -29,6 +29,8 @@ Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 That group allows `/` and disallows a short list of private paths, including sign-in, account, dashboard, admin and `/api/`. Named AI crawlers each get their own `Allow: /` group. They include OAI-SearchBot, ChatGPT-User, GPTBot, Claude-SearchBot, Claude-User, ClaudeBot, PerplexityBot, Perplexity-User, Google-Extended, Meta-WebIndexer, Amazonbot and Applebot-Extended.
 
+What you may do with the data is set by the [data license](https://www.theprivateclubs.com/data/license): scraping or mirroring the directory, building a dataset from it and training AI models on it need a paid data feed license. See [Bulk data](/api/usage-limits#bulk-data).
+
 ## Which file to use
 
 - **Connect an AI app:** point it at `/mcp/setup.md`, or follow [Install Private Clubs](/mcp/connect).
@@ -36,6 +38,6 @@ That group allows `/` and disallows a short list of private paths, including sig
 - **Build on the REST API:** read `/openapi.json`.
 - **Give an AI tool a site overview:** use `/llms.txt`, or `/ai/context.md` for a shorter summary.
 - **Check crawler rules:** read `/robots.txt`.
-- **Check the terms of use:** read `/data/license`.
+- **Check the terms of use:** read `/data/license` and the [terms of service](https://www.theprivateclubs.com/legal/terms).
 
 Next: [Conventions](/reference/conventions) and [API overview](/api/openapi).

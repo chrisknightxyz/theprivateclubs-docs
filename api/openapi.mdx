@@ -17,11 +17,11 @@ Base URL:
 https://www.theprivateclubs.com
 ```
 
-The spec follows OpenAPI 3.0.0 and is at version 1.2.0. It describes more paths than these docs cover. Build on the one endpoint below.
+The spec follows OpenAPI 3.0.0 and is at version 1.3.0. It describes more paths than these docs cover. Build on the one endpoint below.
 
 ## Endpoint
 
-The supported endpoint is `GET /api/v1/clubs`. It searches the directory by type, place, name and waitlist status, with paging. The [API quickstart](/api) walks through each filter, and the [Search clubs](/api-reference/clubs/search-clubs) page, generated from the spec, lists each parameter and response field the spec describes.
+The supported endpoint is `GET /api/v1/clubs`. It searches the directory by type, place, name and waitlist status, with paging. It returns up to 50 clubs a page and the first 500 results of a search. The [API quickstart](/api) walks through each filter, and the [Search clubs](/api-reference/clubs/search-clubs) page, generated from the spec, lists each parameter and response field the spec describes.
 
 Any other path under `/api/v1/`, such as `/api/v1/foo`, returns a 404 with code `not_found`:
 
@@ -61,12 +61,13 @@ The codes:
 |---|---|---|
 | `invalid_page` | 400 | `page` is not a whole number from 1, such as `abc`, `0` or `-1`. An empty `page=` counts as not sent. |
 | `invalid_limit` | 400 | `limit` is not a whole number from 1, such as `abc` or `0`. An empty `limit=` counts as not sent. |
+| `data_feed_required` | 403 | `page` times `limit` is above 500, so the page reaches past the first 500 results of a search. Bulk access needs a paid data feed license. See [Bulk data](/api/usage-limits#bulk-data). |
 | `not_found` | 404 | The `/api/v1` path does not exist. |
 | `clubs_unavailable` | 500 | The directory could not be read. |
 
 [https://www.theprivateclubs.com/problems](https://www.theprivateclubs.com/problems) lists every code, and each code has its own page, such as `/problems/invalid_page`.
 
-Retry `clubs_unavailable` after a short wait. If it keeps failing, email support@theprivateclubs.com, as its `hint` says. A page past the last one is not an error: it answers 200 with an empty `clubs` array. The [quickstart](/api#4-page-through-results) shows when to stop.
+Retry `clubs_unavailable` after a short wait. If it keeps failing, email support@theprivateclubs.com, as its `hint` says. A page past the last result, within the first 500, is not an error: it answers 200 with an empty `clubs` array. The [quickstart](/api#4-page-through-results) shows when to stop.
 
 ## Response headers
 

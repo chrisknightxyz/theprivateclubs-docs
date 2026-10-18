@@ -3,7 +3,7 @@ title: "API quickstart"
 description: "Make your first request to the Private Clubs API in five steps"
 ---
 
-The API returns club records from the Private Clubs directory as JSON. It is free, and you need no API key and no account. Call it from your server or a script. The API sends no CORS headers, so a web page on another site cannot read its responses.
+The API returns club records from the Private Clubs directory as JSON. It is free for looking up, searching and comparing clubs, and you need no API key and no account. It returns up to 50 clubs a page and the first 500 results of a search. Call it from your server or a script. The API sends no CORS headers, so a web page on another site cannot read its responses.
 
 ## 1. Send your first request
 
@@ -85,27 +85,17 @@ curl "https://www.theprivateclubs.com/api/v1/clubs?waitlist=open,waitlist&limit=
 
 ## 4. Page through results
 
-`page` starts at 1. `limit` sets the page size. It defaults to 50, and values above 200 are clamped to 200. Both must be whole numbers from 1: `page=0` answers 400 with `invalid_page`, and `limit=0` answers 400 with `invalid_limit`. Leading zeros are fine, so `page=01` is page 1, and an empty `page=` or `limit=` counts as not sent.
+`page` starts at 1. `limit` sets the page size. It defaults to 50, which is also the maximum, and larger values are clamped to 50. Both must be whole numbers from 1: `page=0` answers 400 with `invalid_page`, and `limit=0` answers 400 with `invalid_limit`. Leading zeros are fine, so `page=01` is page 1, and an empty `page=` or `limit=` counts as not sent.
 
-Stop when `page * limit` reaches `total`. A page past the last one, however large, answers 200 with an empty `clubs` array and the real `total`, so an empty page also means you are done.
-
-This loop prints the name and city of every golf club in Arizona. It needs `jq`:
+Ask for the next page with `page=2`:
 
 ```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-url="https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Arizona&limit=200"
-page=1
-
-while true; do
-  body=$(curl -fsS --retry 3 "$url&page=$page")
-  echo "$body" | jq -r '.clubs[] | [.name, .city] | @tsv'
-  total=$(echo "$body" | jq '.total')
-  if (( page * 200 >= total )); then break; fi
-  page=$((page + 1))
-done
+curl "https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Arizona&page=2"
 ```
+
+The API returns the first 500 results of a search, so `page` times `limit` can be at most 500. At the default `limit` of 50, the last page you can ask for is page 10. A page that reaches past result 500 answers 403 with `data_feed_required`, even when `total` is larger.
+
+Stop when `page * limit` reaches `total` or 500, whichever comes first. A page past the last result, within the first 500, answers 200 with an empty `clubs` array and the real `total`, so an empty page also means you are done. When `total` is above 500, add filters such as `type`, `state` or `q` to find the clubs you need.
 
 ## 5. Handle errors
 
@@ -126,14 +116,40 @@ The API answers with a 400:
   "status": 400,
   "detail": "The limit query parameter must be a positive integer.",
   "code": "invalid_limit",
-  "hint": "Call GET /api/v1/clubs?page=1&limit=50. Maximum limit is 200.",
+  "hint": "Call GET /api/v1/clubs?page=1&limit=50. Maximum limit is 50.",
   "instance": "/api/v1/clubs"
 }
 ```
 
 Each `type` is a page that explains the code, such as https://www.theprivateclubs.com/problems/invalid_limit.
 
+Ask for a page past the first 500 results:
+
+```bash
+curl "https://www.theprivateclubs.com/api/v1/clubs?page=11&limit=50"
+```
+
+The API answers with a 403:
+
+```json
+{
+  "type": "https://www.theprivateclubs.com/problems/data_feed_required",
+  "title": "Bulk access needs a data feed",
+  "status": 403,
+  "detail": "The free API returns the first 500 results of a search. A paid monthly data feed licence covers bulk access: email support@theprivateclubs.com.",
+  "code": "data_feed_required",
+  "hint": "Call GET /api/v1/clubs with page times limit up to 500, such as page=10&limit=50. For bulk access, email support@theprivateclubs.com about a data feed.",
+  "instance": "/api/v1/clubs"
+}
+```
+
 A 500 with `clubs_unavailable` only means the directory could not be read. Wait a moment and retry. If it keeps failing, email support@theprivateclubs.com, as the error's `hint` says. The [API overview](/api/openapi#errors) lists every code.
+
+## Bulk data
+
+The free API is for looking up, searching and comparing clubs, with credit to Private Clubs and a link to each club's profile. Bulk access is a paid monthly data feed license. You need one to download the directory in bulk, scrape, mirror, cache or store the directory or a substantial part of it, build or enrich a database or dataset with it, train AI models on it or resell it. Paging through results or splitting up queries to collect the directory counts as bulk use.
+
+To ask about a data feed license, email support@theprivateclubs.com. See the [data license](https://www.theprivateclubs.com/data/license) and section 8 of the [terms of service](https://www.theprivateclubs.com/legal/terms).
 
 ## Next steps
 

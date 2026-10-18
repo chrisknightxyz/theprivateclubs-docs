@@ -17,7 +17,7 @@ flowchart LR
 
 MCP (Model Context Protocol) connects Private Clubs to compatible AI apps and agents, such as Claude, ChatGPT and Cursor. The server offers five tools: `search_clubs`, `get_club`, `get_clubs_by_state`, `compare_clubs` and `get_membership_info`. Your AI app picks the tool that fits the question. Start with the [MCP quickstart](/mcp/getting-started).
 
-The REST API lets you integrate Private Clubs into an application, backend or automated workflow. It has one endpoint, `GET /api/v1/clubs`. Call it from your server, because it sends no CORS headers. Start with the [API quickstart](/api).
+The REST API lets you integrate Private Clubs into an application, backend or automated workflow. It has one endpoint, `GET /api/v1/clubs`, which returns up to 50 clubs a page and the first 500 results of a search. Call it from your server, because it sends no CORS headers. Bulk access is a paid data feed license. See [Bulk data](/api/usage-limits#bulk-data). Start with the [API quickstart](/api).
 
 Both read the same directory, so choose the one that fits where you work.
 
