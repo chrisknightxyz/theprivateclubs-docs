@@ -1,28 +1,36 @@
 ---
 title: "Pricing and limits"
-description: "What the Private Clubs MCP server and API cost, the data license, page sizes and the request limits on each surface"
+description: "What the Private Clubs MCP server and API cost, the data license, bulk data, page sizes and the request limits on each surface"
 ---
 
-Calls to Private Clubs cost nothing. This page covers the data license, how the API pages results, the rate limit headers and the limits on the MCP server.
+Looking up, searching and comparing clubs through Private Clubs is at no charge, and bulk use needs a paid data feed license. This page covers the data license, bulk data, how the API pages results, the rate limit headers and the limits on the MCP server.
 
 ## Pricing
 
-Calls to the Private Clubs MCP server and API are free, with no account or API key needed. Searching, saving, comparing and enquiring with clubs on theprivateclubs.com are free too.
+Looking up, searching and comparing clubs through the Private Clubs MCP server and API is at no charge, with no account or API key needed. Bulk access to the directory is a paid data feed license, as [Bulk data](#bulk-data) explains. Searching, saving, comparing and enquiring with clubs on theprivateclubs.com are free too.
 
 Business plans for clubs, brands and creators are on the [pricing page](https://www.theprivateclubs.com/pricing).
 
 ## Data license
 
-Under the [data license](https://www.theprivateclubs.com/data/license), non-commercial use is free with attribution. Commercial use, bulk data access and API integrations beyond the public endpoints need a commercial license, and the license page gives the contact.
+The [data license](https://www.theprivateclubs.com/data/license) and section 8 of the [terms of service](https://www.theprivateclubs.com/legal/terms) set what you may do with Private Clubs data. You may use the MCP server and the API as documented, at no charge, to look up, search and compare clubs and to show the results inside an AI app or product, including for work. When you show results, credit Private Clubs as the source and link to the club's profile on theprivateclubs.com. The data license gives the attribution format.
+
+## Bulk data
+
+Bulk access is a paid monthly data feed license. You need one to download the directory in bulk, extract it systematically, scrape, mirror, cache or store the directory or a substantial part of it, build or enrich a database or dataset with it, collect AI training data through the MCP server or the API, or resell it. Paging through results or splitting up queries to collect the directory counts as bulk use, and so does any use that works around the rate or result limits. Private Clubs may limit, suspend or block access that looks like bulk collection.
+
+This does not change what the site's [robots.txt](https://www.theprivateclubs.com/robots.txt) allows: crawlers that follow it may read the public pages for search, AI answers and AI training, as its Content Signals say.
+
+To ask about a data feed license, email support@theprivateclubs.com. See the [data license](https://www.theprivateclubs.com/data/license) and the [terms of service](https://www.theprivateclubs.com/legal/terms).
 
 ## API page size
 
 | Parameter | Default | Rules |
 |---|---|---|
-| `page` | 1 | Starts at 1. A value that is not a whole number from 1, such as `0`, returns 400 `invalid_page`. Leading zeros are fine, and an empty `page=` counts as not sent. |
-| `limit` | 50 | The maximum is 200, and larger values are clamped to 200. A value that is not a whole number from 1, such as `0`, returns 400 `invalid_limit`. Leading zeros are fine, and an empty `limit=` counts as not sent. |
+| `page` | 1 | Starts at 1. `page` times `limit`, with `limit` clamped to 50, can be at most 500, and a larger product returns 403 `data_feed_required`. A value that is not a whole number from 1, such as `0`, returns 400 `invalid_page`. Leading zeros are fine, and an empty `page=` counts as not sent. |
+| `limit` | 50 | The maximum is 50, and larger values are clamped to 50. A value that is not a whole number from 1, such as `0`, returns 400 `invalid_limit`. Leading zeros are fine, and an empty `limit=` counts as not sent. |
 
-Stop paging when `page * limit` reaches `total`. A page past the last one, however large, returns 200 with an empty `clubs` array and the real `total`.
+The API returns the first 500 results of a search. Stop paging when `page * limit` reaches `total` or 500, whichever comes first. A page past the last result, within the first 500, returns 200 with an empty `clubs` array and the real `total`. A page that reaches past result 500 returns 403 with `data_feed_required` whatever the `total`, even when `total` is below 500.
 
 ## Rate limit headers
 
@@ -49,10 +57,10 @@ If a request fails with a 500 or 503, wait and retry with backoff.
 | `compare_clubs` slugs | 2 or 3 |
 | Slow or failed requests | A 503 with `Retry-After: 10` when a request runs past 50 seconds or fails inside the server |
 
-The MCP server has no request rate limit. When a search needs more than 25 or 100 clubs, use the API with paging. See [Troubleshooting](/mcp/troubleshooting) for the exact error messages.
+The MCP server has no request rate limit. When a search needs more than 25 or 100 clubs, use the API, which returns up to 50 clubs a page and the first 500 results of a search. See [Troubleshooting](/mcp/troubleshooting) for the exact error messages.
 
 ## Need more
 
-Email support@theprivateclubs.com. The [data license](https://www.theprivateclubs.com/data/license) names the same address for commercial use, bulk data access and API integrations beyond the public endpoints.
+Email support@theprivateclubs.com. For bulk access, ask about a data feed license, as [Bulk data](#bulk-data) explains.
 
 Next: [Authentication and fees](/api/authentication) and the [API quickstart](/api).

@@ -49,10 +49,10 @@ A field with no value comes back as `null`. Those fields show you what your list
   </Tab>
   <Tab title="API">
     ```bash
-    curl "https://www.theprivateclubs.com/api/v1/clubs?state=Florida&type=yacht&limit=200"
+    curl "https://www.theprivateclubs.com/api/v1/clubs?state=Florida&type=yacht"
     ```
 
-    When `total` is larger than one page, add `page=2` and up, and stop once `page * limit` reaches `total`. Outside the US and Canada, add `country` next to `state`, for example `country=United%20Kingdom&state=Scotland`.
+    A page holds up to 50 clubs. When `total` is larger than one page, add `page=2` and up, and stop once `page * limit` reaches `total`. The API returns the first 500 results of a search, so a page past result 500 answers 403 with `data_feed_required`. Outside the US and Canada, add `country` next to `state`, for example `country=United%20Kingdom&state=Scotland`.
   </Tab>
 </Tabs>
 
@@ -82,7 +82,7 @@ The MCP server and the API read the same listing, so what your listing says is w
 
 Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
 
-Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
+Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for the attribution format and bulk use.
 
 ## Next steps
 

@@ -6,8 +6,8 @@ This repo holds the Mintlify docs for the Private Clubs MCP server and REST API.
 
 Check every fact against one of these before you write it. If you cannot verify a fact, leave it out.
 
-- The app repo, read only: `src/app/api/mcp/route.ts` (the five tools), `src/lib/mcp/club-search.ts` (how `search_clubs` reads a comma in `query`, and the `location` line), `src/lib/mcp/club-ranking.ts` (best known first, duplicates folded), `src/lib/mcp/setup.ts` (setup steps for each app), `src/app/api/clubs/route.ts` (the code behind `GET /api/v1/clubs`), `src/lib/api-v1.ts` (page size limits, columns and every problem code), `src/lib/openapi-spec.json`, `src/app/(marketing)/mcp/` and `src/app/(marketing)/pricing/`.
-- The live site: `https://www.theprivateclubs.com/mcp/setup.md`, `/mcp.json`, `/openapi.json`, `/llms.txt`, `/ai/context.md`, `/problems`, `/pricing`, `/list` and `/data/license`. Make example calls against `/api/mcp` and `/api/v1/clubs` on the day you write.
+- The app repo, read only: `src/app/api/mcp/route.ts` (the five tools), `src/lib/mcp/club-search.ts` (how `search_clubs` reads a comma in `query`, and the `location` line), `src/lib/mcp/club-ranking.ts` (best known first, duplicates folded), `src/lib/mcp/setup.ts` (setup steps for each app), `src/app/api/clubs/route.ts` (the code behind `GET /api/v1/clubs`), `src/lib/api-v1.ts` (page size limits, the 500-result cap, columns and every problem code), `src/lib/openapi-spec.json`, `src/app/(marketing)/mcp/` and `src/app/(marketing)/pricing/`.
+- The live site: `https://www.theprivateclubs.com/mcp/setup.md`, `/mcp.json`, `/openapi.json`, `/llms.txt`, `/ai/context.md`, `/problems`, `/pricing`, `/list`, `/data/license` and `/legal/terms` (section 8 covers the MCP server and the API). Make example calls against `/api/mcp` and `/api/v1/clubs` on the day you write.
 
 ## Terminology
 
@@ -54,7 +54,9 @@ Copy these exactly.
 | Fees | Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com. |
 | Fees (pages that cover the API too) | Private Clubs never returns membership fees over MCP, and API calls from your server or script return none. Account holders see fees on each club's profile at theprivateclubs.com. |
 | Tool fee message (quote only as tool output) | `Membership fees are available to account holders at theprivateclubs.com. Members see exact verified fees.` |
-| Attribution | Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use. |
+| Attribution | Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for the attribution format and bulk use. |
+| Free use and the data feed | Looking up, searching and comparing clubs through the MCP server and the API is at no charge, including for work, with credit to Private Clubs and a link to each club's profile. Bulk download, paging through results to collect the directory, scraping, mirroring or storing the directory, building a dataset from it, collecting AI training data through the MCP server or the API, or reselling it needs a paid monthly data feed license: email support@theprivateclubs.com. See the [terms of service](https://www.theprivateclubs.com/legal/terms). |
+| Bulk data link | [Bulk data](/api/usage-limits#bulk-data) |
 | Help | Email support@theprivateclubs.com |
 | Setup page | https://www.theprivateclubs.com/mcp |
 
@@ -62,6 +64,8 @@ Copy these exactly.
 
 - Every sentence must be true today. Never invent features, prices, limits, numbers, endpoints, fields, UI labels or vendor steps.
 - Fees: the MCP server never returns fees, and API calls from a server or script never return fee figures. Never state, estimate or imply a club's fees, and never paste fee figures.
+- API paging: `limit` defaults to 50, the maximum is 50 and larger values are clamped. `page` times `limit`, with `limit` clamped to 50, can be at most 500 (the first 500 results of a search); past that, `GET /api/v1/clubs` answers 403 `data_feed_required` before any read, whatever the `total`, even when `total` is below 500. Never show a loop or guide that pages through every result to download a state, a type or the directory: that is bulk use.
+- Data feed: bulk access is a paid monthly data feed license (Chris, 2026-10-18). No price, plan name or SLA is set, so never invent one. Say to email support@theprivateclubs.com, and link `/data/license` and `/legal/terms`.
 - Rate limits: REST responses carry static `RateLimit` and `RateLimit-Policy` headers, but nothing counts requests or returns 429. Describe the headers as the advertised policy and never claim enforcement.
 - The REST API sends no CORS headers, so tell readers to call it from a server. The MCP server allows any origin.
 - REST rows carry no profile `url`. MCP results do.
@@ -78,7 +82,7 @@ Document:
 - `GET /api/v1/clubs` with the filters `type`, `state`, `country`, `q`, `waitlist`, `page` and `limit`.
 - Setup for the nine apps in `src/lib/mcp/setup.ts`: Claude, ChatGPT, Claude Code, Codex, Cursor, Grok, Perplexity, OpenClaw and Hermes.
 - Claiming a listing, which is free at https://www.theprivateclubs.com/list with a work email and no credit card.
-- The data license, in one line: "Under the data license, non-commercial use is free with attribution. Commercial use, bulk data access and API integrations beyond the public endpoints need a commercial license, and the license page gives the contact."
+- The data license and the data feed, with the "Free use and the data feed" line above. The full list of bulk uses is on [Bulk data](/api/usage-limits#bulk-data).
 
 Do not document:
 

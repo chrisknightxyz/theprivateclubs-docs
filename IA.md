@@ -6,6 +6,8 @@ Plan for docs.theprivateclubs.com, the docs for the Private Clubs MCP server and
 
 **After PR #679, 2026-10-18.** The app's rename and API fixes are merged (84e3d856) and live: serverInfo and `/mcp.json` say Private Clubs with key `private-clubs`, the plugin ZIPs are `private-clubs.*` (the `clubs.*` links answer 308), `search_clubs` reads a comma in `query`, the spec is 1.2.0 with every section 5 blocker fixed, and the discovery files carry the brand. Branch `docs/after-679` brings the pages, `docs.json` (the `API endpoints` group), this IA and `AGENTS.md` up to date. Checked against the merged code and live GET requests on 2026-10-18.
 
+**Data feed update, 2026-10-18.** Chris: "we dont want people to click and download our entire database and directly.. for that we want to charge a monthly fee for the data feed". Looking up, searching and comparing clubs through the MCP server and the API stays free, including for work, with credit and a link. Bulk download, scraping, mirroring, caching or storing the directory or a substantial part of it, building or enriching a database or dataset, AI training data collected through the MCP server or the API, and resale need a paid monthly data feed license (crawling the public pages for search, AI answers and AI training stays as robots.txt allows) (email support@theprivateclubs.com; no price, plan name or SLA is set). The app changes are on `feat/legal-mcp` (PR #689: terms section 8, sections 9 and 10, `/data/license`) and `feat/api-bulk-cap` (3f773c0b: `limit` maximum 50, the first 500 results of a search, 403 `data_feed_required`, spec 1.3.0). Neither was live when branch `docs/data-feed` was written. Release order: deploy `feat/api-bulk-cap` first, then merge PR #689 and `docs/data-feed` in the same window. Do not let #689 go live on its own: terms section 8 allows use "as documented" and links these docs, and the docs on main still show loops that page through every golf club in Arizona and in Texas, a line on pulling a whole country, and an API tab that pulls a whole state. Before `feat/api-bulk-cap` ships, `GET /api/clubs` (the site's own path: public, listed in the spec and named in `/llms.txt`) needs a depth cap too, because on 3f773c0b only `GET /api/v1/clubs` has the 500-result cap and a loop over `/api/clubs?page=N` never gets a 403. Chris picks the cap for the site's path. These docs document only `/api/v1/clubs` and never name `/api/clubs`. It removes the paging loops that pulled a whole state or type, adds a `Bulk data` section to `api/usage-limits` and `api/index`, and replaces the old license lines. Where this section and older lines below disagree, this section wins.
+
 - **App source of truth (read only):** `/Users/mrcjk/Desktop/Projects/Project - theprivateclubs.com/repo-mcp-page` (main, at 84e3d856 or later)
 - **Live checks:** `curl` against https://www.theprivateclubs.com (setup.md, mcp.json, openapi.json, llms.txt, /ai/context.md, /problems, /api/v1/clubs, /api/mcp). Every `/api/mcp` tool call writes a log row (`logMcpCall`), so the checks after #679 used GET requests only and read the MCP facts from the code.
 - **Rainbrand reference copies:** `/private/tmp/claude-501/-Users-mrcjk-Desktop-Cursor-Projects-Project---theprivateclubs-com/436f968b-168e-466a-b181-7a497f24c2be/scratchpad/rb/`
@@ -23,7 +25,7 @@ Already applied: `docs.json` (section 6) and the removal of 27 retired pages wit
 5. **Guides by audience and use cases by audience.** Guides are how-tos: steps, parameters and MCP or API tabs. Use cases follow Rainbrand's template: the asks, a prompt to adapt, how it works, and checks before you share. Both use only the 15 live asks in `MCP_USE_CASES` (`live: true`).
 6. **Illustrations come from the site.** Three pages hold `Frame` slots for screenshots of the `/mcp` illustrations, in light and dark pairs under `images/`: the showcase window on `introduction.mdx`, the three setup steps on `mcp/connect.mdx` and the app picker on `mcp/getting-started.mdx`. Nobody draws new ones. Cards use Tabler icons on the site's blue tile.
 7. **No hard-coded counts** of clubs, countries or connections. Live figures change hourly (`/mcp` and `/llms.txt` show them).
-8. **Data license.** Calls cost nothing and need no account. Under https://www.theprivateclubs.com/data/license, free use is non-commercial with attribution. Commercial use, bulk data access and API integrations beyond the public endpoints need a commercial license. Every guide and use case links the license. Open item 1 in section 10 covers the gap with the "Free" chips on `/mcp`.
+8. **Data license.** Calls cost nothing and need no account. Under https://www.theprivateclubs.com/data/license and section 8 of https://www.theprivateclubs.com/legal/terms (PR #689), looking up, searching and comparing clubs through the MCP server and the API is free, including for work, with credit and a link. Bulk use needs a paid monthly data feed license: email support@theprivateclubs.com. Every guide and use case links the license, and `api/usage-limits#bulk-data` lists the bulk uses.
 
 ---
 
@@ -83,7 +85,7 @@ Already applied: `docs.json` (section 6) and the removal of 27 retired pages wit
 | Fees | Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com. |
 | Fees (pages that cover the API too) | Private Clubs never returns membership fees over MCP, and API calls from your server or script return none. Account holders see fees on each club's profile at theprivateclubs.com. |
 | Tool fee message (quote only as tool output) | `Membership fees are available to account holders at theprivateclubs.com. Members see exact verified fees.` |
-| Attribution | Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use. |
+| Attribution | Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for the attribution format and bulk use. |
 | Help | Email support@theprivateclubs.com |
 | Setup page | https://www.theprivateclubs.com/mcp |
 
@@ -101,7 +103,7 @@ Already applied: `docs.json` (section 6) and the removal of 27 retired pages wit
 | | 4 | `mcp/getting-started.mdx` | MCP quickstart | | new |
 | Guides | 1 | `guides/members.mdx` | Find and compare clubs | For members | new |
 | | 2 | `guides/clubs.mdx` | Check your club's listing | For clubs | new |
-| | 3 | `guides/brands-and-creators.mdx` | Build a list of clubs | For brands and creators | new |
+| | 3 | `guides/brands-and-creators.mdx` | Find clubs by type and region | For brands and creators | new |
 | | 4 | `guides/real-estate-agents.mdx` | Look up the club behind a listing | For real estate agents | new |
 | Use cases | 1 | `use-cases.mdx` | Use cases | Overview | new, `mode: "wide"` |
 | | 2 | `use-cases/members.mdx` | Shortlist clubs to join | Members | new |
@@ -169,7 +171,7 @@ Word counts are prose words, excluding code. Facts cite the source a writer shou
   - `## 1. Send your first request`: `curl "https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Arizona&limit=5"` (verified live, returns rows).
   - `## 2. Read the response`: body `{clubs, total, fee_access}`, with a trimmed live JSON sample of 1 club, no `description`. Point out `fee_access: "locked"`, null fee fields and `fee_views` kinds `locked` or `none`. Headers: `X-Total-Clubs`, `Cache-Control: private, no-store`. Link `/reference/club-object`.
   - `## 3. Narrow by place and type`: `type` uses grouped categories (link `/reference/club-types`). `state` takes a full name or a two-letter code (`FL` and `Florida` return the same clubs). `country` takes a name or ISO code (`United Kingdom` and `GB` match the same clubs). With no country the search is worldwide, but a state with no country stays in the US and Canada. `q` matches part of the club name. `waitlist` takes a comma-separated list of `open`, `waitlist` and `by_invitation`. Document only these filters (see 9.3).
-  - `## 4. Page through results`: `page` starts at 1. `limit` defaults to 50; values above 200 are clamped to 200. Both are whole numbers from 1: `0` answers 400, and leading zeros are fine. Stop when `page * limit >= total`. A page past the last one, however large, answers 200 with an empty `clubs` array and the real `total`. Show a short bash loop.
+  - `## 4. Page through results`: `page` starts at 1. `limit` defaults to 50, the maximum, and larger values are clamped to 50. Both are whole numbers from 1: `0` answers 400, and leading zeros are fine. `page` times `limit`, with `limit` clamped to 50, can be at most 500; past that, 403 `data_feed_required` whatever the `total`, even when `total` is below 500. Stop when `page * limit` reaches `total` or 500. A page past the last result, within the first 500, answers 200 with an empty `clubs` array and the real `total`. Show one `page=2` request, never a loop that pages through every result.
   - `## 5. Handle errors`: `application/problem+json` with `type`, `title`, `status`, `detail`, `code`, `hint`, `instance`. Show the live `invalid_limit` body from `curl ".../api/v1/clubs?limit=abc"`. Link `/api/openapi#errors`.
   - `## Next steps`: links to `/api/openapi`, `/api/authentication`, `/reference/club-object`, `/reference/club-types`.
 - **Leave out:** `/ai/clubs.json`, `/api/clubs`, fee filters (`feeMin`, `feeMax`), rate-limit enforcement and browser calls.
@@ -210,25 +212,25 @@ Shared shape: intro paragraph, 4 to 6 task H2s, each with `<Tabs>` holding a "MC
 - **description:** See your club the way AI apps see it, compare it with clubs nearby and claim the listing
 - `## Find your club's slug`: `search_clubs` with `query` set to the club name. The slug is in the result and is the last part of the profile `url`.
 - `## Read your profile`: `get_club`, with the fields it returns and no fees.
-- `## See the clubs listed in your state`: MCP `get_clubs_by_state` (US states and Canadian provinces, up to 100, best known first). API `state=` with paging for the full list.
+- `## See the clubs listed in your state`: MCP `get_clubs_by_state` (US states and Canadian provinces, up to 100, best known first). API `state=` with paging, up to the first 500 results of a search.
 - `## Compare with clubs nearby`: `compare_clubs`.
 - `## Claim your listing`: free at https://www.theprivateclubs.com/list, with a work email and no credit card. Promise nothing about what happens after the claim.
 - `## How AI apps find your club`: the MCP server, the API and the discovery files. Link `/reference/discovery-files`.
 - Next: `/use-cases/clubs`.
 
-#### `guides/brands-and-creators.mdx`: Build a list of clubs (sidebar: For brands and creators)
+#### `guides/brands-and-creators.mdx`: Find clubs by type and region (sidebar: For brands and creators)
 
-- **description:** Pull clubs by type and region for research, with the API for longer lists
+- **description:** Find the clubs of one type in a region for research, in your AI app or with the API
 - `## Start in your AI app`: `search_clubs` with `type` and `state` (25 maximum) and `get_clubs_by_state` (100 maximum).
-- `## Pull a full list with the API`: `type` plus `state` or `country`, paged with `limit=200`. Show a bash loop.
+- `## Search further with the API`: `type` plus `state`, 50 a page, up to the first 500 results of a search. One request, no export loop, and a `Note` that collecting the directory or building a dataset is bulk use and needs the data feed license. Point readers to `q` or `waitlist` to narrow a search to the clubs they want, never to finish a list past the 500-result cap. Whether a brand's outreach list counts as free lookup or data feed use is Chris's call, so the guide frames lookups and does not say either way.
 - `## Filter by amenities`: MCP `amenities` takes stored codes, and a club must have all of them. Get real codes from a live result first; do not guess codes. The API `amenity` filter is not documented in v1 (see 9.3).
-- `## Use the list well`: the fees line, the attribution line, and the data license line, copied exactly: "Under the data license, non-commercial use is free with attribution. Commercial use, bulk data access and API integrations beyond the public endpoints need a commercial license, and the license page gives the contact."
+- `## Use the results well`: the fees line, the attribution line, and the "Free use and the data feed" line from `AGENTS.md`, copied exactly.
 - Next: `/use-cases/brands-and-creators`, `/reference/club-types`.
 
 #### `guides/real-estate-agents.mdx`: Look up the club behind a listing (sidebar: For real estate agents)
 
 - **description:** Find the clubs in a town, check membership status and compare courses for a buyer
-- `## Find the clubs in a town`: `search_clubs` with `query` set to the city and `state` (live: `query: Naples, state: Florida` returns rows). API `q` matches names only, so for a town use MCP or `state` plus paging.
+- `## Find the clubs in a town`: `search_clubs` with `query` set to the city and `state` (live: `query: Naples, state: Florida` returns rows). API `q` matches names only, so for a town use MCP. No API tab: pulling a whole state to filter by city runs past the 500-result cap.
 - `## Check membership status`: `get_membership_info`.
 - `## Compare the golf courses`: `compare_clubs`, covering holes, par, yardage, course architect and founded year.
 - `## Share the profile link`: use the `url` from MCP results. Fees stay on the profile.
@@ -362,8 +364,9 @@ Shared shape: intro paragraph, 4 to 6 task H2s, each with `<Tabs>` holding a "MC
 - **description:** What the Private Clubs MCP server and API cost, the data license, page sizes and the request limits on each surface
 - **Length:** 350 to 600 words. **Components:** 1 or 2 tables.
 - `## Pricing`: calls to the MCP server and the API are free and need no account. Members use Private Clubs free. Business plans for clubs, brands and creators are on https://www.theprivateclubs.com/pricing; link there and quote no prices.
-- `## Data license`: one or two sentences summarising https://www.theprivateclubs.com/data/license. Non-commercial use is free with attribution. For commercial use, bulk access or integrations beyond the public endpoints, follow the contact on that page. Link it; do not restate more.
-- `## API page size`: `limit` defaults to 50, the maximum is 200 and larger values are clamped. `page` starts at 1. Both are whole numbers from 1 (`0` returns 400, leading zeros are fine). A page past the last one returns 200 with an empty `clubs` array and the real `total`.
+- `## Data license`: free use under `/data/license` and terms section 8: look up, search and compare clubs, including for work, with credit and a link.
+- `## Bulk data`: bulk access is a paid monthly data feed license. List the bulk uses from terms section 8, say to email support@theprivateclubs.com, and link `/data/license` and `/legal/terms`. No price, plan name or SLA.
+- `## API page size`: `limit` defaults to 50, the maximum is 50 and larger values are clamped. `page` starts at 1, and `page` times `limit`, with `limit` clamped to 50, can be at most 500 (403 `data_feed_required` past that, whatever the `total`). Both are whole numbers from 1 (`0` returns 400, leading zeros are fine). A page past the last result, within the first 500, returns 200 with an empty `clubs` array and the real `total`.
 - `## Rate limit headers`: every REST response sends `RateLimit: limit=120, remaining=119, reset=60` and `RateLimit-Policy: 120;w=60`. Keep within 120 requests a minute. Retry with backoff on 500 and 503. No enforcement claim and no 429.
 - `## MCP limits`: a table with body 2 MB, at most 100 messages per batch, `initialize` sent on its own, `search_clubs` 25 results, `get_clubs_by_state` 100, `compare_clubs` 2 or 3 slugs, and 503 with `Retry-After: 10` when a request runs past the deadline. No request rate limit.
 - `## Need more`: the help line.
@@ -422,7 +425,7 @@ Shared shape: intro paragraph, 4 to 6 task H2s, each with `<Tabs>` holding a "MC
   - `/ai/context.md`: a short Markdown summary for AI tools. Since PR #679 it says Private Clubs and names `/api/v1/clubs` as the club data API.
   - `/data/license`: the data license page, which names Private Clubs and support@theprivateclubs.com since PR #679.
   - `/robots.txt`: allows AI crawlers.
-- `## For AI crawlers`: robots.txt allows every user agent. It names AI crawlers such as GPTBot, ClaudeBot, PerplexityBot, Google-Extended and OAI-SearchBot. Copy the names from the live file.
+- `## For AI crawlers`: robots.txt allows every user agent. It names AI crawlers such as GPTBot, ClaudeBot, PerplexityBot, Google-Extended and OAI-SearchBot. Copy the names from the live file. It may quote the catch-all group's `Content-Signal: search=yes, ai-input=yes, ai-train=yes` line: PR #689 (commit c4034ff2 on `feat/legal-mcp`) keeps robots.txt and the `ai-training: allowed` meta tag as they are and narrows terms section 8 and `/data/license` to match. Crawlers that follow robots.txt may read the public pages for search, AI answers and AI training; only AI training data collected through the MCP server or the API needs the data feed license. If Chris sets `ai-train=no` instead, this page, terms section 8 and `/data/license` change together.
 - `## Which file to use`: one line each.
 - **Leave out:** `/llms-full.txt` (stale), `/ai/clubs.json` (empty), `/agents.json` and `/ai-plugin.json` (not checked).
 
@@ -440,7 +443,7 @@ This is the shape Mintlify documents: a navigation group takes `openapi` (a repo
 
 **Blockers before the API reference tab is public: all fixed.** PR #679 (merge 84e3d856) took `src/lib/openapi-spec.json` to v1.2.0, live at /openapi.json on 2026-10-18:
 
-1. **Fixed.** `limit` defaults to 50 with a maximum of 200 and a minimum of 1 on both `/api/v1/clubs` and `/api/clubs` (the shared `Limit` parameter, matching `CLUBS_API_DEFAULT_LIMIT` and `CLUBS_API_MAX_LIMIT` in `src/lib/api-v1.ts`).
+1. **Fixed.** `limit` defaults to 50 with a maximum of 200 (50 from `feat/api-bulk-cap`, spec 1.3.0) and a minimum of 1 on both `/api/v1/clubs` and `/api/clubs` (the shared `Limit` parameter, matching `CLUBS_API_DEFAULT_LIMIT` and `CLUBS_API_MAX_LIMIT` in `src/lib/api-v1.ts`).
 2. **Fixed.** The description calls `RateLimit` and `RateLimit-Policy` advisory headers, and the spec lists no 429 anywhere.
 3. **Fixed.** One server, `https://www.theprivateclubs.com`.
 4. **Fixed.** `tags: ["Clubs"]`, summary `Search clubs` and `x-mint: { href: "/api-reference/clubs/search-clubs" }`.
@@ -556,10 +559,10 @@ Group 1 also rewrites the support files:
 ### 9.3 REST API
 
 - `GET https://www.theprivateclubs.com/api/v1/clubs` re-exports `GET /api/clubs` and adds `X-Request-Id` (`req_` and 16 hex characters) to every answer, rows or a problem (`src/app/api/v1/clubs/route.ts`). No auth, no CORS. Response `{clubs, total, fee_access}`. Success headers: `Cache-Control: private, no-store`, `X-Total-Clubs`, `X-Data-Source: Private Clubs` (`API_DATA_SOURCE`), `RateLimit`, `RateLimit-Policy`. Problem responses carry `RateLimit` and `RateLimit-Policy`. (`src/app/api/clubs/route.ts`, `src/lib/api-v1.ts`, `src/lib/api-problem.ts`, live)
-- Documented parameters: `type` (grouped), `state` (full name or two-letter code), `country` (name or ISO code), `q` (part of the name), `waitlist` (comma list; spec values `open`, `waitlist`, `by_invitation`, `invite_only`, `closed`, `unknown`; `by_invitation` also matches `invite_only`), `page` (from 1), `limit` (default 50, max 200, clamped). `page` and `limit` must be whole numbers from 1 when sent (an empty `page=` or `limit=` counts as not sent): `0` answers 400 `invalid_page` or `invalid_limit`, and leading zeros are fine (`01` is 1). A page past the last one, however large (`page=99999999999999999` included), answers 200 with an empty `clubs` array and the real `total`. Verified live: `country=GB` and `country=United Kingdom` match the same clubs, `state=FL` matches the same as `state=Florida`, and `type=wine` returns the same clubs as `type=dining`.
+- Documented parameters: `type` (grouped), `state` (full name or two-letter code), `country` (name or ISO code), `q` (part of the name), `waitlist` (comma list; spec values `open`, `waitlist`, `by_invitation`, `invite_only`, `closed`, `unknown`; `by_invitation` also matches `invite_only`), `page` (from 1), `limit` (default 50, max 200, clamped; max 50 from `feat/api-bulk-cap`). `page` and `limit` must be whole numbers from 1 when sent (an empty `page=` or `limit=` counts as not sent): `0` answers 400 `invalid_page` or `invalid_limit`, and leading zeros are fine (`01` is 1). A page past the last one, however large (`page=99999999999999999` included), answers 200 with an empty `clubs` array and the real `total`. From `feat/api-bulk-cap`, `GET /api/v1/clubs` answers 403 `data_feed_required` when `page` times the clamped `limit` is above 500, before any read; a page past the last result within 500 still answers 200 empty. Verified on a local build of 3f773c0b on 2026-10-18: `page=10&limit=50` 200, `page=11&limit=50` 403, `page=10&limit=200` 200 with 50 rows, `page=0` 400 first. Verified live: `country=GB` and `country=United Kingdom` match the same clubs, `state=FL` matches the same as `state=Florida`, and `type=wine` returns the same clubs as `type=dining`.
 - Types (`src/lib/browse-type-scope.ts`, PR #679): `city` groups `city`, `social`, `arts`, `cigar` and `dining`; `dining` and `wine` both group `dining` and `wine`.
 - Exist in code but are not documented in v1 (unstable, or not in the spec): `city`, `amenity`, `architect`, `holes`, `sort`, `coming`, `ranked`, `tour`, `operator`, `homes`, `access`, `membership`, `perPage`, `feeMin`, `feeMax`.
-- Errors (`API_PROBLEMS` in `src/lib/api-v1.ts`): `invalid_page` 400, `invalid_limit` 400 (hint `Call GET /api/v1/clubs?page=1&limit=50. Maximum limit is 200.`), `not_found` 404 (any other `/api/v1` path, no `X-Request-Id`), `clubs_unavailable` 500 (only "The club directory could not be read", hint names support@theprivateclubs.com). Problem `type` URLs are `https://www.theprivateclubs.com/problems/{code}`, and each opens a page; `/problems` lists all four, and an unknown code is a 404. (live)
+- Errors (`API_PROBLEMS` in `src/lib/api-v1.ts`): `invalid_page` 400, `invalid_limit` 400 (hint `Call GET /api/v1/clubs?page=1&limit=50. Maximum limit is 200.`, and `Maximum limit is 50.` from `feat/api-bulk-cap`), `data_feed_required` 403 (from `feat/api-bulk-cap`, title `Bulk access needs a data feed`, names support@theprivateclubs.com; on 3f773c0b its `detail` and the spec spell "licence", while the terms and these docs spell "license", and `api/index.mdx` quotes the `detail` as the app sends it, so change that quote when the app's spelling changes), `not_found` 404 (any other `/api/v1` path, no `X-Request-Id`), `clubs_unavailable` 500 (only "The club directory could not be read", hint names support@theprivateclubs.com). Problem `type` URLs are `https://www.theprivateclubs.com/problems/{code}`, and each opens a page; `/problems` lists every code, and an unknown code is a 404. (live)
 
 ### 9.4 Fees
 
@@ -570,7 +573,7 @@ Group 1 also rewrites the support files:
 ### 9.5 Pricing and license
 
 - Members are free (`/pricing` FAQ). The MCP and API are free for public club data (`/mcp` FAQ). Business plans Plus, Pro, Elite and Max are listed on `/pricing`, and every plan button reads "Not available yet" today, so link `/pricing` and quote no prices.
-- Data license (`/data/license`, PR #679): non-commercial use is free with attribution to Private Clubs, AI training is allowed with citation, the attribution formats are "According to Private Clubs (theprivateclubs.com), which indexes ... private clubs..." and "Data from Private Clubs (theprivateclubs.com) shows...", and commercial use, bulk access or integrations beyond the public endpoints go to support@theprivateclubs.com. The docs' attribution line follows it: "Cite Private Clubs (theprivateclubs.com) and link the club's profile."
+- Data license (`/data/license`): PR #689 replaces the text below with three sections: citing and linking individual clubs at no charge with attribution, the attribution format (both examples kept), and bulk use and the paid monthly data feed license (support@theprivateclubs.com). Before #689 (PR #679): non-commercial use is free with attribution to Private Clubs, AI training is allowed with citation, the attribution formats are "According to Private Clubs (theprivateclubs.com), which indexes ... private clubs..." and "Data from Private Clubs (theprivateclubs.com) shows...", and commercial use, bulk access or integrations beyond the public endpoints go to support@theprivateclubs.com. The docs' attribution line follows it: "Cite Private Clubs (theprivateclubs.com) and link the club's profile."
 - Claiming a club is free, with a work email and no credit card (`/list`).
 
 ### 9.6 Live use cases with verified arguments
@@ -599,7 +602,7 @@ Results were checked with `tools/call` on 2026-10-18. Writers re-run them before
 
 ## 10. Open items for Chris
 
-1. **License versus "Free" chips:** `/mcp` labels every use case "Free", including ones for brands and real estate agents, but `/data/license` limits free use to non-commercial. The docs state both plainly. Decide whether the license or the page copy changes.
+1. **License versus "Free" chips:** closed by PR #689. Lookups inside AI apps and products are free, including for work, so the "Free" chips on `/mcp` match the license. Bulk use needs the paid data feed license.
 2. **OpenAPI fixes (closed 2026-10-18):** PR #679 fixed all eight items in section 5 (spec 1.2.0, live), and the `API endpoints` group is in docs.json.
 3. **Logo files (closed 2026-10-18):** `logo/light.svg` and `logo/dark.svg` are built from the app's `public/brand/tpc-logo-light.svg` and `tpc-logo-dark.svg`, and `favicon.png` is the site's `public/favicon.png`.
 4. **Members use case:** the `/mcp` ask "Which private golf clubs in Arizona have an open waitlist?" returns an empty list today. Few clubs carry `open`.
