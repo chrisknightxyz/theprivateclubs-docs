@@ -17,15 +17,11 @@ Base URL:
 https://www.theprivateclubs.com
 ```
 
-The spec follows OpenAPI 3.0.0. It describes more paths than these docs cover. Build on the one endpoint below.
-
-<Note>
-  Some details in the spec differ from the live API today. Where they differ, follow these docs and the [club object](/reference/club-object). `limit` defaults to 50, not 24. `country`, `q` and `waitlist` work but are not in the spec. Rows carry more fields than the spec's `Club` schema lists. `waitlist_status` can also be `unknown`, `invite_only` or `null`. The API does not send the 429 response the spec lists. Use the base URL `https://www.theprivateclubs.com`, not the spec's second server.
-</Note>
+The spec follows OpenAPI 3.0.0 and is at version 1.2.0. It describes more paths than these docs cover. Build on the one endpoint below.
 
 ## Endpoint
 
-The supported endpoint is `GET /api/v1/clubs`. It searches the directory by type, place, name and waitlist status, with paging. The [API quickstart](/api) walks through each filter.
+The supported endpoint is `GET /api/v1/clubs`. It searches the directory by type, place, name and waitlist status, with paging. The [API quickstart](/api) walks through each filter, and the [Search clubs](/api-reference/clubs/search-clubs) page, generated from the spec, lists each parameter and response field the spec describes.
 
 Any other path under `/api/v1/`, such as `/api/v1/foo`, returns a 404 with code `not_found`:
 
@@ -51,7 +47,7 @@ Errors follow RFC 9457 and use the `application/problem+json` content type. Ever
 
 | Field | What it holds |
 |---|---|
-| `type` | A URI that names the problem. It ends in the `code`. |
+| `type` | A URL that names the problem, `https://www.theprivateclubs.com/problems/{code}`. It opens a page that explains the code. |
 | `title` | A short summary of the problem. |
 | `status` | The HTTP status code. |
 | `detail` | What went wrong with this request. |
@@ -63,17 +59,42 @@ The codes:
 
 | Code | Status | When |
 |---|---|---|
-| `invalid_page` | 400 | `page` is not a whole number, such as `abc` or `-1`. |
-| `invalid_limit` | 400 | `limit` is not a whole number. |
+| `invalid_page` | 400 | `page` is not a whole number from 1, such as `abc`, `0` or `-1`. An empty `page=` counts as not sent. |
+| `invalid_limit` | 400 | `limit` is not a whole number from 1, such as `abc` or `0`. An empty `limit=` counts as not sent. |
 | `not_found` | 404 | The `/api/v1` path does not exist. |
-| `clubs_unavailable` | 500 | The directory could not be read, or `page` is past the last page. |
+| `clubs_unavailable` | 500 | The directory could not be read. |
 
-Retry `clubs_unavailable` after a short wait. If your `page` is past the last page, stop paging instead. The [quickstart](/api#4-page-through-results) shows when to stop.
+[https://www.theprivateclubs.com/problems](https://www.theprivateclubs.com/problems) lists every code, and each code has its own page, such as `/problems/invalid_page`.
+
+Retry `clubs_unavailable` after a short wait. If it keeps failing, email support@theprivateclubs.com, as its `hint` says. A page past the last one is not an error: it answers 200 with an empty `clubs` array. The [quickstart](/api#4-page-through-results) shows when to stop.
+
+## Response headers
+
+`GET /api/v1/clubs` sends these headers on every response:
+
+| Header | What it holds |
+|---|---|
+| `X-Request-Id` | A new ID for each request: `req_` followed by 16 hex characters, such as `req_0123456789abcdef`. |
+| `RateLimit` and `RateLimit-Policy` | The advertised rate limit policy. See [Pricing and limits](/api/usage-limits#rate-limit-headers). |
+
+Successful responses also carry `X-Total-Clubs` (the same number as `total`), `X-Data-Source: Private Clubs` and `Cache-Control: private, no-store`.
 
 ## Versioning
 
 The current version is v1, in the URL path. The spec states the policy:
 
 > Breaking changes ship under a new /api/vN path. Deprecated versions send Deprecation and Sunset headers for at least 90 days.
+
+## What you can do with the spec
+
+- Generate a typed client for your language.
+- Import it into an API tool such as Postman or Insomnia.
+- Give it to an AI agent that writes code against the API.
+
+Download it with:
+
+```bash
+curl -o clubs-openapi.json https://www.theprivateclubs.com/openapi.json
+```
 
 Next: [Authentication and fees](/api/authentication), [Pricing and limits](/api/usage-limits) and the [club object](/reference/club-object).

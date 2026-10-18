@@ -47,7 +47,7 @@ The body has three keys: `clubs`, `total` and `fee_access`. Here is the response
       }
     }
   ],
-  "total": 473,
+  "total": 471,
   "fee_access": "locked"
 }
 ```
@@ -58,7 +58,8 @@ What to notice:
 - `fee_access` is `locked` for calls without a theprivateclubs.com session, which is every call from your server or script. The fee fields `initiation_fee`, `annual_dues` and `monthly_dues` are then always `null`.
 - Each entry in `fee_views` has a `kind`. You will see `none` when no figure is on file, or `locked` when a figure exists but is not shared. See [Authentication and fees](/api/authentication).
 - Rows carry no profile link.
-- Successful responses carry `Cache-Control: private, no-store`.
+- Successful responses carry `Cache-Control: private, no-store` and `X-Data-Source: Private Clubs`.
+- Every response, rows or an error, carries an `X-Request-Id` header, a new ID for each request that starts with `req_`.
 
 The [club object](/reference/club-object) describes every field.
 
@@ -72,7 +73,7 @@ Filters combine, so each club returned matches all of them.
 | `state` | A state or province, by full name or two-letter code. `FL` and `Florida` return the same clubs. | `state=Florida` |
 | `country` | A country, by name or ISO code. `GB` and `United Kingdom` return the same clubs. | `country=GB` |
 | `q` | Part of the club name, in any case. | `q=yacht` |
-| `waitlist` | A comma-separated list of `open`, `waitlist` and `by_invitation`. `by_invitation` also matches clubs stored as `invite_only`. | `waitlist=open,waitlist` |
+| `waitlist` | A comma-separated list of waitlist values: `open`, `waitlist`, `by_invitation`, `invite_only`, `closed` and `unknown`. `by_invitation` also matches clubs stored as `invite_only`. | `waitlist=open,waitlist` |
 
 With no `country`, the search covers every country. A `state` with no `country` stays in the US and Canada. For a region elsewhere, such as Scotland, send `country` as well:
 
@@ -84,9 +85,9 @@ curl "https://www.theprivateclubs.com/api/v1/clubs?waitlist=open,waitlist&limit=
 
 ## 4. Page through results
 
-`page` starts at 1. `limit` sets the page size. It defaults to 50, and values above 200 are clamped to 200.
+`page` starts at 1. `limit` sets the page size. It defaults to 50, and values above 200 are clamped to 200. Both must be whole numbers from 1: `page=0` answers 400 with `invalid_page`, and `limit=0` answers 400 with `invalid_limit`. Leading zeros are fine, so `page=01` is page 1, and an empty `page=` or `limit=` counts as not sent.
 
-Stop when `page * limit` reaches `total`. A page past the last one returns a 500 `clubs_unavailable` error, not an empty list, so check `total` before you ask for the next page.
+Stop when `page * limit` reaches `total`. A page past the last one, however large, answers 200 with an empty `clubs` array and the real `total`, so an empty page also means you are done.
 
 This loop prints the name and city of every golf club in Arizona. It needs `jq`:
 
@@ -125,12 +126,14 @@ The API answers with a 400:
   "status": 400,
   "detail": "The limit query parameter must be a positive integer.",
   "code": "invalid_limit",
-  "hint": "Call GET /api/v1/clubs?page=1&limit=24. Maximum limit is 200.",
+  "hint": "Call GET /api/v1/clubs?page=1&limit=50. Maximum limit is 200.",
   "instance": "/api/v1/clubs"
 }
 ```
 
-A 500 with `clubs_unavailable` means the directory could not be read. Wait a moment and retry, unless you asked for a page past the last one. The [API overview](/api/openapi#errors) lists every code.
+Each `type` is a page that explains the code, such as https://www.theprivateclubs.com/problems/invalid_limit.
+
+A 500 with `clubs_unavailable` only means the directory could not be read. Wait a moment and retry. If it keeps failing, email support@theprivateclubs.com, as the error's `hint` says. The [API overview](/api/openapi#errors) lists every code.
 
 ## Next steps
 

@@ -6,8 +6,8 @@ This repo holds the Mintlify docs for the Private Clubs MCP server and REST API.
 
 Check every fact against one of these before you write it. If you cannot verify a fact, leave it out.
 
-- The app repo, read only: `src/app/api/mcp/route.ts` (the five tools), `src/lib/mcp/setup.ts` (setup steps for each app), `src/app/api/clubs/route.ts` (the code behind `GET /api/v1/clubs`), `src/lib/openapi-spec.json`, `src/app/(marketing)/mcp/` and `src/app/(marketing)/pricing/`.
-- The live site: `https://www.theprivateclubs.com/mcp/setup.md`, `/mcp.json`, `/openapi.json`, `/llms.txt`, `/pricing`, `/list` and `/data/license`. Make example calls against `/api/mcp` and `/api/v1/clubs` on the day you write.
+- The app repo, read only: `src/app/api/mcp/route.ts` (the five tools), `src/lib/mcp/club-search.ts` (how `search_clubs` reads a comma in `query`, and the `location` line), `src/lib/mcp/club-ranking.ts` (best known first, duplicates folded), `src/lib/mcp/setup.ts` (setup steps for each app), `src/app/api/clubs/route.ts` (the code behind `GET /api/v1/clubs`), `src/lib/api-v1.ts` (page size limits, columns and every problem code), `src/lib/openapi-spec.json`, `src/app/(marketing)/mcp/` and `src/app/(marketing)/pricing/`.
+- The live site: `https://www.theprivateclubs.com/mcp/setup.md`, `/mcp.json`, `/openapi.json`, `/llms.txt`, `/ai/context.md`, `/problems`, `/pricing`, `/list` and `/data/license`. Make example calls against `/api/mcp` and `/api/v1/clubs` on the day you write.
 
 ## Terminology
 
@@ -18,7 +18,7 @@ Check every fact against one of these before you write it. If you cannot verify 
 - **Slug**: a club's short ID, such as `desert-forest-golf-club`, and the last part of its profile URL.
 - **Agent**: an AI agent. The audience is always "real estate agents", in full.
 - **Older entry**: `clubs`, the server key under the short-lived Clubs name. Tell readers to replace it with `private-clubs`.
-- **Plugin ZIPs**: link the live file names (`clubs.claude-plugin.zip`, `clubs.codex-plugin.zip`, `clubs.cursor-plugin.zip`) until the app ships the renamed files. Do not name labels that come from inside a ZIP, such as the connector name, because they change with the app.
+- **Plugin ZIPs**: link `/mcp/private-clubs.claude-plugin.zip`, `/mcp/private-clubs.codex-plugin.zip` and `/mcp/private-clubs.cursor-plugin.zip` (PR #679). The earlier `clubs.*` links answer 308 to these. Each plugin and its skill are named `private-clubs`, and the Cursor plugin goes in `~/.cursor/plugins/local/private-clubs`. Do not name other labels from inside a ZIP, such as the connector name, because they change with the app.
 - Tool names go in code font: `search_clubs`, `get_club`, `get_clubs_by_state`, `compare_clubs`, `get_membership_info`.
 
 ## House style
@@ -50,11 +50,11 @@ Copy these exactly.
 | Check prompt | `Search clubs in Florida` |
 | First ask | `Find yacht clubs in Florida` |
 | Older entry | Added `clubs` before? It is the same server under an earlier name. Replace it with `private-clubs`. |
-| Older entry (chat apps) | Added it before under the name Clubs? Replace that older entry with Private Clubs. |
+| Older entry (chat apps) | Added Clubs before? Replace that older entry with Private Clubs. |
 | Fees | Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com. |
 | Fees (pages that cover the API too) | Private Clubs never returns membership fees over MCP, and API calls from your server or script return none. Account holders see fees on each club's profile at theprivateclubs.com. |
 | Tool fee message (quote only as tool output) | `Membership fees are available to account holders at theprivateclubs.com. Members see exact verified fees.` |
-| Attribution | Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use. |
+| Attribution | Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use. |
 | Help | Email support@theprivateclubs.com |
 | Setup page | https://www.theprivateclubs.com/mcp |
 

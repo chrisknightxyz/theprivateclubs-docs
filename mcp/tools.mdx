@@ -13,17 +13,17 @@ Private Clubs never returns membership fees. Account holders see fees on each cl
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `query` | string | No | Case-insensitive part match on the club's name, type or city; no commas, because a comma makes the search fail |
+| `query` | string | No | Case-insensitive part match on the club's name, type or city. A comma adds a place, such as `Naples, Florida`; see [place names](#place-names) |
 | `state` | string | No | A US state or Canadian province, full name recommended; setting it keeps results in the US and Canada |
 | `type` | string | No | Case-insensitive exact match on the club's stored type, with no grouping |
 | `amenities` | array of strings | No | Stored amenity values; a club must have all of them |
 | `waitlist` | boolean | No | `true` keeps clubs whose `waitlist_status` is `open`; `false` does not filter |
 
-Nothing is required. With no `state`, the search is worldwide.
+Nothing is required. With no `state` and no place in `query`, the search is worldwide.
 
 **Returns** up to 25 clubs, best known first, with no paging. Each club has `id`, `name`, `slug`, `city`, `state`, `country`, `type`, `waitlist_status`, `holes`, `par`, `yardage`, `course_architect`, `amenities` and `url`.
 
-**Errors:** `Club search failed. Try again.` when the search cannot run, and every time `query` holds a comma.
+**Errors:** `Club search failed. Try again.` when the search cannot run.
 
 ```json
 { "state": "Arizona", "type": "golf" }
@@ -72,7 +72,7 @@ It covers the US and Canada only.
 |---|---|---|---|
 | `slugs` | array of strings | Yes | 2 or 3 club slugs |
 
-**Returns** one entry per club with `name`, `slug`, `location`, `url`, `waitlist_status`, `holes`, `par`, `yardage`, `course_architect`, `founded_year`, `amenities` and `website`. The `location` field is the city and state in one string, such as `New York, New York`. When the city or state is not stored, that part reads as the text `null`, such as `Sydney, null`, and the string never names the country. Use the club's `url`, or `get_club`, for the full place.
+**Returns** one entry per club with `name`, `slug`, `location`, `url`, `waitlist_status`, `holes`, `par`, `yardage`, `course_architect`, `founded_year`, `amenities` and `website`. The `location` field is the city and state in one string, such as `New York, New York`. When there is no state, the country takes its place, such as `Sydney, Australia`. A missing part is left out, and `location` is `null` when the city, state and country are all missing.
 
 Unknown slugs are left out without an error, and the order is not fixed.
 
@@ -117,6 +117,8 @@ Result from October 2026:
 
 Only listed public clubs appear. Drafts, closed or hidden listings and merged duplicates never do.
 
+`search_clubs` and `get_clubs_by_state` list the best known clubs first. When one club is listed twice in the same city and state, under names that differ only in words such as `The`, `Golf`, `Club` or `and`, or in the city's name, the two tools show it once. A name made only of such words and the city's name, such as `Boca Raton Golf Club` in Boca Raton, always keeps its own row.
+
 ### Profile links
 
 The `url` field links the club's profile:
@@ -129,7 +131,18 @@ The region is the state or province for clubs in the US and Canada, and the coun
 
 ### Place names
 
-Use full names, such as `Florida` or `Ontario`. Two-letter codes such as `FL` also resolve, but the tool descriptions ask for full names. Outside the US and Canada, leave `state` empty and put a city in `query`.
+Use full names, such as `Florida` or `Ontario`. Two-letter codes such as `FL` also resolve, but the tool descriptions ask for full names.
+
+`search_clubs` also reads a place from a `query` that holds a comma, such as `Naples, Florida`:
+
+- Only the first part is searched, so `Naples, Florida` searches for `Naples`.
+- When the last part names a US state or Canadian province, by full name or by a two-letter code in capitals, such as `Naples, FL`, the search keeps to that state.
+- Otherwise, when the last part names a country the directory knows, such as `Sydney, Australia`, the search keeps to that country.
+- A state wins over a country with the same code or name, so `Toronto, CA` means California, not Canada, and `Tbilisi, Georgia` means the US state. For the country Georgia, use its code: `Tbilisi, GE`.
+- A two-letter last part in lower case, such as `in`, is ignored, and so is a last part that names no place.
+- A `state` you send wins over the place in `query`.
+
+Outside the US and Canada, leave `state` empty and put the city and country in `query`, such as `Sydney, Australia`.
 
 ### Types
 
@@ -141,7 +154,7 @@ Amenity values come back as each listing stores them. Most are snake_case codes 
 
 ### Waitlist values
 
-`waitlist_status` can be `open`, `waitlist`, `by_invitation`, `invite_only` or `unknown`, and it can be `null`. See [Waitlist values](/reference/conventions#waitlist-values) for what each one means.
+`waitlist_status` can be `open`, `waitlist`, `by_invitation`, `invite_only`, `closed` or `unknown`, and it can be `null`. See [Waitlist values](/reference/conventions#waitlist-values) for what each one means.
 
 ### Fees
 

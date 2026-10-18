@@ -64,7 +64,7 @@ Each MCP tool returns its own set of fields:
 Six fields appear only in MCP results: `url`, `location`, `membership_fees`, `total_members`, `website` and `phone`. Three of them need a note:
 
 - `url` is the club's profile link, in the form `https://www.theprivateclubs.com/clubs/{region}/{slug}`. It is `null` when a club has no region. See [profile links](/reference/conventions#profile-links).
-- `location` appears in `compare_clubs` only. It is one string built from the city and state, such as `New York, New York`. When the city or state is not stored, that part reads as the text `null`, such as `Sydney, null`, and the string never names the country. Use the club's `url`, or `get_club`, for the full place.
+- `location` appears in `compare_clubs` only. It is one string built from the city and state, such as `New York, New York`. When there is no state, the country takes its place, such as `Sydney, Australia`. A missing part is left out, and `location` is `null` when the city, state and country are all missing.
 - `membership_fees` holds a fixed message that points to the club's profile. It never holds a figure.
 
 [Available tools](/mcp/tools) covers each tool's parameters.
@@ -85,7 +85,7 @@ Six fields appear only in MCP results: `url`, `location`, `membership_fees`, `to
 
 ### Waitlist status
 
-`waitlist_status` holds one of five values: `open`, `waitlist`, `by_invitation`, `invite_only` or `unknown`. It can also be `null`. [Conventions](/reference/conventions#waitlist-values) explains each value.
+`waitlist_status` holds one of the values the [OpenAPI spec](/api/openapi) lists: `open`, `waitlist`, `by_invitation`, `invite_only`, `closed` or `unknown`. It can also be `null`. [Conventions](/reference/conventions#waitlist-values) explains each value.
 
 ### Amenities
 

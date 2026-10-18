@@ -16,7 +16,7 @@ Use Private Clubs to find clubs in a place, compare the ones you like and check 
     Find golf clubs in Arizona
     ```
 
-    The tool that fits is `search_clubs`. Set `state` to a US state or Canadian province, `type` to a club type such as `golf` or `yacht`, and `query` to part of a club's name, type or city. It returns up to 25 clubs, best known first, with a link to each club's profile. With no `state`, the search covers every country.
+    The tool that fits is `search_clubs`. Set `state` to a US state or Canadian province, `type` to a club type such as `golf` or `yacht`, and `query` to part of a club's name, type or city. It returns up to 25 clubs, best known first, with a link to each club's profile. With no `state` and no place in `query`, the search covers every country.
 
     In MCP, `type` is an exact match on the club's stored type, so `golf` does not include `country_club`.
   </Tab>
@@ -44,7 +44,7 @@ Use Private Clubs to find clubs in a place, compare the ones you like and check 
     curl "https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Arizona&waitlist=open"
     ```
 
-    `waitlist` takes a comma-separated list of `open`, `waitlist` and `by_invitation`.
+    `waitlist` takes a comma-separated list of waitlist values, such as `open,waitlist`. `by_invitation` also matches clubs stored as `invite_only`.
   </Tab>
 </Tabs>
 
@@ -71,6 +71,7 @@ The tool that fits is `get_membership_info`, with `slug` set to the club's slug,
 - `open`: listed as open to new members
 - `waitlist`: listed with a waitlist
 - `by_invitation` or `invite_only`: by invitation
+- `closed`: listed as not accepting new members
 - `unknown` or `null`: not known
 
 See [waitlist values](/reference/conventions#waitlist-values). A status can change, so confirm it on the club's profile.
@@ -83,7 +84,7 @@ Private Clubs answers carry no fees. To see them, open the club's profile from t
 
 Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
 
-Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
+Cite Private Clubs (theprivateclubs.com) and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
 
 ## Next steps
 
