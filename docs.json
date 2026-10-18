@@ -1,114 +1,174 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "willow",
-  "name": "The Private Clubs",
+  "theme": "luma",
+  "name": "Private Clubs",
+  "description": "Documentation for the Private Clubs MCP server and REST API",
   "colors": {
-    "primary": "#171717"
+    "primary": "#2563EB",
+    "light": "#60A5FA",
+    "dark": "#2563EB"
   },
-  "favicon": "https://icons.duckduckgo.com/ip3/theprivateclubs.com.ico",
+  "background": {
+    "color": {
+      "light": "#FAFAFA",
+      "dark": "#0B0B0B"
+    }
+  },
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "dark": "/logo/dark.svg",
+    "href": "https://www.theprivateclubs.com"
+  },
+  "favicon": "/favicon.png",
+  "fonts": {
+    "heading": {
+      "family": "Instrument Sans",
+      "weight": 550
+    },
+    "body": {
+      "family": "Instrument Sans",
+      "weight": 450
+    }
+  },
+  "appearance": {
+    "default": "system"
+  },
+  "icons": {
+    "library": "tabler"
+  },
+  "styling": {
+    "codeblocks": "system"
   },
   "navbar": {
     "links": [
       {
         "label": "Support",
-        "href": "mailto:data@theprivateclubs.com"
+        "href": "mailto:support@theprivateclubs.com"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Visit Platform",
-      "href": "https://www.theprivateclubs.com"
+      "label": "Open Private Clubs",
+      "href": "https://www.theprivateclubs.com/mcp"
     }
+  },
+  "contextual": {
+    "options": ["copy", "view", "chatgpt", "claude"],
+    "display": "header"
   },
   "navigation": {
     "tabs": [
       {
-        "tab": "Platform",
+        "tab": "Documentation",
+        "icon": "book",
         "groups": [
           {
-            "group": "Overview",
+            "group": "Getting started",
             "pages": [
               "introduction",
-              "platform/how-it-works",
-              "platform/club-types"
+              "how-clubs-works",
+              "api/index",
+              "mcp/getting-started"
             ]
           },
           {
-            "group": "For Members",
+            "group": "Guides",
             "pages": [
-              "members/searching-clubs",
-              "members/comparing-clubs",
-              "members/applying-for-membership",
-              "members/concierge-service",
-              "members/member-community"
+              "guides/members",
+              "guides/clubs",
+              "guides/brands-and-creators",
+              "guides/real-estate-agents"
             ]
           },
           {
-            "group": "For Clubs",
+            "group": "Use cases",
             "pages": [
-              "clubs/claiming-your-listing",
-              "clubs/verified-profile",
-              "clubs/lead-management",
-              "clubs/analytics-dashboard",
-              "clubs/ai-discovery",
-              "clubs/director-community"
+              "use-cases",
+              "use-cases/members",
+              "use-cases/clubs",
+              "use-cases/brands-and-creators",
+              "use-cases/real-estate-agents",
+              "use-cases/home-buyers"
             ]
           },
           {
-            "group": "Pricing & Plans",
+            "group": "MCP",
             "pages": [
-              "pricing/members-plans",
-              "pricing/clubs-plans"
+              "mcp/connect",
+              "mcp/tools",
+              "mcp/troubleshooting"
             ]
           }
         ]
       },
       {
-        "tab": "API & Integrations",
+        "tab": "API reference",
+        "icon": "brackets-angle",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "API",
             "pages": [
-              "api/overview",
+              "api/openapi",
               "api/authentication",
-              "api/rate-limits"
+              "api/usage-limits"
             ]
           },
           {
-            "group": "REST API",
+            "group": "Data reference",
             "pages": [
-              "api/search-clubs",
-              "api/get-club",
-              "api/fee-data",
-              "api/statistics"
-            ]
-          },
-          {
-            "group": "MCP Integration",
-            "pages": [
-              "api/mcp-overview",
-              "api/mcp-tools",
-              "api/mcp-connect"
-            ]
-          },
-          {
-            "group": "Data Reference",
-            "pages": [
-              "api/data-model",
-              "api/club-types-reference",
-              "api/conventions"
+              "reference/club-object",
+              "reference/club-types",
+              "reference/conventions",
+              "reference/discovery-files"
             ]
           }
         ]
       }
     ]
   },
+  "redirects": [
+    { "source": "/api/overview", "destination": "/api/openapi" },
+    { "source": "/api/rate-limits", "destination": "/api/usage-limits" },
+    { "source": "/api/search-clubs", "destination": "/api" },
+    { "source": "/api/get-club", "destination": "/mcp/tools#get-club-details" },
+    { "source": "/api/fee-data", "destination": "/api/authentication" },
+    { "source": "/api/statistics", "destination": "/introduction" },
+    { "source": "/api/mcp-overview", "destination": "/mcp/getting-started" },
+    { "source": "/api/mcp-tools", "destination": "/mcp/tools" },
+    { "source": "/api/mcp-connect", "destination": "/mcp/connect" },
+    { "source": "/api/data-model", "destination": "/reference/club-object" },
+    { "source": "/api/club-types-reference", "destination": "/reference/club-types" },
+    { "source": "/api/conventions", "destination": "/reference/conventions" },
+    { "source": "/platform/how-it-works", "destination": "/how-clubs-works" },
+    { "source": "/platform/club-types", "destination": "/reference/club-types" },
+    { "source": "/members/searching-clubs", "destination": "/guides/members" },
+    { "source": "/members/comparing-clubs", "destination": "/guides/members#compare-two-or-three-clubs" },
+    { "source": "/members/applying-for-membership", "destination": "/guides/members" },
+    { "source": "/members/concierge-service", "destination": "/guides/members" },
+    { "source": "/members/member-community", "destination": "/guides/members" },
+    { "source": "/clubs/claiming-your-listing", "destination": "/guides/clubs#claim-your-listing" },
+    { "source": "/clubs/verified-profile", "destination": "/guides/clubs" },
+    { "source": "/clubs/lead-management", "destination": "/guides/clubs" },
+    { "source": "/clubs/analytics-dashboard", "destination": "/guides/clubs" },
+    { "source": "/clubs/ai-discovery", "destination": "/mcp/getting-started" },
+    { "source": "/clubs/director-community", "destination": "/guides/clubs" },
+    { "source": "/pricing/members-plans", "destination": "/introduction" },
+    { "source": "/pricing/clubs-plans", "destination": "/introduction" }
+  ],
   "footer": {
     "socials": {
-      "x": "https://x.com/theprivateclubs"
+      "x": "https://x.com/theprivateclubs",
+      "instagram": "https://www.instagram.com/theprivateclubs",
+      "linkedin": "https://www.linkedin.com/company/theprivateclubs",
+      "youtube": "https://www.youtube.com/@theprivateclubs",
+      "website": "https://www.theprivateclubs.com"
+    }
+  },
+  "errors": {
+    "404": {
+      "redirect": false,
+      "title": "This page does not exist or has moved",
+      "description": "Check the link, or search the docs"
     }
   }
 }

@@ -1,0 +1,79 @@
+---
+title: "Build a list of clubs"
+sidebarTitle: "For brands and creators"
+description: "Pull clubs by type and region for research, with the API for longer lists"
+---
+
+Brands and creators use Private Clubs to see which clubs of one type sit in a region, before research or outreach. Start in your AI app for a quick look, then move to the API when you need the full list. [Install Private Clubs](/mcp/connect) first, or read the [API quickstart](/api).
+
+## Start in your AI app
+
+```text
+Which equestrian clubs are listed in Kentucky?
+```
+
+Two tools fit a list like this:
+
+- `search_clubs` with `type` and `state` returns up to 25 clubs, best known first.
+- `get_clubs_by_state` with `state` and an optional `type` returns up to 100 clubs, best known first. It covers US states and Canadian provinces.
+
+```text
+List the golf clubs in Texas
+```
+
+Both tools match `type` exactly against the club's stored type, so `golf` does not include `country_club`. A list that stops at exactly 25 or 100 clubs may be cut off. Use the API for the rest.
+
+## Pull a full list with the API
+
+Ask for 200 rows a page, the most the API returns, and keep paging until you have `total` rows. `page` starts at 1, and rows come back A to Z by name. This loop writes the golf clubs in Texas to `clubs.jsonl`, one JSON object per line. It needs `jq`.
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+url="https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Texas&limit=200"
+page=1
+
+while true; do
+  body=$(curl -fsS --retry 3 "$url&page=$page")
+  echo "$body" | jq -c '.clubs[] | {name, slug, city, state, country, type, waitlist_status}'
+  total=$(echo "$body" | jq '.total')
+  if (( page * 200 >= total )); then break; fi
+  page=$((page + 1))
+done > clubs.jsonl
+```
+
+In the API, `type` groups related types, so `type=golf` also returns country clubs. See [club types](/reference/club-types) for the groups. To pull a whole country, swap `state` for `country`, such as `country=United%20Kingdom`.
+
+Run the loop from a terminal or a server. The API sends no CORS headers, so browser calls from another site fail.
+
+## Filter by amenities
+
+```text
+Find clubs in Florida with a golf course and a spa
+```
+
+The tool that fits is `search_clubs`, with `state` set to `Florida` and `amenities` set to `["golf_course", "spa"]`. The `amenities` argument takes stored amenity codes, and a club must have every code you send.
+
+Matching is exact, so `Spa` and `spa` are different codes. Take real codes from a live result first, such as a `get_club` answer, and do not guess them.
+
+API rows carry the same `amenities` field, so you can filter a pulled list in your own code.
+
+## Use the list well
+
+Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
+
+Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
+
+Under the data license, non-commercial use is free with attribution. Commercial use, bulk data access and API integrations beyond the public endpoints need a commercial license, and the license page gives the contact.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Map clubs by type and region" icon="sparkles" href="/use-cases/brands-and-creators">
+    Find the clubs of one type in a state, with one prompt you can adapt.
+  </Card>
+  <Card title="Club types" icon="file-text" href="/reference/club-types">
+    See every club type and how the API groups them.
+  </Card>
+</CardGroup>

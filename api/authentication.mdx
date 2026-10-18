@@ -1,87 +1,61 @@
 ---
-title: "API Authentication: No Key Required for Public Use"
-sidebarTitle: "Authentication"
-description: "The TPC REST API is fully public — no API key or Authorization header needed for standard endpoints. Learn when auth does and doesn't apply."
+title: "Authentication and fees"
+description: "No keys or accounts, and what fee data each caller sees"
 ---
 
-The Private Clubs API is designed for frictionless access. The standard REST endpoints are completely public, meaning you can make requests directly from a browser, a curl command, a server-side script, or an LLM tool without registering for an account or generating an API key. For the vast majority of use cases, authentication is simply not required.
+Anyone can call Private Clubs. This page covers why your requests need no credentials, and what the fee fields in a response hold.
 
-<Note>
-**No API key needed.** You do not need an `Authorization` header, a `Bearer` token, or any query-string credential to call `/ai/clubs.json` or `/api/clubs`. Just make a plain HTTP GET request.
-</Note>
+## No API keys
 
-## Public Endpoints
+Neither the Private Clubs API nor its MCP server takes an API key, an `Authorization` header or an account. Send a plain request:
 
-The following endpoints are open to everyone with no credentials:
-
-| Endpoint | Auth Required |
-|---|---|
-| `GET /ai/clubs.json` | None |
-| `GET /api/clubs` | None |
-| `GET /ai/context.md` | None |
-| `GET /openapi.json` | None |
-| `GET /llms.txt` | None |
-| `GET /llms-full.txt` | None |
-
-### Making a request
-
-Because there is no authentication layer, a minimal request looks exactly like this:
-
-<CodeGroup>
-```bash curl
-curl "https://www.theprivateclubs.com/ai/clubs.json?type=country_club&state=New+York"
+```bash
+curl "https://www.theprivateclubs.com/api/v1/clubs?state=Florida&limit=1"
 ```
 
-```python Python
-import urllib.request, json
+## Fee access
 
-url = "https://www.theprivateclubs.com/ai/clubs.json?type=country_club&state=New+York"
-with urllib.request.urlopen(url) as response:
-    data = json.loads(response.read())
-print(data["meta"]["total"], "clubs found")
+Every successful API response includes `fee_access`, which says what fee data the response may hold. For calls without a theprivateclubs.com session, which is every call from your server or script, `fee_access` is `locked` and the response holds no fee figures.
+
+| Value | Who sees it | What it allows |
+|---|---|---|
+| `locked` | Every call without a site session | No figures |
+| `band` | Free account holders signed in on theprivateclubs.com | Ranges only |
+| `exact` | Members with paid access, signed in on theprivateclubs.com | Exact figures for club-verified fees, and ranges for estimates |
+
+## Fee fields
+
+Each club in an API response carries these fee fields:
+
+- `initiation_fee`, `annual_dues` and `monthly_dues` are always `null` when `fee_access` is `locked`, which covers every call without a site session.
+- `fee_views` holds four entries: `initiation`, `annual`, `monthly` and `firstYear`. `firstYear` covers initiation plus annual dues. Each entry has a `kind`.
+- `fee_tier` labels where a figure comes from: `verified` means the club is the source, `estimate` means it is an estimate, and `none` means there is no figure. It can also be `null`. Everyone receives it, and it is never a figure.
+
+The `kind` in each `fee_views` entry is one of:
+
+| Kind | Meaning |
+|---|---|
+| `none` | No figure is on file. |
+| `locked` | A figure is on file but is not shared with this caller. |
+| `band` | A range, shown only to signed-in account holders on the site. |
+| `exact` | A club-verified figure, shown only to signed-in members with paid access on the site. |
+
+Calls without a site session only ever see `none` and `locked`.
+
+## Fees over MCP
+
+Private Clubs never returns membership fees over MCP. Account holders see fees on each club's profile at theprivateclubs.com.
+
+Where an MCP tool result has a `membership_fees` field, it holds this message instead of a figure, sometimes followed by a link to the club's profile:
+
+```text
+Membership fees are available to account holders at theprivateclubs.com. Members see exact verified fees.
 ```
 
-```javascript JavaScript
-const res = await fetch(
-  "https://www.theprivateclubs.com/ai/clubs.json?type=country_club&state=New+York"
-);
-const data = await res.json();
-console.log(data.meta.total, "clubs found");
-```
-</CodeGroup>
+See [Available tools](/mcp/tools) for the tools that return it.
 
-No additional headers are needed. The API responds with `Content-Type: application/json` and you can parse the body immediately.
+## Caching
 
-## MCP Endpoint
+Successful API responses carry `Cache-Control: private, no-store`, because fee fields can differ from one caller to the next. Do not store responses in a shared cache or CDN.
 
-The MCP endpoint at `/api/mcp` is used by AI clients such as Claude, Cursor, and Windsurf that support the [Model Context Protocol](https://modelcontextprotocol.io/). Authentication for the MCP endpoint is **managed automatically by the MCP client** — the client establishes a session when it connects, and that session context is passed with every tool call. You do not need to generate or store a token manually.
-
-If you are setting up an MCP client integration, refer to the [MCP Overview](/api/mcp-overview) and [MCP Connect](/api/mcp-connect) pages for connection instructions specific to your tool.
-
-| Endpoint | Auth |
-|---|---|
-| `GET /api/mcp` | Session-based, managed by the MCP client |
-
-## Enterprise & Bulk Access
-
-If you need capabilities beyond the public API — such as higher rate limits, bulk data exports, or a dedicated data feed — you will need to contact the team to arrange enterprise access:
-
-- **Email:** [data@theprivateclubs.com](mailto:data@theprivateclubs.com)
-- **Enterprise page:** [theprivateclubs.com/enterprise](https://www.theprivateclubs.com/enterprise)
-
-Enterprise access details, including any credential format used for higher-tier endpoints, are provided directly to enterprise customers.
-
-<Tip>
-If you are building a prototype, a research tool, or an LLM agent, the public endpoints almost certainly cover your needs. Start with `/ai/clubs.json` and only reach out for enterprise access if you are running into [rate limits](/api/rate-limits) or require bulk export volumes.
-</Tip>
-
-## Summary
-
-| Use Case | Auth Required |
-|---|---|
-| Browse or search clubs | ❌ None |
-| Fetch fee and waitlist data | ❌ None |
-| AI context file | ❌ None |
-| LLM guidance files | ❌ None |
-| MCP tool use (via AI client) | Session-managed by client |
-| Enterprise bulk access | Contact data@theprivateclubs.com |
+Next: [Pricing and limits](/api/usage-limits) and the [club object](/reference/club-object).

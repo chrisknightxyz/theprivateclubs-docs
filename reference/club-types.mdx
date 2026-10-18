@@ -1,0 +1,59 @@
+---
+title: "Club types"
+description: "The 15 club types, how the API groups them and where legacy types go"
+---
+
+Every club has one stored type. There are 15 current types, and each has a browse page at `https://www.theprivateclubs.com/clubs/{type}`. The API's `type` filter also groups some older types into the current ones.
+
+## Current types
+
+| Type | Browse page | API `type=` also matches |
+|---|---|---|
+| `golf` | `/clubs/golf` | `country_club` |
+| `city` | `/clubs/city` | `social`, `arts`, `cigar`, `dining`, `wine` |
+| `yacht` | `/clubs/yacht` | None |
+| `athletic` | `/clubs/athletic` | `tennis`, `wellness` |
+| `beach` | `/clubs/beach` | None |
+| `equestrian` | `/clubs/equestrian` | None |
+| `ski` | `/clubs/ski` | None |
+| `automotive` | `/clubs/automotive` | None |
+| `aviation` | `/clubs/aviation` | None |
+| `outdoor` | `/clubs/outdoor` | `hunting`, `fishing`, `shooting`, `adventure` |
+| `business` | `/clubs/business` | None |
+| `workspace` | `/clubs/workspace` | None |
+| `wellness` | `/clubs/wellness` | None |
+| `dining` | `/clubs/dining` | None |
+| `residential` | `/clubs/residential` | None |
+
+`wellness` and `dining` are types of their own, and they also sit inside a group. So a `wellness` club appears for both `type=wellness` and `type=athletic`, and a `dining` club appears for both `type=dining` and `type=city`.
+
+## How the API and MCP match types
+
+The API and the MCP tools treat `type` differently.
+
+- **API.** `type` matches the groups in the table above. Send it in lower case: `type=GOLF` matches nothing. A legacy value matches only the clubs stored with that exact type, so `type=country_club` returns country clubs alone.
+- **MCP.** The `type` argument of `search_clubs` and `get_clubs_by_state` is an exact match on the stored type, in any case. It does not group, so `golf` there leaves out clubs stored as `country_club`. Search each type when you need both.
+
+The MCP tool description lists 13 types: `golf`, `city`, `yacht`, `athletic`, `beach`, `equestrian`, `ski`, `automotive`, `aviation`, `outdoor`, `business`, `wellness` and `dining`. `workspace` and `residential` also work.
+
+## Legacy types
+
+These older types now live under a current type:
+
+| Legacy type | Now |
+|---|---|
+| `social`, `arts`, `cigar` | `city` |
+| `wine` | `dining` |
+| `tennis` | `athletic` |
+| `hunting`, `fishing`, `shooting`, `adventure` | `outdoor` |
+| `country_club` | `golf` |
+
+A legacy browse page answers with a 308 redirect to its new page. For example, `/clubs/tennis` redirects to `/clubs/athletic`. `/clubs/country-club` and `/clubs/type/country_club` both redirect to `/clubs/golf`.
+
+In the API, `wine` is grouped under `city`, not `dining`. Some clubs are still stored with a legacy type, such as `country_club`, so you can see one in the `type` field.
+
+## Browse URLs
+
+`https://www.theprivateclubs.com/clubs/{type}` is the canonical browse page for each current type. Link to that form.
+
+Next: [Conventions](/reference/conventions) and the [club object](/reference/club-object).

@@ -1,0 +1,150 @@
+---
+title: "API quickstart"
+description: "Make your first request to the Private Clubs API in five steps"
+---
+
+The API returns club records from the Private Clubs directory as JSON. It is free, and you need no API key and no account. Call it from your server or a script. The API sends no CORS headers, so a web page on another site cannot read its responses.
+
+## 1. Send your first request
+
+Ask for five golf clubs in Arizona:
+
+```bash
+curl "https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Arizona&limit=5"
+```
+
+`GET /api/v1/clubs` is the one endpoint. Every filter is an optional query parameter. A request with no filters returns the first page of the whole directory, sorted by club name.
+
+## 2. Read the response
+
+The body has three keys: `clubs`, `total` and `fee_access`. Here is the response to the request above, trimmed to its first club and a few fields, with `description` left out:
+
+```json
+{
+  "clubs": [
+    {
+      "id": "331d6274-49be-4046-b422-2bbefd52575a",
+      "name": "3 Parks Fairways",
+      "slug": "3-parks-fairways",
+      "city": "Florence",
+      "state": "Arizona",
+      "country": "United States",
+      "type": "golf",
+      "status": "unclaimed",
+      "initiation_fee": null,
+      "annual_dues": null,
+      "monthly_dues": null,
+      "fee_tier": "none",
+      "waitlist_status": "unknown",
+      "holes": 9,
+      "founded_year": 1972,
+      "currency": "USD",
+      "fee_views": {
+        "initiation": { "kind": "none" },
+        "annual": { "kind": "none" },
+        "monthly": { "kind": "none" },
+        "firstYear": { "kind": "none" }
+      }
+    }
+  ],
+  "total": 473,
+  "fee_access": "locked"
+}
+```
+
+What to notice:
+
+- `total` counts every club that matches your filters, across all pages. The `X-Total-Clubs` header carries the same number. Your total will differ as listings change.
+- `fee_access` is `locked` for calls without a theprivateclubs.com session, which is every call from your server or script. The fee fields `initiation_fee`, `annual_dues` and `monthly_dues` are then always `null`.
+- Each entry in `fee_views` has a `kind`. You will see `none` when no figure is on file, or `locked` when a figure exists but is not shared. See [Authentication and fees](/api/authentication).
+- Rows carry no profile link.
+- Successful responses carry `Cache-Control: private, no-store`.
+
+The [club object](/reference/club-object) describes every field.
+
+## 3. Narrow by place and type
+
+Filters combine, so each club returned matches all of them.
+
+| Parameter | What it matches | Example |
+|---|---|---|
+| `type` | A club type. Some types also match related types, such as `golf` with `country_club`. See [Club types](/reference/club-types). | `type=yacht` |
+| `state` | A state or province, by full name or two-letter code. `FL` and `Florida` return the same clubs. | `state=Florida` |
+| `country` | A country, by name or ISO code. `GB` and `United Kingdom` return the same clubs. | `country=GB` |
+| `q` | Part of the club name, in any case. | `q=yacht` |
+| `waitlist` | A comma-separated list of `open`, `waitlist` and `by_invitation`. `by_invitation` also matches clubs stored as `invite_only`. | `waitlist=open,waitlist` |
+
+With no `country`, the search covers every country. A `state` with no `country` stays in the US and Canada. For a region elsewhere, such as Scotland, send `country` as well:
+
+```bash
+curl "https://www.theprivateclubs.com/api/v1/clubs?state=FL&type=yacht&limit=5"
+curl "https://www.theprivateclubs.com/api/v1/clubs?country=GB&state=Scotland&type=golf&limit=5"
+curl "https://www.theprivateclubs.com/api/v1/clubs?waitlist=open,waitlist&limit=5"
+```
+
+## 4. Page through results
+
+`page` starts at 1. `limit` sets the page size. It defaults to 50, and values above 200 are clamped to 200.
+
+Stop when `page * limit` reaches `total`. A page past the last one returns a 500 `clubs_unavailable` error, not an empty list, so check `total` before you ask for the next page.
+
+This loop prints the name and city of every golf club in Arizona. It needs `jq`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+url="https://www.theprivateclubs.com/api/v1/clubs?type=golf&state=Arizona&limit=200"
+page=1
+
+while true; do
+  body=$(curl -fsS --retry 3 "$url&page=$page")
+  echo "$body" | jq -r '.clubs[] | [.name, .city] | @tsv'
+  total=$(echo "$body" | jq '.total')
+  if (( page * 200 >= total )); then break; fi
+  page=$((page + 1))
+done
+```
+
+## 5. Handle errors
+
+Errors come back as `application/problem+json`. Each body has `type`, `title`, `status`, `detail`, `code`, `hint` and `instance`. Branch on `code`, which stays stable.
+
+Send a limit that is not a number:
+
+```bash
+curl "https://www.theprivateclubs.com/api/v1/clubs?limit=abc"
+```
+
+The API answers with a 400:
+
+```json
+{
+  "type": "https://www.theprivateclubs.com/problems/invalid_limit",
+  "title": "Invalid limit",
+  "status": 400,
+  "detail": "The limit query parameter must be a positive integer.",
+  "code": "invalid_limit",
+  "hint": "Call GET /api/v1/clubs?page=1&limit=24. Maximum limit is 200.",
+  "instance": "/api/v1/clubs"
+}
+```
+
+A 500 with `clubs_unavailable` means the directory could not be read. Wait a moment and retry, unless you asked for a page past the last one. The [API overview](/api/openapi#errors) lists every code.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="API overview" icon="brackets-angle" href="/api/openapi">
+    The spec, base URL, error codes and versioning.
+  </Card>
+  <Card title="Authentication and fees" icon="file-text" href="/api/authentication">
+    Why calls need no key, and what the fee fields hold.
+  </Card>
+  <Card title="Club object" icon="file-text" href="/reference/club-object">
+    Every field in a club record.
+  </Card>
+  <Card title="Club types" icon="search" href="/reference/club-types">
+    The 15 types and how the API groups them.
+  </Card>
+</CardGroup>

@@ -1,0 +1,84 @@
+---
+title: "MCP quickstart"
+description: "Connect Private Clubs to your AI app and ask your first question"
+---
+
+Install Private Clubs in your AI app, check that it works, then ask about clubs. Free, no account or API key needed.
+
+## Install Private Clubs
+
+Paste this line into your AI app:
+
+```text
+Set up the Private Clubs MCP for me: read https://www.theprivateclubs.com/mcp/setup.md and follow the steps for this app
+```
+
+Agent apps such as Claude Code, Codex and Cursor run the setup for you, once you agree to each change. Chat apps such as Claude and ChatGPT walk you through the clicks.
+
+Prefer a plugin? Download the one for your app. Each plugin includes the Private Clubs skill and the MCP connection.
+
+<CardGroup cols={3}>
+  <Card title="Claude and Claude Code" icon="download" href="https://www.theprivateclubs.com/mcp/clubs.claude-plugin.zip">
+    Download the Claude plugin.
+  </Card>
+  <Card title="Codex" icon="download" href="https://www.theprivateclubs.com/mcp/clubs.codex-plugin.zip">
+    Download the Codex plugin.
+  </Card>
+  <Card title="Cursor" icon="download" href="https://www.theprivateclubs.com/mcp/clubs.cursor-plugin.zip">
+    Download the Cursor plugin.
+  </Card>
+</CardGroup>
+
+Then follow the [steps for your app](/mcp/connect) to install it.
+
+<Frame>
+  <img className="block dark:hidden" src="/images/switcher-light.png" alt="The app picker on the setup page: one button for each AI app, with the selected app named beside its icon" />
+  <img className="hidden dark:block" src="/images/switcher-dark.png" alt="The app picker on the setup page: one button for each AI app, with the selected app named beside its icon" />
+</Frame>
+
+<Note>
+  Using another app? Add a remote MCP server with the address `https://www.theprivateclubs.com/api/mcp`, transport Streamable HTTP and no authentication. See [Another app](/mcp/connect#another-app).
+</Note>
+
+## Confirm the connection
+
+Start a new session if your app needs one, then ask:
+
+```text
+Search clubs in Florida
+```
+
+The `search_clubs` tool answers with clubs and a link to each profile.
+
+## Ask about clubs
+
+Ask your first question:
+
+```text
+Find yacht clubs in Florida
+```
+
+`search_clubs` returns up to 25 listed clubs, best known first. Narrow by type and place to get the clubs you want. Try another:
+
+```text
+Which equestrian clubs are listed in Kentucky?
+```
+
+## Look up one club
+
+Ask about a single club by name:
+
+```text
+Show me the profile of Desert Forest Golf Club
+```
+
+`get_club` fits this ask. It takes the club's slug, such as `desert-forest-golf-club`, which `search_clubs` returns. It answers with the club's course, amenities, waitlist status and a link to its profile.
+
+Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
+
+## Continue with Private Clubs
+
+- [Install Private Clubs](/mcp/connect) step by step in each app.
+- See every parameter and field in [Available tools](/mcp/tools).
+- Find questions to ask in [Use cases](/use-cases).
+- Call the REST API from your server with the [API quickstart](/api).

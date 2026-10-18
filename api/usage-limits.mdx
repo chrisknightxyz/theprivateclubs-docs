@@ -1,0 +1,58 @@
+---
+title: "Pricing and limits"
+description: "What the Private Clubs MCP server and API cost, the data license, page sizes and the request limits on each surface"
+---
+
+Calls to Private Clubs cost nothing. This page covers the data license, how the API pages results, the rate limit headers and the limits on the MCP server.
+
+## Pricing
+
+Calls to the Private Clubs MCP server and API are free, with no account or API key needed. Searching, saving, comparing and enquiring with clubs on theprivateclubs.com are free too.
+
+Business plans for clubs, brands and creators are on the [pricing page](https://www.theprivateclubs.com/pricing).
+
+## Data license
+
+Under the [data license](https://www.theprivateclubs.com/data/license), non-commercial use is free with attribution. Commercial use, bulk data access and API integrations beyond the public endpoints need a commercial license, and the license page gives the contact.
+
+## API page size
+
+| Parameter | Default | Rules |
+|---|---|---|
+| `page` | 1 | Starts at 1. A value that is not a whole number returns 400 `invalid_page`. |
+| `limit` | 50 | The maximum is 200, and larger values are clamped to 200. A value that is not a whole number returns 400 `invalid_limit`. |
+
+Stop paging when `page * limit` reaches `total`. A page past the last one returns a 500 `clubs_unavailable` error.
+
+## Rate limit headers
+
+Every API response sends these two headers:
+
+```text
+RateLimit: limit=120, remaining=119, reset=60
+RateLimit-Policy: 120;w=60
+```
+
+They advertise a policy of 120 requests per 60 seconds. Keep within 120 requests a minute. The values are the same on every response, so do not read `remaining` as a live count.
+
+If a request fails with a 500 or 503, wait and retry with backoff.
+
+## MCP limits
+
+| Limit | Value |
+|---|---|
+| Request body | 2 MB |
+| Messages in one batch | 100 at most |
+| `initialize` | Sent on its own, never in a batch |
+| `search_clubs` results | Up to 25, with no paging |
+| `get_clubs_by_state` results | Up to 100 |
+| `compare_clubs` slugs | 2 or 3 |
+| Slow or failed requests | A 503 with `Retry-After: 10` when a request runs past 50 seconds or fails inside the server |
+
+The MCP server has no request rate limit. When a search needs more than 25 or 100 clubs, use the API with paging. See [Troubleshooting](/mcp/troubleshooting) for the exact error messages.
+
+## Need more
+
+Email support@theprivateclubs.com. For commercial use, follow the contact on the [data license](https://www.theprivateclubs.com/data/license) page.
+
+Next: [Authentication and fees](/api/authentication) and the [API quickstart](/api).

@@ -1,55 +1,55 @@
-# Mintlify Starter Kit
+# Private Clubs docs
 
-Use the starter kit to get your docs deployed and ready to customize.
+The docs for the Private Clubs MCP server and REST API, built with [Mintlify](https://mintlify.com). They cover the free MCP server at `https://www.theprivateclubs.com/api/mcp` and the `GET /api/v1/clubs` endpoint.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+## What is here
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+- `docs.json`: navigation, theme and settings
+- `style.css`: the website's type, colours and surfaces, which Mintlify loads on every page
+- `logo/`, `favicon.png` and `images/`: our logo, the site's favicon and the illustrations from `/mcp`
+- `introduction.mdx` and `how-clubs-works.mdx`: getting started
+- `guides/` and `use-cases/`: how-tos and example asks by audience
+- `mcp/`: setup, tools and troubleshooting for the MCP server
+- `api/` and `reference/`: the API reference tab and the data reference
+- `IA.md`: the plan, with page outlines and the fact sheet
+- `AGENTS.md`: rules for AI agents that edit these docs
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+The generated API endpoint page is held back. The live spec at https://www.theprivateclubs.com/openapi.json states limits the code does not apply, so the `API endpoints` group stays out of `docs.json` until the spec fix in `IA.md` section 5 ships.
 
-## AI-assisted writing
+## Preview locally
 
-Set up your AI coding tool to work with Mintlify:
+1. Install Node.js 20.17 or later. Mintlify recommends an LTS release.
+2. Install the Mintlify CLI:
+
+   ```bash
+   npm i -g mint
+   ```
+
+3. From the folder that holds `docs.json`, start the preview:
+
+   ```bash
+   mint dev
+   ```
+
+4. Open http://localhost:3000. To use another port, run `mint dev --port 3333`.
+
+Before you open a pull request, check the links and the build:
 
 ```bash
-npx skills add https://mintlify.com/docs
+mint broken-links
+mint validate
 ```
 
-This command installs Mintlify's documentation skill for your configured AI tools like Claude Code, Cursor, Windsurf, and others. The skill includes component reference, writing standards, and workflow guidance.
+If the preview does not start, run `mint update` and try again.
 
-See the [AI tools guides](/ai-tools) for tool-specific setup.
+## Writing
 
-## Development
+Follow `AGENTS.md` for naming, house style and content boundaries, and `IA.md` for page outlines. Check every fact against the app code or a live call before you write it.
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
+## Publishing
 
-```
-npm i -g mint
-```
+Pages go live only when Mintlify deploys this repo. Ask Chris before you push or merge.
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
+## Help
 
-```
-mint dev
-```
-
-View your local preview at `http://localhost:3000`.
-
-## Publishing changes
-
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
-
-## Need help?
-
-### Troubleshooting
-
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
-
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+Email support@theprivateclubs.com.

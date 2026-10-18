@@ -1,0 +1,79 @@
+---
+title: "API overview"
+description: "Spec, base URL, errors and versioning for the Private Clubs API"
+---
+
+Private Clubs has a read-only REST API over its directory. A live OpenAPI spec describes it.
+
+## Spec URL
+
+```text
+https://www.theprivateclubs.com/openapi.json
+```
+
+Base URL:
+
+```text
+https://www.theprivateclubs.com
+```
+
+The spec follows OpenAPI 3.0.0. It describes more paths than these docs cover. Build on the one endpoint below.
+
+<Note>
+  Some details in the spec differ from the live API today. Where they differ, follow these docs and the [club object](/reference/club-object). `limit` defaults to 50, not 24. `country`, `q` and `waitlist` work but are not in the spec. Rows carry more fields than the spec's `Club` schema lists. `waitlist_status` can also be `unknown`, `invite_only` or `null`. The API does not send the 429 response the spec lists. Use the base URL `https://www.theprivateclubs.com`, not the spec's second server.
+</Note>
+
+## Endpoint
+
+The supported endpoint is `GET /api/v1/clubs`. It searches the directory by type, place, name and waitlist status, with paging. The [API quickstart](/api) walks through each filter.
+
+Any other path under `/api/v1/`, such as `/api/v1/foo`, returns a 404 with code `not_found`:
+
+```json
+{
+  "type": "https://www.theprivateclubs.com/problems/not_found",
+  "title": "Not found",
+  "status": 404,
+  "detail": "This /api/v1 path does not exist.",
+  "code": "not_found",
+  "hint": "Use GET /api/v1/clubs or read https://www.theprivateclubs.com/openapi.json",
+  "instance": "/api/v1"
+}
+```
+
+## Call it from your server
+
+The API sends no CORS headers, so a browser page on another origin cannot read its responses. Call it from your server, a serverless function or a script. The MCP server at `https://www.theprivateclubs.com/api/mcp` allows any origin.
+
+## Errors
+
+Errors follow RFC 9457 and use the `application/problem+json` content type. Every error body has these fields:
+
+| Field | What it holds |
+|---|---|
+| `type` | A URI that names the problem. It ends in the `code`. |
+| `title` | A short summary of the problem. |
+| `status` | The HTTP status code. |
+| `detail` | What went wrong with this request. |
+| `code` | A stable code to branch on. |
+| `hint` | How to fix the request. |
+| `instance` | The path you called. For an unknown `/api/v1` path, it is `/api/v1`. |
+
+The codes:
+
+| Code | Status | When |
+|---|---|---|
+| `invalid_page` | 400 | `page` is not a whole number, such as `abc` or `-1`. |
+| `invalid_limit` | 400 | `limit` is not a whole number. |
+| `not_found` | 404 | The `/api/v1` path does not exist. |
+| `clubs_unavailable` | 500 | The directory could not be read, or `page` is past the last page. |
+
+Retry `clubs_unavailable` after a short wait. If your `page` is past the last page, stop paging instead. The [quickstart](/api#4-page-through-results) shows when to stop.
+
+## Versioning
+
+The current version is v1, in the URL path. The spec states the policy:
+
+> Breaking changes ship under a new /api/vN path. Deprecated versions send Deprecation and Sunset headers for at least 90 days.
+
+Next: [Authentication and fees](/api/authentication), [Pricing and limits](/api/usage-limits) and the [club object](/reference/club-object).

@@ -1,0 +1,342 @@
+/*
+ * Private Clubs docs on the website's design (the Wander standard, as built on /list and /mcp).
+ * Values come from repo-mcp-page: src/app/globals.css (ground, ink, borders, Instrument Sans with
+ * 550 headings and 450 body), src/components/for-clubs/list/list-tokens.ts (LIST_H2, LIST_BODY,
+ * LIST_CTA) and src/app/(marketing)/mcp/mcp-tokens.ts (MCP_H1, MCP_POP_CARD, MCP_WINDOW_FRAME,
+ * MCP_BLUE_TILE, MCP_CODE_FONT, MCP_MONO_CHIP). Blue is blue-600 in light mode and blue-400 in dark.
+ * Mintlify loads every .css file in the repo on every page. Selectors use the ids, classes and data
+ * attributes Mintlify documents (mintlify.com/docs/customize/custom-scripts).
+ */
+
+:root {
+  --pc-ink: #171717;
+  --pc-body: #636363;
+  --pc-muted: #8e8e8e;
+  --pc-line: #e5e5e5;
+  --pc-card: #ffffff;
+  --pc-chip: #f2f2f2;
+  --pc-chip-ink: #171717;
+  --pc-blue: #2563eb;
+  --pc-blue-hover: #1d4ed8;
+  --pc-tint: rgba(37, 99, 235, 0.08);
+  --pc-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --pc-window-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  --pc-card-border: #e5e5e5;
+  --pc-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+html.dark {
+  --pc-ink: #f7f7f7;
+  --pc-body: #8e8e8e;
+  --pc-muted: #636363;
+  --pc-line: #232323;
+  --pc-card: #151515;
+  --pc-chip: rgba(255, 255, 255, 0.08);
+  --pc-chip-ink: #e5e5e5;
+  --pc-blue: #60a5fa;
+  --pc-blue-hover: #93c5fd;
+  --pc-tint: rgba(96, 165, 250, 0.12);
+  --pc-card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --pc-window-shadow: none;
+  --pc-card-border: rgba(255, 255, 255, 0.1);
+}
+
+/* The site's body text settings (globals.css body) */
+body {
+  font-feature-settings: "ss01", "ss03", "ss09", "ss12", "kern";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Wander has no eyebrows: hide the group label Mintlify prints above each page title */
+#header .eyebrow {
+  display: none;
+}
+
+/* The logo at the site header's size: the monogram 20px tall, 22px from 1200px */
+img.nav-logo {
+  height: 20px !important;
+  width: auto !important;
+}
+@media (min-width: 1200px) {
+  img.nav-logo {
+    height: 22px !important;
+  }
+}
+
+/* Page title: MCP_H1, 34px, 44px from 640px, 52px on 56px from 1024px */
+#page-title {
+  font-size: 34px;
+  line-height: 1.1;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  color: var(--pc-ink);
+  text-wrap: balance;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+@media (min-width: 640px) {
+  #page-title {
+    font-size: 44px;
+  }
+}
+@media (min-width: 1024px) {
+  #page-title {
+    font-size: 52px;
+    line-height: 56px;
+  }
+}
+
+/* The line under the title: the hero sub line, 16px then 18px, 1.6, grey */
+#header > .prose,
+#header > .prose p {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 450;
+  letter-spacing: 0;
+  color: var(--pc-body);
+  text-wrap: balance;
+}
+@media (min-width: 768px) {
+  #header > .prose,
+  #header > .prose p {
+    font-size: 18px;
+  }
+}
+
+/* Body: LIST_BODY, 16px on 24px, 450, grey, with ink for headings and bold */
+#content-area .prose {
+  --tw-prose-body: var(--pc-body);
+  --tw-prose-lead: var(--pc-body);
+  --tw-prose-headings: var(--pc-ink);
+  --tw-prose-bold: var(--pc-ink);
+  --tw-prose-counters: var(--pc-muted);
+  --tw-prose-bullets: var(--pc-muted);
+  --tw-prose-hr: var(--pc-line);
+  --tw-prose-quotes: var(--pc-ink);
+  --tw-prose-captions: var(--pc-body);
+  --tw-prose-code: var(--pc-chip-ink);
+  --tw-prose-th-borders: var(--pc-line);
+  --tw-prose-td-borders: var(--pc-line);
+  letter-spacing: 0;
+}
+#content {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 450;
+  color: var(--pc-body);
+}
+
+/* Section heads: LIST_H2, 28px then 36px on 40px from 768px, 550, -0.02em */
+#content h2:not([data-component-part]) {
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  color: var(--pc-ink);
+  text-wrap: balance;
+}
+@media (min-width: 768px) {
+  #content h2:not([data-component-part]) {
+    font-size: 36px;
+    line-height: 40px;
+  }
+}
+
+/* Step and sub heads: MCP_H3, 20px on 26px, 550, -0.01em */
+#content h3:not([data-component-part]) {
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  color: var(--pc-ink);
+}
+
+#content strong {
+  font-weight: 550;
+  color: var(--pc-ink);
+}
+
+/* Links are blue */
+#content a.link {
+  color: var(--pc-blue);
+  font-weight: 450;
+  border-bottom-color: transparent;
+}
+#content a.link:hover {
+  color: var(--pc-blue-hover);
+  border-bottom-color: currentColor;
+}
+
+/* Sentence case: Mintlify capitalises group labels; show them as written */
+.sidebar-group-header {
+  text-transform: none;
+}
+
+/* Selected states are blue: the top tab on its grey pill */
+#navbar nav[aria-label="Main"] a[aria-current] {
+  color: var(--pc-blue);
+}
+
+/* The primary: LIST_CTA, the blue pill (white with blue text in dark), sized as the site header's buttons */
+#topbar-cta-button a {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 9999px;
+  background-color: #2563eb;
+  font-size: 14px;
+  font-weight: 550;
+  opacity: 1;
+  transition: background-color 150ms ease;
+}
+#topbar-cta-button a,
+#topbar-cta-button a * {
+  color: #ffffff;
+}
+#topbar-cta-button a:hover {
+  opacity: 1;
+  background-color: #1d4ed8;
+}
+html.dark #topbar-cta-button a {
+  background-color: #ffffff;
+}
+html.dark #topbar-cta-button a,
+html.dark #topbar-cta-button a * {
+  color: #2563eb;
+}
+html.dark #topbar-cta-button a:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Cards: MCP_POP_CARD, white, 20px corners and a soft shadow (#151515 with an inset highlight in dark) */
+#content-area .card {
+  border-radius: 20px;
+  border-color: var(--pc-card-border);
+  background-color: var(--pc-card);
+  box-shadow: var(--pc-card-shadow);
+}
+#content-area [data-component-part="card-title"] {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  color: var(--pc-ink);
+}
+#content-area [data-component-part="card-content"] {
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--pc-body);
+}
+
+/* A card's icon on MCP_BLUE_TILE: a 40px blue square with a white icon (white with a blue icon in dark) */
+#content-area [data-component-part="card-icon"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #2563eb;
+}
+#content-area [data-component-part="card-icon"] > svg {
+  width: 20px !important;
+  height: 20px !important;
+  background-color: #ffffff !important;
+}
+html.dark #content-area [data-component-part="card-icon"] {
+  background-color: #ffffff;
+}
+html.dark #content-area [data-component-part="card-icon"] > svg {
+  background-color: #2563eb !important;
+}
+
+/* Illustrations: MCP_WINDOW_FRAME, the showcase window's frame */
+#content-area .frame {
+  padding: 0;
+  border: 1px solid var(--pc-card-border);
+  border-radius: 20px;
+  background-color: var(--pc-card);
+  box-shadow: var(--pc-window-shadow);
+}
+#content-area .frame > .absolute.inset-0 {
+  display: none;
+}
+#content-area .frame > .relative,
+#content-area .frame img {
+  border-radius: 0;
+}
+
+/* Step numbers on the site's number badge: a blue square with white figures (white with blue in dark) */
+#content-area [data-component-part="step-indicator"] {
+  border-radius: 8px;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-weight: 550;
+}
+html.dark #content-area [data-component-part="step-indicator"] {
+  background-color: #ffffff;
+  color: #2563eb;
+}
+#content-area [data-component-part="step-title"] {
+  font-weight: 550;
+  color: var(--pc-ink);
+}
+
+/* Notes read as WanderNotice: a 12px blue tint panel, grey text, no border */
+#content-area .callout {
+  border: 0;
+  border-radius: 12px;
+}
+#content-area .callout[data-callout-type="note"],
+#content-area .callout[data-callout-type="info"] {
+  background-color: var(--pc-tint);
+}
+#content-area .callout [data-component-part="callout-content"] {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--pc-body);
+}
+html.dark #content-area .callout [data-component-part="callout-content"] {
+  color: #a3a3a3;
+}
+#content-area .callout a.link {
+  color: var(--pc-blue) !important;
+  border-bottom-color: transparent;
+}
+#content-area .callout[data-callout-type="note"] [data-component-part="callout-icon"] svg,
+#content-area .callout[data-callout-type="info"] [data-component-part="callout-icon"] svg {
+  color: var(--pc-blue);
+}
+
+/* Code: the site's code font, on white panels with a hairline (#151515 in dark) */
+#content-area .code-block {
+  border-radius: 16px;
+  border: 1px solid var(--pc-card-border);
+  overflow: hidden;
+}
+#content-area .code-block [data-component-part="code-block-root"] {
+  background-color: var(--pc-card) !important;
+}
+#content-area pre,
+#content-area pre code,
+#content-area code {
+  font-family: var(--pc-code);
+}
+#content :not(pre) > code {
+  border-radius: 6px;
+  padding: 2px 6px;
+  background-color: var(--pc-chip);
+  color: var(--pc-chip-ink);
+  font-size: 0.875em;
+  font-weight: 450;
+}
+
+/* Tables: hairlines in the site's border colour */
+#content-area table th,
+#content-area table td {
+  border-color: var(--pc-line);
+}
+#content-area table th {
+  font-weight: 550;
+  color: var(--pc-ink);
+}

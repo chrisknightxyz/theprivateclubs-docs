@@ -1,0 +1,105 @@
+---
+title: "Check the club before you buy a home"
+sidebarTitle: "Home buyers"
+description: "Find the golf clubs in a town, check a club's waitlist and compare two clubs side by side"
+---
+
+You are looking at homes in or near a private club. Before you buy, ask your AI app which golf clubs are in the town, whether a club's waitlist is open and how two clubs compare. Private Clubs answers about the clubs, with a profile link for each one. It returns club data only, so check home details with your real estate agent.
+
+## What you can ask
+
+- "Which golf clubs are in Scottsdale, Arizona?" uses `search_clubs`.
+- "Is the waitlist open at this home's club?" uses `get_membership_info`.
+- "Compare the two clubs these homes sit in" uses `compare_clubs`.
+
+## Run it in your AI app
+
+<Card title="Connect Private Clubs to your AI app" icon="plug" href="/mcp/connect" horizontal>
+  Install the Private Clubs MCP server in your AI app. Free, no account or API key needed.
+</Card>
+
+Adapt this starting prompt:
+
+```text
+Use the Private Clubs MCP. List the golf clubs in [Scottsdale], [Arizona].
+Then check whether the waitlist is open at [club name]. Then compare
+[first club] and [second club], the clubs these homes sit in. Include each
+club's profile link, and say that fees are on the club's profile at
+theprivateclubs.com.
+```
+
+## How it works
+
+<Steps>
+  <Step title="Find the golf clubs in a town">
+    `search_clubs` fits this ask. Put the town in `query` and add the state and type:
+
+    ```json
+    {"query": "Scottsdale", "state": "Arizona", "type": "golf"}
+    ```
+
+    The tool returns up to 25 clubs, best known first, each with a profile `url`. Scottsdale reaches that limit, so the list is partial. To find one club, set `query` to its name. `type` is an exact match, so search `country_club` as well to catch clubs stored under that type.
+  </Step>
+  <Step title="Check the club's waitlist">
+    `get_membership_info` takes the club's slug:
+
+    ```json
+    {"slug": "the-estancia-club"}
+    ```
+
+    It returns the club's `waitlist_status`, its profile `url` and a message that points to the profile for fees. For this club, the status was `by_invitation` in October 2026. If the status is `unknown` or `null`, Private Clubs does not know, so ask the club. See [waitlist values](/reference/conventions#waitlist-values).
+  </Step>
+  <Step title="Compare two clubs">
+    `compare_clubs` takes two or three slugs:
+
+    ```json
+    {"slugs": ["silverleaf-club", "mirabel-golf-club"]}
+    ```
+
+    Trimmed result from October 2026, with slug, amenities and website left out:
+
+    ```json
+    [
+      {
+        "name": "Mirabel Golf Club",
+        "location": "Scottsdale, Arizona",
+        "waitlist_status": null,
+        "holes": 18,
+        "par": 71,
+        "yardage": 7147,
+        "course_architect": "Thomas Fazio, ASGCA",
+        "founded_year": null,
+        "url": "https://www.theprivateclubs.com/clubs/arizona/mirabel-golf-club"
+      },
+      {
+        "name": "Silverleaf Club",
+        "location": "Scottsdale, Arizona",
+        "waitlist_status": null,
+        "holes": 18,
+        "par": 72,
+        "yardage": 7418,
+        "course_architect": "Tom Weiskopf",
+        "founded_year": 2002,
+        "url": "https://www.theprivateclubs.com/clubs/arizona/silverleaf-club"
+      }
+    ]
+    ```
+
+    A `null` field means Private Clubs does not know the value. The order of the clubs is not fixed.
+  </Step>
+</Steps>
+
+## What each system did
+
+- Private Clubs returned the listed clubs, their waitlist status and a profile link for each one.
+- Your AI app chose the tool for each question and wrote the answer.
+
+## Before you share
+
+- Fees are not included. Open the club's profile, where account holders see fees.
+- Waitlist status can change. Check the club's profile, and ask the club before you rely on it.
+- Cite theprivateclubs.com and link the club's profile. See the [data license](https://www.theprivateclubs.com/data/license) for commercial use.
+
+## Next
+
+Read [Look up the club behind a listing](/guides/real-estate-agents) and [Find and compare clubs](/guides/members).

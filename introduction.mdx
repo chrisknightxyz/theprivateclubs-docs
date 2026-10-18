@@ -1,67 +1,36 @@
 ---
-title: "The Private Clubs: North America's Private Club Directory"
-sidebarTitle: "Introduction"
-description: "Explore, compare, and join 51,633+ private clubs across the US and Canada. Tools for prospective members and membership directors alike."
+title: "Introduction"
+description: "Search and compare private clubs from your AI app or your own product, free and without an account"
 ---
 
-The Private Clubs is the largest directory of private membership clubs in North America, indexing more than 51,633 clubs across every US state and Canadian province. Whether you're searching for your next golf club, looking to join a city or yacht club, or managing membership enquiries for an established club, this platform gives you the data and tools to move efficiently.
+<Frame>
+  <img className="block dark:hidden" src="/images/showcase-light.png" alt="Illustration of an AI app asking about clubs, calling search_clubs and showing three clubs from the directory" />
+  <img className="hidden dark:block" src="/images/showcase-dark.png" alt="Illustration of an AI app asking about clubs, calling search_clubs and showing three clubs from the directory" />
+</Frame>
+
+Private Clubs has an MCP server and a REST API. Both serve the public clubs directory at theprivateclubs.com, which lists private membership clubs worldwide. Listings carry profile basics, course data, amenities and waitlist status where known, and MCP answers link to each club's profile.
+
+Free, no account or API key needed. Calls to the MCP server and the API cost nothing. Private Clubs never returns membership fees over MCP, and API calls from your server or script return none. Account holders see fees on each club's profile at theprivateclubs.com.
+
+## Start using Private Clubs
 
 <CardGroup cols={2}>
-  <Card title="Find a Club" icon="magnifying-glass" href="/members/searching-clubs">
-    Search by location, club type, initiation fee, and waitlist status
+  <Card title="Connect an AI app" icon="plug" href="/mcp/getting-started">
+    Install Private Clubs in Claude, ChatGPT, Cursor or another AI app, then ask about clubs in your own words.
   </Card>
-  <Card title="Compare Clubs" icon="scale-balanced" href="/members/comparing-clubs">
-    See fees, amenities, and waitlists side by side
-  </Card>
-  <Card title="Apply for Membership" icon="file-signature" href="/members/applying-for-membership">
-    Submit your application directly to the membership director
-  </Card>
-  <Card title="Concierge Service" icon="star" href="/members/concierge-service">
-    Get a dedicated advisor to place you in the right club
+  <Card title="Build with the API" icon="brackets-angle" href="/api">
+    Call `GET /api/v1/clubs` from your server to search clubs by type, place, name and waitlist status.
   </Card>
 </CardGroup>
 
-## For Membership Directors
+## What a club record holds
 
-<CardGroup cols={2}>
-  <Card title="Claim Your Listing" icon="badge-check" href="/clubs/claiming-your-listing">
-    Verify your club and start receiving qualified leads
-  </Card>
-  <Card title="Lead Management" icon="inbox" href="/clubs/lead-management">
-    Pre-qualified enquiries delivered to email, SMS, WhatsApp, or your CRM
-  </Card>
-  <Card title="AI Discovery" icon="robot" href="/clubs/ai-discovery">
-    Your club surfaces in ChatGPT, Perplexity, Claude, and more
-  </Card>
-  <Card title="Analytics Dashboard" icon="chart-line" href="/clubs/analytics-dashboard">
-    Track views, impressions, enquiries, and fee benchmarks in real time
-  </Card>
-</CardGroup>
+A **club record** is the set of fields Private Clubs returns for one listed club. It names the club and gives its city, state, country and type. It adds course data such as holes, par, yardage and course architect, the club's amenities and its waitlist status. MCP results also carry a `url` to the club's profile, but API rows do not.
 
-## For Developers & AI Tools
+A field that is not known comes back as `null`. Leave it out of your answer rather than fill it in.
 
-<CardGroup cols={2}>
-  <Card title="REST API" icon="code" href="/api/overview">
-    Query club data, fees, and waitlist status programmatically
-  </Card>
-  <Card title="MCP Integration" icon="plug" href="/api/mcp-overview">
-    Connect Claude, Cursor, Windsurf, and other AI tools via MCP
-  </Card>
-</CardGroup>
+See every field in the [club object](/reference/club-object). For the questions people bring to Private Clubs from their AI app, browse the [use cases](/use-cases).
 
-## How It Works
+## Get help
 
-<Steps>
-  <Step title="Explore the Directory">
-    Browse 51,633+ private clubs filtered by state, type, initiation fee, annual dues, and waitlist status — all in one place.
-  </Step>
-  <Step title="Compare Your Shortlist">
-    Put two or more clubs side by side to compare fees, amenities, waitlist timelines, and founding year.
-  </Step>
-  <Step title="Apply or Engage Concierge">
-    Submit your application directly to the membership director, or engage the Concierge service for a dedicated advisor and warm introductions.
-  </Step>
-  <Step title="Get Accepted">
-    Track your application status and correspond with the club. The Concierge service includes full representation through acceptance.
-  </Step>
-</Steps>
+Email support@theprivateclubs.com.

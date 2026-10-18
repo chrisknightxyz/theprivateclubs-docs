@@ -1,0 +1,116 @@
+---
+title: "Troubleshooting"
+description: "Fix common problems with the Private Clubs MCP server, from missing tools to empty results"
+---
+
+Find the symptom you see, then follow the fix. Tool errors come back as results marked `isError`. Request errors come back as JSON-RPC error bodies with an HTTP status.
+
+## Private Clubs tools do not appear
+
+Start a new session if your app needs one, then check the entry. The server key is `private-clubs` and the address is `https://www.theprivateclubs.com/api/mcp`. Some apps also need one more step:
+
+- **Claude:** in a chat, press **Use** on the plugin's connector.
+- **Claude Code:** run `/mcp` and check that `private-clubs` shows as connected.
+- **Cursor plugin:** reload Cursor and confirm the plugin under **Customize**.
+- **Perplexity:** select the Private Clubs card to turn it on.
+- **Hermes:** run `/reload-mcp` in a running Hermes session.
+- **OpenClaw:** run `openclaw mcp doctor private-clubs --probe` to check the connection.
+
+To check the server itself, [call it without an app](/mcp/connect#call-the-server-without-an-app).
+
+## You see two Private Clubs entries
+
+You added the server under an earlier name before. An entry named `clubs` is the same server, so remove it and keep `private-clubs`.
+
+```bash
+claude mcp remove clubs
+codex mcp remove clubs
+openclaw mcp remove clubs
+```
+
+In other apps, see [Replace an older entry](/mcp/connect#replace-an-older-entry).
+
+## The address shows an error in a browser
+
+A browser sends a GET request. The server answers POST only, so GET returns 405 with this body:
+
+```json
+{"jsonrpc":"2.0","error":{"code":-32000,"message":"Method not allowed, send MCP requests as POST"},"id":null}
+```
+
+This is expected. Add the address in your app instead. See [Install Private Clubs](/mcp/connect).
+
+## A club is not found
+
+`get_club` and `get_membership_info` return `Club not found: <slug>` when no listed club has that slug.
+
+Get the slug from a `search_clubs` result. It is also the last part of the club's profile `url`. Only listed public clubs appear, so a draft, a closed or hidden listing or a merged duplicate returns this error too.
+
+## A comparison returns fewer clubs
+
+`compare_clubs` leaves out unknown slugs without an error. Check each slug with `search_clubs`, then send two or three slugs.
+
+With 1 slug, or more than 3, the call fails the input schema. The result starts with `MCP error -32602: Input validation error`.
+
+## A search fails every time
+
+`search_clubs` answers `Club search failed. Try again.` on every call when `query` holds a comma, such as `Naples, Florida`. Put the town in `query` and the state in `state`, for example `{"query": "Naples", "state": "Florida"}`.
+
+## A search stops at 25 clubs
+
+`search_clubs` returns at most 25 clubs, best known first, with no paging. To see more:
+
+- Narrow the search with `state`, `type` or `query`.
+- Use `get_clubs_by_state`, which returns up to 100 clubs in a US state or Canadian province.
+- Use the [Private Clubs API](/api), which pages through every result.
+
+## A state search returns nothing
+
+`state` in `search_clubs` and `get_clubs_by_state` covers US states and Canadian provinces only. A region elsewhere, such as Scotland, returns an empty list.
+
+Outside the US and Canada, use `search_clubs` with a city in `query` and no `state`. Inside them, check the spelling. Use the full name, such as `Florida`, or a two-letter code, such as `FL`.
+
+## A type search misses clubs
+
+The MCP `type` is an exact match on the club's stored type. Legacy types stay separate, so `golf` does not return clubs stored as `country_club`. Search for each type you need. See [Club types](/reference/club-types).
+
+## An amenity filter returns nothing
+
+`amenities` takes stored values, and a club must have every value you send. The match is exact and case-sensitive, so `spa` and `Spa` return different clubs.
+
+Run the search without `amenities` first. Copy the values from the results, then filter with those.
+
+## The answer has no fees
+
+This is by design. Private Clubs never returns membership fees. Account holders see fees on each club's profile at theprivateclubs.com.
+
+`get_club` and `get_membership_info` say where to find them in `membership_fees`. Open the club's profile from its `url`.
+
+## The request is rejected
+
+The server answers HTTP 400 with one of these messages when it cannot read a request:
+
+| Message | What to change |
+|---|---|
+| `Request too large, the limit is 2 MB` | Send a body of 2 MB or less |
+| `Invalid request, send at most 100 messages in one batch` | Split the batch into batches of 100 messages or fewer |
+| `Invalid request, the batch is empty` | Put at least one message in the batch |
+| `Invalid request, send initialize on its own` | Send `initialize` in a request of its own, not in a batch |
+| `Unsupported Mcp-Protocol-Version, send one of ...` | Send a version the message lists, or leave the header out |
+| `Parse error, the body is not valid JSON` | Fix the JSON in the body |
+| `Invalid request, the body is empty` | Send a JSON-RPC message in the body |
+| `Invalid request, every message must be a JSON-RPC 2.0 message` | Give each message `"jsonrpc": "2.0"` and a `method` |
+
+## The server returns 503
+
+The request took longer than 50 seconds, or it failed inside the server. The body says `Something went wrong on our side`, followed by a reference.
+
+The response carries `Retry-After: 10`. Wait 10 seconds, then send the request again.
+
+Every POST response carries an `X-Request-Id` header that starts with `req_`. The reference in a 503 body is the same ID. Keep it if you contact support.
+
+## Still stuck
+
+Email support@theprivateclubs.com. Include the `X-Request-Id`, the app you use and the tool call that failed.
+
+You can also go back to [Install Private Clubs](/mcp/connect) or [Available tools](/mcp/tools).
