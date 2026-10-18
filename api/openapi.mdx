@@ -21,7 +21,7 @@ The spec follows OpenAPI 3.0.0 and is at version 1.2.0. It describes more paths 
 
 ## Endpoint
 
-The supported endpoint is `GET /api/v1/clubs`. It searches the directory by type, place, name and waitlist status, with paging. The [API quickstart](/api) walks through each filter, and the [Search clubs](/api-reference/clubs/search-clubs) page, generated from the spec, lists every parameter and response field.
+The supported endpoint is `GET /api/v1/clubs`. It searches the directory by type, place, name and waitlist status, with paging. The [API quickstart](/api) walks through each filter, and the [Search clubs](/api-reference/clubs/search-clubs) page, generated from the spec, lists each parameter and response field the spec describes.
 
 Any other path under `/api/v1/`, such as `/api/v1/foo`, returns a 404 with code `not_found`:
 
@@ -59,8 +59,8 @@ The codes:
 
 | Code | Status | When |
 |---|---|---|
-| `invalid_page` | 400 | `page` is not a whole number from 1, such as `abc`, `0` or `-1`. |
-| `invalid_limit` | 400 | `limit` is not a whole number from 1, such as `abc` or `0`. |
+| `invalid_page` | 400 | `page` is not a whole number from 1, such as `abc`, `0` or `-1`. An empty `page=` counts as not sent. |
+| `invalid_limit` | 400 | `limit` is not a whole number from 1, such as `abc` or `0`. An empty `limit=` counts as not sent. |
 | `not_found` | 404 | The `/api/v1` path does not exist. |
 | `clubs_unavailable` | 500 | The directory could not be read. |
 
@@ -74,7 +74,7 @@ Retry `clubs_unavailable` after a short wait. If it keeps failing, email support
 
 | Header | What it holds |
 |---|---|
-| `X-Request-Id` | A new ID for each request, such as `req_0123456789abcdef`. Keep it if you contact support. |
+| `X-Request-Id` | A new ID for each request: `req_` followed by 16 hex characters, such as `req_0123456789abcdef`. |
 | `RateLimit` and `RateLimit-Policy` | The advertised rate limit policy. See [Pricing and limits](/api/usage-limits#rate-limit-headers). |
 
 Successful responses also carry `X-Total-Clubs` (the same number as `total`), `X-Data-Source: Private Clubs` and `Cache-Control: private, no-store`.

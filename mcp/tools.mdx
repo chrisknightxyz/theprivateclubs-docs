@@ -117,7 +117,7 @@ Result from October 2026:
 
 Only listed public clubs appear. Drafts, closed or hidden listings and merged duplicates never do.
 
-`search_clubs` and `get_clubs_by_state` list the best known clubs first. When one club is listed twice in the same city, under names that differ only in words such as `The`, `Golf`, `Club` or `and`, the two tools show it once.
+`search_clubs` and `get_clubs_by_state` list the best known clubs first. When one club is listed twice in the same city and state, under names that differ only in words such as `The`, `Golf`, `Club` or `and`, or in the city's name, the two tools show it once. A name made only of such words and the city's name, such as `Boca Raton Golf Club` in Boca Raton, always keeps its own row.
 
 ### Profile links
 
@@ -138,7 +138,7 @@ Use full names, such as `Florida` or `Ontario`. Two-letter codes such as `FL` al
 - Only the first part is searched, so `Naples, Florida` searches for `Naples`.
 - When the last part names a US state or Canadian province, by full name or by a two-letter code in capitals, such as `Naples, FL`, the search keeps to that state.
 - Otherwise, when the last part names a country the directory knows, such as `Sydney, Australia`, the search keeps to that country.
-- State codes win over country codes, so `Toronto, CA` means California, not Canada.
+- A state wins over a country with the same code or name, so `Toronto, CA` means California, not Canada, and `Tbilisi, Georgia` means the US state. For the country Georgia, use its code: `Tbilisi, GE`.
 - A two-letter last part in lower case, such as `in`, is ignored, and so is a last part that names no place.
 - A `state` you send wins over the place in `query`.
 

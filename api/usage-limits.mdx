@@ -19,8 +19,8 @@ Under the [data license](https://www.theprivateclubs.com/data/license), non-comm
 
 | Parameter | Default | Rules |
 |---|---|---|
-| `page` | 1 | Starts at 1. A value that is not a whole number from 1, such as `0`, returns 400 `invalid_page`. Leading zeros are fine. |
-| `limit` | 50 | The maximum is 200, and larger values are clamped to 200. A value that is not a whole number from 1, such as `0`, returns 400 `invalid_limit`. Leading zeros are fine. |
+| `page` | 1 | Starts at 1. A value that is not a whole number from 1, such as `0`, returns 400 `invalid_page`. Leading zeros are fine, and an empty `page=` counts as not sent. |
+| `limit` | 50 | The maximum is 200, and larger values are clamped to 200. A value that is not a whole number from 1, such as `0`, returns 400 `invalid_limit`. Leading zeros are fine, and an empty `limit=` counts as not sent. |
 
 Stop paging when `page * limit` reaches `total`. A page past the last one, however large, returns 200 with an empty `clubs` array and the real `total`.
 

@@ -59,7 +59,7 @@ What to notice:
 - Each entry in `fee_views` has a `kind`. You will see `none` when no figure is on file, or `locked` when a figure exists but is not shared. See [Authentication and fees](/api/authentication).
 - Rows carry no profile link.
 - Successful responses carry `Cache-Control: private, no-store` and `X-Data-Source: Private Clubs`.
-- Every response, rows or an error, carries an `X-Request-Id` header, a new ID for each request that starts with `req_`. Keep it if you contact support.
+- Every response, rows or an error, carries an `X-Request-Id` header, a new ID for each request that starts with `req_`.
 
 The [club object](/reference/club-object) describes every field.
 
@@ -85,7 +85,7 @@ curl "https://www.theprivateclubs.com/api/v1/clubs?waitlist=open,waitlist&limit=
 
 ## 4. Page through results
 
-`page` starts at 1. `limit` sets the page size. It defaults to 50, and values above 200 are clamped to 200. Both must be whole numbers from 1: `page=0` answers 400 with `invalid_page`, and `limit=0` answers 400 with `invalid_limit`. Leading zeros are fine, so `page=01` is page 1.
+`page` starts at 1. `limit` sets the page size. It defaults to 50, and values above 200 are clamped to 200. Both must be whole numbers from 1: `page=0` answers 400 with `invalid_page`, and `limit=0` answers 400 with `invalid_limit`. Leading zeros are fine, so `page=01` is page 1, and an empty `page=` or `limit=` counts as not sent.
 
 Stop when `page * limit` reaches `total`. A page past the last one, however large, answers 200 with an empty `clubs` array and the real `total`, so an empty page also means you are done.
 
